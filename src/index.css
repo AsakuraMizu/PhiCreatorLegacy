@@ -1,0 +1,11 @@
+body {
+  overflow: hidden;
+  margin: 0 auto;
+  background-color: white;
+}
+
+#player {
+  padding: 0;
+  margin: auto;
+  display: block;
+}

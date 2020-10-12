@@ -1,0 +1,68 @@
+{
+  "timing": {
+    "offset": 1,
+    "bpmList": [
+      {
+        "time": 0,
+        "bpm": 150
+      }
+    ]
+  },
+  "judgeLineList": [
+    {
+      "eventList": [
+        {
+          "type": "construct",
+          "startTime": 10,
+          "endTime": 550,
+          "properties": {
+            "x": -0.1,
+            "y": -0.1,
+            "angle": 0,
+            "alpha": 1,
+            "speed": 0.2
+          }
+        },
+        {
+          "type": "move",
+          "startTime": 0,
+          "endTime": 200,
+          "properties": {
+            "x": 0.3,
+            "y": 0.4,
+            "easeX": "linear",
+            "easeY": "sineIn"
+          }
+        },
+        {
+          "type": "rotate",
+          "startTime": 200,
+          "endTime": 600,
+          "properties": {
+            "angle": -3.1415926,
+            "ease": "backOut"
+          }
+        },
+        {
+          "type": "fade",
+          "startTime": 0,
+          "endTime": 600,
+          "properties": {
+            "alpha": 0.5,
+            "ease": "linear"
+          }
+        }
+      ],
+      "noteList": [
+        {
+          "type": "flick",
+          "startTime": 0,
+          "endTime": 500,
+          "relativeX": 0,
+          "side": 1,
+          "isFake": false
+        }
+      ]
+    }
+  ]
+}

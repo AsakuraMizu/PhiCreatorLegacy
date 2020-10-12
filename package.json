@@ -1,0 +1,24 @@
+{
+  "name": "phicreator",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@pixi-essentials/cull": "^1.0.9",
+    "draggable": "^4.2.0",
+    "element-plus": "^1.0.1-alpha.4",
+    "howler": "^2.2.0",
+    "lodash-es": "^4.17.15",
+    "moveable": "^0.19.4",
+    "pixi.js": "^5.3.3",
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.3",
+    "@vue/compiler-sfc": "^3.0.0",
+    "typescript": "^4.0.3",
+    "vite": "^1.0.0-rc.4"
+  }
+}

@@ -1,5 +1,4 @@
 body {
-  overflow: hidden;
   margin: 0 auto;
   background-color: white;
 }
@@ -8,4 +7,9 @@ body {
   padding: 0;
   margin: auto;
   display: block;
+}
+
+@font-face {
+  font-family: "Exo Regular";
+  src: url("./assets/font/Exo-Regular.otf") format("opentype");
 }

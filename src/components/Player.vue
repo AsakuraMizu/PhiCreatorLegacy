@@ -1,37 +1,55 @@
 <template>
-<canvas id="player" />
+<canvas id="canvas" />
 </template>
 
-<script>
+<script lang='ts'>
 import * as PIXI from 'pixi.js';
 window.PIXI = PIXI;
 
-import Player from './player/Player';
-import { skin, skinScale } from './player/skin';
-import chart from './chart.json';
+import { defineComponent, PropType } from 'vue';
+import screenfull from 'screenfull';
 
-export default {
+import Player, { DisplayOptions } from './player/Player';
+import { ChartData } from './player/ChartData';
+import skin from './player/skin';
+
+export default defineComponent({
   name: 'Player',
+  props: {
+    // fullscreen: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    chart: <PropType<ChartData>>Object,
+    display: <PropType<DisplayOptions>>Object,
+  },
   data() {
     return {
-      player: undefined
-    }
+      player: <Player>null,
+      canvas: <HTMLCanvasElement>null,
+    };
   },
   mounted() {
-    const canvas = document.getElementById('player');
-
+    this.canvas = <HTMLCanvasElement>document.getElementById('canvas');
     this.player = new Player({
-      canvas,
+      canvas: this.canvas,
+      chart: this.chart,
+      display: this.display,
       skin,
-      skinScale,
-      chart
     });
-    // this.player.fullscreen = true;
-    // const handler = () => {
-    //   this.player.fullscreen = false;
-    //   document.removeEventListener('fullscreenchange', handler);
-    // };
-    // document.addEventListener('fullscreenchange', handler);
+    this.canvas.width = this.player.width;
+    this.canvas.height = this.player.height;
+    // this.setFullscreen(this.fullscreen);
+    // screenfull.isEnabled && screenfull.on('change', () => {
+    //   this.setFullscreen(screenfull.isEnabled && screenfull.isFullscreen);
+    // })
   },
-}
+  // methods: {
+  //   setFullscreen(value: boolean) {
+  //     screenfull.isEnabled && (value ? screenfull.request(this.canvas) : screenfull.exit()).then(() => {
+  //       this.player.fullscreen = value;
+  //     });
+  //   }
+  // }
+});
 </script>

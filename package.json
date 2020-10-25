@@ -6,19 +6,24 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@icon-park/vue-next": "^1.0.11",
     "@pixi-essentials/cull": "^1.0.9",
+    "ant-design-vue": "^2.0.0-beta.10",
     "draggable": "^4.2.0",
-    "element-plus": "^1.0.1-alpha.4",
-    "howler": "^2.2.0",
+    "jsoneditor": "^9.1.1",
     "lodash-es": "^4.17.15",
     "moveable": "^0.19.4",
+    "pixi-particles": "^4.3.0",
+    "pixi-sound": "^3.0.5",
     "pixi.js": "^5.3.3",
-    "vue": "^3.0.0"
+    "screenfull": "^5.0.2",
+    "vue": "^3.0.2"
   },
   "devDependencies": {
+    "@types/jsoneditor": "^8.6.0",
     "@types/lodash-es": "^4.17.3",
-    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/compiler-sfc": "^3.0.2",
     "typescript": "^4.0.3",
-    "vite": "^1.0.0-rc.4"
+    "vite": "^1.0.0-rc.6"
   }
 }

@@ -4,8 +4,10 @@
     "module": "esnext",
     // this enables stricter inference for data properties on `this`
     "strict": true,
+    "strictNullChecks": false,
     "jsx": "preserve",
     "moduleResolution": "node",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   }
 }

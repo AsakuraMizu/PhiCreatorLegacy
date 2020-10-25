@@ -10,7 +10,7 @@ export interface TimingData {
 }
 
 export type Ease =
-  'linear'    |
+  'linear'    | 'jump'       |
   'backIn'    | 'backOut'    |
   'bounceIn'  | 'bounceOut'  |
   'circIn'    | 'circOut'    |
@@ -28,6 +28,17 @@ export interface BaseEventData {
   startTime: number;
   endTime: number;
   properties: Record<string, any>;
+}
+
+export interface ConstructEventData extends BaseEventData {
+  type: 'construct';
+  properties: {
+    x: number;
+    y: number;
+    angle: number;
+    alpha: number;
+    speed: number;
+  };
 }
 
 export interface MoveEventData extends BaseEventData {
@@ -64,27 +75,17 @@ export interface SpeedEventData extends BaseEventData {
   };
 }
 
-export interface ConstructEventData extends BaseEventData {
-  type: 'construct';
-  properties: {
-    x: number;
-    y: number;
-    angle: number;
-    alpha: number;
-    speed: number;
-  };
-}
-
-export type EventData = MoveEventData | RotateEventData | FadeEventData | SpeedEventData | ConstructEventData;
+export type EventData = ConstructEventData | MoveEventData | RotateEventData | FadeEventData | SpeedEventData;
 
 export interface BaseNoteData {
   id: number;
   type: string;
   startTime: number;
   endTime: number;
+  showTime: number;
   relativeX: number;
   side: 1 | -1;
-  speed?: number;
+  speed: number;
   isFake: boolean;
 }
 
@@ -102,7 +103,6 @@ export interface DragNoteData extends BaseNoteData {
 
 export interface HoldNoteData extends BaseNoteData {
   type: 'hold';
-  holdTime: number;
 }
 
 export type NoteData = ClickNoteData | FlickNoteData | DragNoteData | HoldNoteData;

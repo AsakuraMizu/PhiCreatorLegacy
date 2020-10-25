@@ -95,7 +95,7 @@ const easingsFunctions = {
   easeOutBounce: bounceOut,
 };
 
-export default function EaseCalc(l: number, r: number, t: number, ease?: Ease) {
+export function EaseCalc(l: number, r: number, t: number, ease?: Ease) {
   let func: (t: number) => number;
   switch (ease) {
     case 'backIn':
@@ -158,10 +158,23 @@ export default function EaseCalc(l: number, r: number, t: number, ease?: Ease) {
     case 'sineOut':
       func = easingsFunctions.easeOutSine;
       break;
+    case 'jump':
+      func = (_) => 1;
     case 'linear':
     default:
       func = t => t;
       break;
   }
   return l + (r - l) * func(t);
+}
+
+export function EaseSumCalc(l: number, r: number, st: number, et: number, ease?: Ease) {
+  const eps = 1e-3;
+  let t = st, all = et - st, sum = 0;
+  while (Math.abs(et - t) >= eps) {
+    sum += EaseCalc(l, r, t, ease);
+    t += eps;
+  }
+  sum *= eps;
+  return sum;
 }

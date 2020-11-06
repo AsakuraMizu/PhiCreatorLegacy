@@ -49,7 +49,7 @@
         {
           "id": 3,
           "type": "move",
-          "startTime": 0,
+          "startTime": 400,
           "endTime": 600,
           "properties": {
             "x": 0.1,

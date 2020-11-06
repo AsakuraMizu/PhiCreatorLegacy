@@ -71,7 +71,7 @@ export default class JudgeLineRenderer {
     this.container.rotation = this.constructEvent.properties.angle;
     player.app.stage.addChild(this.container);
 
-    this.prevPosition = this.container.position;
+    this.prevPosition = this.container.position.clone();
     this.prevRotation = this.container.rotation;
     this.prevAlpha = this.container.alpha;
     this.prevSpeed = this.constructEvent.properties.speed;
@@ -116,7 +116,7 @@ export default class JudgeLineRenderer {
       this.container.position.y = easeCalc(this.prevPosition.y, this.player.calcY(event.properties.y), dt / all, event.properties.easeY);
 
       if (event.endTime < this.player.tick) {
-        this.prevPosition = this.container.position;
+        this.prevPosition = this.container.position.clone();
         this.moveEventList.shift();
         continue;
       }

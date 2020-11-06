@@ -1,15 +1,16 @@
 import { Container, Graphics, Point } from 'pixi.js';
 import { Cull } from '@pixi-essentials/cull';
 import { ConstructEventData, FadeEventData, JudgeLineData, MoveEventData, RotateEventData, SpeedEventData } from './ChartData';
-import { EaseCalc, EaseSumCalc } from './Easing';
-import NoteRender from './NoteRender';
+import { easeCalc, easeSumCalc } from './Easing';
+import NoteRenderer from './NoteRenderer';
 import Player from './Player';
+import { forEach } from 'lodash-es';
 
-export default class JudgeLineRender {
+export default class JudgeLineRenderer {
   player: Player;
 
   container: Container;
-  notes: NoteRender[] = [];
+  notes: NoteRenderer[] = [];
   line: Graphics;
   cull: Cull;
 
@@ -23,8 +24,6 @@ export default class JudgeLineRender {
   prevRotation: number;
   prevAlpha: number;
   prevSpeed: number;
-
-  combo: number = 0;
 
   constructor(player: Player, judgeLine: JudgeLineData) {
     this.player = player;
@@ -44,22 +43,24 @@ export default class JudgeLineRender {
     };
 
     judgeLine.eventList.sort((a, b) => a.startTime - b.startTime);
-    judgeLine.eventList.forEach(e => {
-      switch (e.type) {
+    forEach(judgeLine.eventList, event => {
+      switch (event.type) {
         case 'construct':
-          this.constructEvent = e;
+          this.constructEvent = event;
           break;
         case 'move':
-          this.moveEventList.push(e);
+          this.moveEventList.push(event);
           break;
         case 'rotate':
-          this.rotateEventList.push(e);
+          this.rotateEventList.push(event);
           break;
         case 'fade':
-          this.fadeEventList.push(e);
+          this.fadeEventList.push(event);
           break;
         case 'speed':
-          this.speedEventList.push(e);
+          this.speedEventList.push(event);
+          break;
+        default:
           break;
       }
     });
@@ -84,36 +85,37 @@ export default class JudgeLineRender {
 
     judgeLine.noteList.sort((a, b) => a.startTime - b.startTime);
 
-    this.notes.push(...judgeLine.noteList.map((n, i, arr) => {
+    this.notes.push(...judgeLine.noteList.map((n, index, array) => {
       let hl = false;
-      if (i > 0 && Math.abs(arr[i - 1].startTime - n.startTime) < 1e-5) {
+      if (index > 0 && Math.abs(array[index - 1].startTime - n.startTime) < 1e-5) {
         hl = true;
       }
-      return new NoteRender(this, n, hl);
+
+      return new NoteRenderer(this, n, hl);
     }));
 
     this.cull = new Cull();
     this.cull.add(this.container);
   }
 
-  update() {
+  update(): void {
     if (this.player.tick < this.constructEvent.startTime || this.player.tick > this.constructEvent.endTime) {
       this.container.visible = false;
       return;
     }
 
     while (this.moveEventList.length > 0) {
-      const e = this.moveEventList[0];
-      if (e.startTime > this.player.tick) {
+      const event = this.moveEventList[0];
+      if (event.startTime > this.player.tick) {
         break;
       }
 
-      const dt = Math.min(this.player.tick - e.startTime, e.endTime - e.startTime);
-      const all = e.endTime - e.startTime;
-      this.container.position.x = EaseCalc(this.prevPosition.x, this.player.calcX(e.properties.x), dt / all, e.properties.easeX);
-      this.container.position.y = EaseCalc(this.prevPosition.y, this.player.calcY(e.properties.y), dt / all, e.properties.easeY);
+      const dt = Math.min(this.player.tick - event.startTime, event.endTime - event.startTime);
+      const all = event.endTime - event.startTime;
+      this.container.position.x = easeCalc(this.prevPosition.x, this.player.calcX(event.properties.x), dt / all, event.properties.easeX);
+      this.container.position.y = easeCalc(this.prevPosition.y, this.player.calcY(event.properties.y), dt / all, event.properties.easeY);
 
-      if (e.endTime < this.player.tick) {
+      if (event.endTime < this.player.tick) {
         this.prevPosition = this.container.position;
         this.moveEventList.shift();
         continue;
@@ -123,16 +125,16 @@ export default class JudgeLineRender {
     }
 
     while (this.rotateEventList.length > 0) {
-      const e = this.rotateEventList[0];
-      if (e.startTime > this.player.tick) {
+      const event = this.rotateEventList[0];
+      if (event.startTime > this.player.tick) {
         break;
       }
 
-      const dt = Math.min(this.player.tick - e.startTime, e.endTime - e.startTime);
-      const all = e.endTime - e.startTime;
-      this.container.rotation = EaseCalc(this.prevRotation, e.properties.angle, dt / all, e.properties.ease);
+      const dt = Math.min(this.player.tick - event.startTime, event.endTime - event.startTime);
+      const all = event.endTime - event.startTime;
+      this.container.rotation = easeCalc(this.prevRotation, event.properties.angle, dt / all, event.properties.ease);
 
-      if (e.endTime < this.player.tick) {
+      if (event.endTime < this.player.tick) {
         this.prevRotation = this.container.rotation;
         this.rotateEventList.shift();
         continue;
@@ -142,16 +144,16 @@ export default class JudgeLineRender {
     }
 
     while (this.fadeEventList.length > 0) {
-      const e = this.fadeEventList[0];
-      if (e.startTime > this.player.tick) {
+      const event = this.fadeEventList[0];
+      if (event.startTime > this.player.tick) {
         break;
       }
 
-      const dt = Math.min(this.player.tick - e.startTime, e.endTime - e.startTime);
-      const all = e.endTime - e.startTime;
-      this.line.alpha = EaseCalc(this.prevAlpha, e.properties.alpha, dt / all, e.properties.ease);
+      const dt = Math.min(this.player.tick - event.startTime, event.endTime - event.startTime);
+      const all = event.endTime - event.startTime;
+      this.line.alpha = easeCalc(this.prevAlpha, event.properties.alpha, dt / all, event.properties.ease);
 
-      if (e.endTime < this.player.tick) {
+      if (event.endTime < this.player.tick) {
         this.prevAlpha = this.line.alpha;
         this.fadeEventList.shift();
         continue;
@@ -161,13 +163,13 @@ export default class JudgeLineRender {
     }
 
     while (this.speedEventList.length > 0) {
-      const e = this.speedEventList[0];
-      if (e.startTime > this.player.tick) {
+      const event = this.speedEventList[0];
+      if (event.startTime > this.player.tick) {
         break;
       }
 
-      if (e.endTime < this.player.tick) {
-        this.prevSpeed = e.properties.speed;
+      if (event.endTime < this.player.tick) {
+        this.prevSpeed = event.properties.speed;
         this.speedEventList.shift();
         continue;
       }
@@ -179,35 +181,38 @@ export default class JudgeLineRender {
       n.update();
       if (this.player.tick > n.note.endTime) {
         this.container.removeChild(n.sprite);
-        ++this.combo;
+        ++this.player.combo;
         return false;
       }
+
       return true;
     });
 
     this.cull.cull(this.player.app.renderer.screen);
   }
 
-  calcDist(time: number) {
-    let ans = 0, prevTime = this.player.tick, speed = this.prevSpeed;
+  calcDist(time: number): number {
+    let ans = 0;
+    let previousTime = this.player.tick;
+    let speed = this.prevSpeed;
 
-    for (const e of this.speedEventList) {
-      if (e.startTime > time) {
+    for (const event of this.speedEventList) {
+      if (event.startTime > time) {
         break;
       }
 
-      ans += speed * Math.max(0, e.startTime - prevTime);
+      ans += speed * Math.max(0, event.startTime - previousTime);
 
-      const dt0 = Math.max(0, prevTime - e.startTime);
-      const dt = Math.min(time - e.startTime, e.endTime - e.startTime);
-      const all = e.endTime - e.startTime;
-      ans += EaseSumCalc(speed, e.properties.speed, dt0 / all, dt / all, e.properties.ease) * all;
+      const dt0 = Math.max(0, previousTime - event.startTime);
+      const dt = Math.min(time - event.startTime, event.endTime - event.startTime);
+      const all = event.endTime - event.startTime;
+      ans += easeSumCalc(speed, event.properties.speed, dt0 / all, dt / all, event.properties.ease) * all;
 
-      prevTime = e.startTime + dt;
-      speed = e.properties.speed;
+      previousTime = event.startTime + dt;
+      speed = event.properties.speed;
     }
 
-    ans += speed * (time - prevTime);
+    ans += speed * (time - previousTime);
     return ans;
   }
 }

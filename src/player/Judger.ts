@@ -18,29 +18,32 @@ export default class Judger {
     const size = player.skin.effect.size * player.skin.effect.ratio;
     const col = Math.floor(btx.width / size);
     const row = Math.floor(btx.height / size);
-    for (let i = 0; i < col * row; i += 1) {
-      const ir = Math.floor(i / col), ic = i % col;
+    for (let index = 0; index < col * row; index += 1) {
+      const ir = Math.floor(index / col);
+      const ic = index % col;
       const tx = new Texture(btx);
-      tx.orig = tx._frame = new Rectangle(
+      tx._frame = new Rectangle(
         ic * size,
         ir * size,
         size,
-        size
+        size,
       );
+      tx.orig = tx._frame;
       tx.updateUvs();
       this.textures.push(tx);
     }
   }
 
-  judgeAt({x, y}: Point) {
-    let i = -1, time = 0;
+  judgeAt({ x, y }: Point): void {
+    let index = -1;
+    let time = 0;
     const sprite = new Sprite(this.textures[0]);
     sprite.tint = this.player.skin.color;
     sprite.pivot.set(sprite.width / 2, sprite.height / 2);
     sprite.position.set(x, y);
     this.container.addChild(sprite);
 
-    const emitter = new Emitter(this.container, this.player.textures.Square, this.player.skin.effect.particle);
+    const emitter = new Emitter(this.container, this.player.textures.Particle, this.player.skin.effect.particle);
     emitter.updateSpawnPos(x, y);
     emitter.emit = true;
     emitter.update(0);
@@ -51,9 +54,9 @@ export default class Judger {
       emitter.update(dt * 0.001);
       if (time >= this.player.skin.effect.duration) {
         time -= this.player.skin.effect.duration;
-        i += 1;
-        if (i in this.textures) {
-          sprite.texture = this.textures[i];
+        index += 1;
+        if (index in this.textures) {
+          sprite.texture = this.textures[index];
         } else {
           sprite.destroy();
           emitter.destroy();
@@ -62,6 +65,7 @@ export default class Judger {
         }
       }
     };
+
     this.player.app.ticker.add(next);
   }
 }

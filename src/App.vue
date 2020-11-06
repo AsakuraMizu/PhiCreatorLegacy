@@ -1,106 +1,69 @@
 <template>
-<a-layout>
-  <a-layout-content>
-    <a-row>
-      <a-col :md="{ span: 16, offset: 4 }" :offset="0" :span="24">
-        <h1>PhiCreator</h1>
-        <a-divider orientation="left">
-          JSON Editor
-        </a-divider>
-        <json-editor v-model="chart" />
-        <a-divider orientation="left">
-          Preview Settings
-        </a-divider>
-        <a-row>
-          <a-col :span="12">
-            <a-input v-model:value="display.title" placeholder="Song Name" />
-          </a-col>
-          <a-col :span="12">
-            <a-input v-model:value="display.diff" placeholder="Diffculty" />
-          </a-col>
-        </a-row>
-        <br />
-        <a-row>
-          <a-col :span="12">
-            <a-upload-dragger name="background" :showUploadList="false" :beforeUpload="beforeUploadBackground">
-              <p class="ant-upload-drag-icon">
-                <pic theme="outline" size="30" />
-              </p>
-              <p class="ant-upload-text">
-                {{ display.background ? display.background.name : "Background" }}
-              </p>
-              <p class="ant-upload-hint">
-                Click or drag file to this area
-              </p>
-            </a-upload-dragger>
-          </a-col>
-          <a-col :span="12">
-            <a-upload-dragger name="music" :showUploadList="false" :beforeUpload="beforeUploadMusic">
-              <p class="ant-upload-drag-icon">
-                <music theme="outline" size="30" />
-              </p>
-              <p class="ant-upload-text">
-                {{ display.music ? display.music.name : "Music" }}
-              </p>
-              <p class="ant-upload-hint">
-                Click or drag file to this area
-              </p>
-            </a-upload-dragger>
-          </a-col>
-        </a-row>
-        <a-button type="button" @click="() => { this.preview = true; }">
-          Preview
-        </a-button>
-        <a-modal v-model:visible="preview" title="Preview" width="400" :destroyOnClose="true" :centered="true" :footer="null">
-          <player :chart="chart" :display="display" />
-        </a-modal>
-      </a-col>
-    </a-row>
-  </a-layout-content>
-  <a-layout-footer style="text-align: center">PhiCreator © 2020 PhiX Dev Team</a-layout-footer>
-</a-layout>
+  <a-layout>
+    <a-layout-content>
+      <a-row>
+        <a-col
+          :md="{ span: 16, offset: 4 }"
+          :offset="0"
+          :span="24"
+        >
+          <h1>PhiCreator</h1>
+          <a-collapse v-model:activeKey="activeKey">
+            <a-collapse-panel
+              key="jsoneditor"
+              header="JSON Editor"
+            >
+              <json-editor />
+            </a-collapse-panel>
+            <a-collapse-panel
+              key="simpleeditor"
+              header="Simple Editor"
+            >
+              <simple-editor />
+            </a-collapse-panel>
+            <a-collapse-panel
+              key="preview"
+              header="Preview"
+            >
+              <preview />
+            </a-collapse-panel>
+          </a-collapse>
+        </a-col>
+      </a-row>
+    </a-layout-content>
+    <a-layout-footer style="text-align: center">
+      PhiCreator © 2020 PhiX Dev Team
+    </a-layout-footer>
+  </a-layout>
 </template>
 
 <script lang='ts'>
 import { defineComponent } from 'vue';
+import { DEFAULT_ICON_CONFIGS, IconProvider } from '@icon-park/vue-next';
 
-import { Music, Pic } from '@icon-park/vue-next';
-import Player from './components/Player.vue';
 import JsonEditor from './components/JsonEditor.vue';
-import { DisplayOptions } from './components/player/Player';
-
-import chart from './chart.json';
+import SimpleEditor from './components/simpleeditor/SimpleEditor.vue';
+import Preview from './components/Preview.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    Player,
     JsonEditor,
-
-    Music,
-    Pic,
+    SimpleEditor,
+    Preview,
+  },
+  setup() {
+    IconProvider({
+      ...DEFAULT_ICON_CONFIGS,
+      theme: 'outline',
+      size: 30,
+      strokeWidth: 3,
+    });
   },
   data() {
     return {
-      chart: chart,
-      display: <DisplayOptions>{
-        title: null,
-        diff: null,
-        background: null,
-        music: null,
-      },
-      preview: false,
+      activeKey: ['jsoneditor', 'simpleeditor', 'preview'],
     };
-  },
-  methods: {
-    beforeUploadBackground(file: File) {
-      this.display.background = file;
-      return false;
-    },
-    beforeUploadMusic(file: File) {
-      this.display.music = file;
-      return false;
-    },
   },
 });
 </script>

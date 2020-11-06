@@ -1,6 +1,7 @@
 body {
   margin: 0 auto;
   background-color: white;
+  font-family: 'Exo Regular', zcool;
 }
 
 #player {
@@ -12,4 +13,9 @@ body {
 @font-face {
   font-family: "Exo Regular";
   src: url("./assets/font/Exo-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: zcool;
+  src: url("./assets/font/zcool.ttf") format("truetype");
 }

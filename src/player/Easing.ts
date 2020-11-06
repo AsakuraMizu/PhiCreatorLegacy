@@ -2,7 +2,6 @@
 
 import { Ease } from './ChartData';
 
-const pow = Math.pow;
 const sqrt = Math.sqrt;
 const sin = Math.sin;
 const cos = Math.cos;
@@ -17,13 +16,17 @@ function bounceOut(x: number): number {
 
   if (x < 1 / d1) {
     return n1 * x * x;
-  } else if (x < 2 / d1) {
-    return n1 * (x -= 1.5 / d1) * x + 0.75;
-  } else if (x < 2.5 / d1) {
-    return n1 * (x -= 2.25 / d1) * x + 0.9375;
-  } else {
-    return n1 * (x -= 2.625 / d1) * x + 0.984375;
   }
+
+  if (x < 2 / d1) {
+    return n1 * (x -= 1.5 / d1) * x + 0.75;
+  }
+
+  if (x < 2.5 / d1) {
+    return n1 * (x -= 2.25 / d1) * x + 0.9375;
+  }
+
+  return n1 * (x -= 2.625 / d1) * x + 0.984375;
 }
 
 const easingsFunctions = {
@@ -37,19 +40,19 @@ const easingsFunctions = {
     return x * x * x;
   },
   easeOutCubic(x: number) {
-    return 1 - pow(1 - x, 3);
+    return 1 - (1 - x) ** 3;
   },
   easeInQuart(x: number) {
     return x * x * x * x;
   },
   easeOutQuart(x: number) {
-    return 1 - pow(1 - x, 4);
+    return 1 - (1 - x) ** 4;
   },
   easeInQuint(x: number) {
     return x * x * x * x * x;
   },
   easeOutQuint(x: number) {
-    return 1 - pow(1 - x, 5);
+    return 1 - (1 - x) ** 5;
   },
   easeInSine(x: number) {
     return 1 - cos((x * PI) / 2);
@@ -58,36 +61,36 @@ const easingsFunctions = {
     return sin((x * PI) / 2);
   },
   easeInExpo(x: number) {
-    return x === 0 ? 0 : pow(2, 10 * x - 10);
+    return x === 0 ? 0 : 2 ** (10 * x - 10);
   },
   easeOutExpo(x: number) {
-    return x === 1 ? 1 : 1 - pow(2, -10 * x);
+    return x === 1 ? 1 : 1 - 2 ** (-10 * x);
   },
   easeInCirc(x: number) {
-    return 1 - sqrt(1 - pow(x, 2));
+    return 1 - sqrt(1 - x ** 2);
   },
   easeOutCirc(x: number) {
-    return sqrt(1 - pow(x - 1, 2));
+    return sqrt(1 - (x - 1) ** 2);
   },
   easeInBack(x: number) {
     return c3 * x * x * x - c1 * x * x;
   },
   easeOutBack(x: number) {
-    return 1 + c3 * pow(x - 1, 3) + c1 * pow(x - 1, 2);
+    return 1 + c3 * (x - 1) ** 3 + c1 * (x - 1) ** 2;
   },
   easeInElastic(x: number) {
-    return x === 0
-      ? 0
-      : x === 1
-      ? 1
-      : -pow(2, 10 * x - 10) * sin((x * 10 - 10.75) * c4);
+    return x === 0 ?
+      0 :
+      (x === 1 ?
+        1 :
+        -(2 ** (10 * x - 10)) * sin((x * 10 - 10.75) * c4));
   },
   easeOutElastic(x: number) {
-    return x === 0
-      ? 0
-      : x === 1
-      ? 1
-      : pow(2, -10 * x) * sin((x * 10 - 0.75) * c4) + 1;
+    return x === 0 ?
+      0 :
+      (x === 1 ?
+        1 :
+        2 ** (-10 * x) * sin((x * 10 - 0.75) * c4) + 1);
   },
   easeInBounce(x: number) {
     return 1 - bounceOut(1 - x);
@@ -95,86 +98,92 @@ const easingsFunctions = {
   easeOutBounce: bounceOut,
 };
 
-export function EaseCalc(l: number, r: number, t: number, ease?: Ease) {
-  let func: (t: number) => number;
+// eslint-disable-next-line complexity
+export function easeCalc(l: number, r: number, t: number, ease?: Ease): number {
+  let function_: (t: number) => number;
   switch (ease) {
     case 'backIn':
-      func = easingsFunctions.easeInBack;
+      function_ = easingsFunctions.easeInBack;
       break;
     case 'backOut':
-      func = easingsFunctions.easeOutBack;
+      function_ = easingsFunctions.easeOutBack;
       break;
     case 'bounceIn':
-      func = easingsFunctions.easeInBounce;
+      function_ = easingsFunctions.easeInBounce;
       break;
     case 'bounceOut':
-      func = easingsFunctions.easeOutBounce;
+      function_ = easingsFunctions.easeOutBounce;
       break;
     case 'circIn':
-      func = easingsFunctions.easeInCirc;
+      function_ = easingsFunctions.easeInCirc;
       break;
     case 'circOut':
-      func = easingsFunctions.easeOutCirc;
+      function_ = easingsFunctions.easeOutCirc;
       break;
     case 'cubicIn':
-      func = easingsFunctions.easeInCubic;
+      function_ = easingsFunctions.easeInCubic;
       break;
     case 'cubicOut':
-      func = easingsFunctions.easeOutCubic;
+      function_ = easingsFunctions.easeOutCubic;
       break;
     case 'elasticIn':
-      func = easingsFunctions.easeInElastic;
+      function_ = easingsFunctions.easeInElastic;
       break;
     case 'elasticOut':
-      func = easingsFunctions.easeOutElastic;
+      function_ = easingsFunctions.easeOutElastic;
       break;
     case 'expoIn':
-      func = easingsFunctions.easeInExpo;
+      function_ = easingsFunctions.easeInExpo;
       break;
     case 'expoOut':
-      func = easingsFunctions.easeOutExpo;
+      function_ = easingsFunctions.easeOutExpo;
       break;
     case 'quadIn':
-      func = easingsFunctions.easeInQuad;
+      function_ = easingsFunctions.easeInQuad;
       break;
     case 'quadOut':
-      func = easingsFunctions.easeOutQuad;
+      function_ = easingsFunctions.easeOutQuad;
       break;
     case 'quartIn':
-      func = easingsFunctions.easeInQuart;
+      function_ = easingsFunctions.easeInQuart;
       break;
     case 'quartOut':
-      func = easingsFunctions.easeOutQuart;
+      function_ = easingsFunctions.easeOutQuart;
       break;
     case 'quintIn':
-      func = easingsFunctions.easeInQuint;
+      function_ = easingsFunctions.easeInQuint;
       break;
     case 'quintOut':
-      func = easingsFunctions.easeOutQuint;
+      function_ = easingsFunctions.easeOutQuint;
       break;
     case 'sineIn':
-      func = easingsFunctions.easeInSine;
+      function_ = easingsFunctions.easeInSine;
       break;
     case 'sineOut':
-      func = easingsFunctions.easeOutSine;
+      function_ = easingsFunctions.easeOutSine;
       break;
     case 'jump':
-      func = (_) => 1;
+      function_ = () => 1;
+      break;
     case 'linear':
     default:
-      func = t => t;
+      function_ = t => t;
       break;
   }
-  return l + (r - l) * func(t);
+
+  return l + (r - l) * function_(t);
 }
 
-export function EaseSumCalc(l: number, r: number, st: number, et: number, ease?: Ease) {
+// eslint-disable-next-line max-params
+export function easeSumCalc(l: number, r: number, st: number, et: number, ease?: Ease): number {
   const eps = 1e-3;
-  let t = st, all = et - st, sum = 0;
+  let t = st;
+  let sum = 0;
   while (Math.abs(et - t) >= eps) {
-    sum += EaseCalc(l, r, t, ease);
+    sum += easeCalc(l, r, t, ease);
     t += eps;
   }
+
   sum *= eps;
   return sum;
 }

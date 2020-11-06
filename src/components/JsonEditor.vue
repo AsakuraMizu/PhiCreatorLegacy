@@ -1,5 +1,8 @@
 <template>
-  <div style="height: 400px;" />
+  <div
+    ref="editor"
+    style="height: 400px;"
+  />
 </template>
 
 <script lang="ts">
@@ -7,12 +10,17 @@ import { defineComponent, PropType } from 'vue';
 
 import JSONEditor, { JSONEditorMode, JSONEditorOptions } from 'jsoneditor';
 import 'jsoneditor/dist/jsoneditor.min.css';
+import { ChartData } from '../player/ChartData';
+
+// declare module 'jsoneditor' {
+//   export interface JSONEditorOptions {
+//     onBlur?: (event: { type: 'blur', target: HTMLElement }) => void;
+//   }
+// }
 
 export default defineComponent({
   name: 'JsonEditor',
-  emits: ['update:modelValue', 'error'],
   props: {
-    modelValue: null,
     mode: {
       type: <PropType<JSONEditorMode>>String,
       default: 'code',
@@ -22,15 +30,20 @@ export default defineComponent({
       default: ['tree', 'code'],
     },
   },
-  watch: {
-    modelValue(val) {
-      this.editor.set(val);
-    },
-  },
-  data(){
+  data() {
     return {
-      editor: <JSONEditor>null,
+      editor: <JSONEditor>undefined,
+      watchFlag: 0,
     }
+  },
+  watch: {
+    '$store.state.chart'(newChart: ChartData) {
+      if (this.watchFlag > 0) {
+        --this.watchFlag;
+      } else {
+        this.editor.set(newChart);
+      }
+    },
   },
   mounted() {
     const options: JSONEditorOptions = {
@@ -38,18 +51,17 @@ export default defineComponent({
       modes: this.modes,
       onChange: () => {
         try {
-          let json = this.editor.get();
-          this.$emit('update:modelValue', json);
-        } catch (e) {
-          this.$emit('error', e);
-        }
+          const json = this.editor.get();
+          this.$store.setChart(json);
+          ++this.watchFlag;
+        } catch { /** */ }
       },
     };
 
-    this.editor = new JSONEditor(this.$el, options, this.modelValue);
+    this.editor = new JSONEditor(<HTMLDivElement>this.$refs.editor, options, this.$store.state.chart);
   },
   beforeUnmount() {
     this.editor.destroy();
-  }
-})
+  },
+});
 </script>

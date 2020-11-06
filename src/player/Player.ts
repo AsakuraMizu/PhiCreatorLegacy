@@ -1,37 +1,18 @@
-import { cloneDeep, forEach, reduce } from 'lodash-es';
+import { cloneDeep, forEach, reduce, sumBy } from 'lodash-es';
 import { Application, Texture } from 'pixi.js';
-import { OldEmitterConfig } from 'pixi-particles';
 import { ChartData } from './ChartData';
-import JudgeLineRender from './JudgeLineRender';
 import Judger from './Judger';
-import setupUI from './UI';
-
-export type ResourceName = 'Click' | 'ClickHL' | 'Drag' | 'DragHL' | 'Flick' | 'FlickHL' | 'Hold' | 'HoldEnd' | 'HoldHead' | 'Effect' | 'Square';
-
-export type Resources = {
-  [k in ResourceName]: string;
-};
-
-export interface EffectOptions {
-  ratio: number;
-  size: number;
-  duration: number;
-  interval: number;
-  particle: OldEmitterConfig;
-}
-
-export interface Skin {
-  resources: Resources;
-  noteRatio: number;
-  effect: EffectOptions;
-  color: number;
-}
+import UiRenderer from './UiRenderer';
+import AudioPlayer from './AudioPlayer';
+import JudgeLineRenderer from './JudgeLineRenderer';
+import type { ResourceName, Skin } from './skin';
+import { load } from './utils';
 
 export type Textures = {
   [k in ResourceName]: Texture;
 };
 
-export interface DisplayOptions {
+export interface PreviewOptions {
   title: string;
   diff: string;
   background: File;
@@ -42,65 +23,68 @@ export interface PlayerOptions {
   canvas: HTMLCanvasElement;
   chart: ChartData;
   skin: Skin;
-  display: DisplayOptions;
+  preview: PreviewOptions;
   width?: number;
   height?: number;
   offset?: number;
 }
 
+const emptyState = (): void => { /** */ };
+
 export default class Player {
   app: Application;
-  state: (dt: number) => void = () => { };
-
-  judgeLines: JudgeLineRender[] = [];
-
-  bpm: number;
-  tick: number;
-  width: number;
-  height: number;
+  state: (dt: number) => void = emptyState;
 
   chart: ChartData;
+  width: number;
+  height: number;
 
   skin: Skin;
   textures!: Textures;
   judger!: Judger;
+  uiRenderer: UiRenderer;
+  audioPlayer: AudioPlayer;
+  judgeLines: JudgeLineRenderer[] = [];
 
-  // set fullscreen(status: boolean) {
-  //   if (status) {
-  //     this.app.renderer.resize(window.innerWidth, window.innerHeight);
-  //     this.app.stage.scale.set(window.innerWidth / this.width, window.innerHeight / this.height);
-  //   } else {
-  //     this.app.renderer.resize(this.width, this.height);
-  //     this.app.stage.scale.set(1, 1);
-  //   }
-  // }
+  bpm: number;
+  tick: number;
+  comboTotal: number;
+  combo = 0;
 
-  constructor(options: PlayerOptions) {
+  constructor(options: PlayerOptions, ready?: () => void) {
     this.chart = cloneDeep(options.chart);
     this.skin = options.skin;
-    this.width = options.width ?? 800;
-    this.height = options.height ?? 480;
+    this.width = options.width ?? 1280;
+    this.height = options.height ?? 720;
     this.bpm = this.chart.timing.bpmList[0].bpm;
     this.chart.timing.bpmList.shift();
     this.tick = ((options.offset ?? 0) - this.chart.timing.offset) * this.bpm * 1.2;
+    this.comboTotal = sumBy(this.chart.judgeLineList, l => l.noteList.length);
     this.app = new Application({
       width: this.width,
       height: this.height,
       view: options.canvas,
       antialias: true,
     });
-    // this.fullscreen = false;
+    this.uiRenderer = new UiRenderer(this);
+    this.audioPlayer = new AudioPlayer();
 
-    forEach(this.skin.resources, (url) => {
+    forEach(this.skin.resources, url => {
       this.app.loader.add(url);
     });
 
-    this.app.loader.load(() => this.setup());
-
-    setupUI(this, options.display);
+    load(this.app.loader).then(async () => {
+      await this.setup();
+      await this.uiRenderer.setup(options.preview);
+      await this.audioPlayer.setup(options.preview.music);
+      return;
+    }).then(() => {
+      ready?.();
+      return;
+    }).catch(() => { /** */ });
   }
 
-  setup() {
+  async setup(): Promise<void> {
     this.textures = reduce(this.skin.resources, (result, url, name) => {
       const t = this.app.loader.resources[url].texture;
       t.baseTexture.setResolution(1 / this.skin.noteRatio);
@@ -109,17 +93,34 @@ export default class Player {
     }, <Textures>{});
 
     this.judger = new Judger(this);
-    this.judgeLines.push(...this.chart.judgeLineList.map(l => new JudgeLineRender(this, l)));
 
-    this.state = this.play;
+    this.judgeLines.push(...this.chart.judgeLineList.map(l => new JudgeLineRenderer(this, l)));
+
     this.app.ticker.add(dt => this.gameLoop(dt));
   }
 
-  gameLoop(dt: number) {
+  destroy(): void {
+    this.app.destroy(false, {
+      children: true,
+    });
+    this.audioPlayer.destroy();
+  }
+
+  pause(paused: boolean): void {
+    if (paused) {
+      this.state = emptyState;
+    } else {
+      this.state = this.play;
+    }
+
+    this.audioPlayer.pause(paused);
+  }
+
+  gameLoop(dt: number): void {
     this.state(dt);
   }
 
-  play(dt: number) {
+  play(dt: number): void {
     dt /= 100;
     while (this.chart.timing.bpmList.length > 0) {
       const b = this.chart.timing.bpmList[0];
@@ -133,16 +134,23 @@ export default class Player {
 
     this.tick += this.bpm * dt * 1.2;
 
-    let combo = 0;
     this.judgeLines = this.judgeLines.filter(l => {
       l.update();
-      combo += l.combo;
       if (this.tick > l.constructEvent.endTime) {
         this.app.stage.removeChild(l.container);
         return false;
       }
+
       return true;
     });
+
+    this.uiRenderer.update();
+  }
+
+  resize(width: number, height: number): void {
+    const scale = Math.min(width / this.width, height / this.height);
+    this.app.renderer.resize(this.width * scale, this.height * scale);
+    this.app.stage.scale.set(scale, scale);
   }
 
   calcX(x: number): number {

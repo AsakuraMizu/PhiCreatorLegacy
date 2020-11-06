@@ -1,8 +1,9 @@
 {
   "timing": {
-    "offset": 1,
+    "offset": 0,
     "bpmList": [
       {
+        "id": 0,
         "time": 0,
         "bpm": 150
       }
@@ -10,8 +11,10 @@
   },
   "judgeLineList": [
     {
+      "id": 0,
       "eventList": [
         {
+          "id": 0,
           "type": "construct",
           "startTime": 0,
           "endTime": 550,
@@ -24,17 +27,7 @@
           }
         },
         {
-          "type": "move",
-          "startTime": 0,
-          "endTime": 200,
-          "properties": {
-            "x": 0.2,
-            "y": 0.2,
-            "easeX": "linear",
-            "easeY": "jump"
-          }
-        },
-        {
+          "id": 1,
           "type": "rotate",
           "startTime": 200,
           "endTime": 600,
@@ -44,6 +37,7 @@
           }
         },
         {
+          "id": 2,
           "type": "fade",
           "startTime": 0,
           "endTime": 600,
@@ -51,10 +45,23 @@
             "alpha": 0.5,
             "ease": "linear"
           }
+        },
+        {
+          "id": 3,
+          "type": "move",
+          "startTime": 0,
+          "endTime": 600,
+          "properties": {
+            "x": 0.1,
+            "y": 0.1,
+            "easeX": "linear",
+            "easeY": "linear"
+          }
         }
       ],
       "noteList": [
         {
+          "id": 0,
           "type": "hold",
           "startTime": 200,
           "endTime": 500,
@@ -63,11 +70,30 @@
           "isFake": false
         },
         {
+          "id": 1,
+          "type": "drag",
+          "startTime": 200,
+          "endTime": 200,
+          "relativeX": 0,
+          "side": 1,
+          "isFake": false
+        },
+        {
+          "id": 2,
+          "type": "drag",
+          "startTime": 300,
+          "endTime": 300,
+          "relativeX": 0,
+          "side": 1,
+          "isFake": false
+        },
+        {
+          "id": 3,
           "type": "flick",
           "startTime": 200,
           "endTime": 200,
           "relativeX": 0.3,
-          "side": 1,
+          "side": -1,
           "isFake": false
         }
       ]

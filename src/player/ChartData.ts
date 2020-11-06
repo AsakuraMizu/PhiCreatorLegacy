@@ -10,24 +10,24 @@ export interface TimingData {
 }
 
 export type Ease =
-  'linear'    | 'jump'       |
-  'backIn'    | 'backOut'    |
-  'bounceIn'  | 'bounceOut'  |
-  'circIn'    | 'circOut'    |
-  'cubicIn'   | 'cubicOut'   |
+  'linear' | 'jump' |
+  'backIn' | 'backOut' |
+  'bounceIn' | 'bounceOut' |
+  'circIn' | 'circOut' |
+  'cubicIn' | 'cubicOut' |
   'elasticIn' | 'elasticOut' |
-  'expoIn'    | 'expoOut'    |
-  'quadIn'    | 'quadOut'    |
-  'quartIn'   | 'quartOut'   |
-  'quintIn'   | 'quintOut'   |
-  'sineIn'    | 'sineOut'    ;
+  'expoIn' | 'expoOut' |
+  'quadIn' | 'quadOut' |
+  'quartIn' | 'quartOut' |
+  'quintIn' | 'quintOut' |
+  'sineIn' | 'sineOut';
 
 export interface BaseEventData {
   id: number;
   type: string;
   startTime: number;
   endTime: number;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
 }
 
 export interface ConstructEventData extends BaseEventData {

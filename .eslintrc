@@ -24,6 +24,7 @@
       }
     ],
     "import/no-unassigned-import": "off",
-    "unicorn/prefer-node-remove": "off"
+    "unicorn/prefer-node-remove": "off",
+    "unicorn/prevent-abbreviations": "off"
   }
 }

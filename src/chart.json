@@ -63,36 +63,9 @@
         {
           "id": 0,
           "type": "hold",
-          "startTime": 200,
-          "endTime": 500,
-          "relativeX": 0,
-          "side": 1,
-          "isFake": false
-        },
-        {
-          "id": 1,
-          "type": "drag",
-          "startTime": 200,
-          "endTime": 200,
-          "relativeX": 0,
-          "side": 1,
-          "isFake": false
-        },
-        {
-          "id": 2,
-          "type": "drag",
-          "startTime": 300,
-          "endTime": 300,
-          "relativeX": 0,
-          "side": 1,
-          "isFake": false
-        },
-        {
-          "id": 3,
-          "type": "flick",
-          "startTime": 200,
-          "endTime": 200,
-          "relativeX": 0.3,
+          "startTime": 72,
+          "endTime": 144,
+          "relativeX": -0.3,
           "side": -1,
           "isFake": false
         }

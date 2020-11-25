@@ -12,14 +12,8 @@ import JSONEditor, { JSONEditorMode, JSONEditorOptions } from 'jsoneditor';
 import 'jsoneditor/dist/jsoneditor.min.css';
 import { ChartData } from '../player/ChartData';
 
-// declare module 'jsoneditor' {
-//   export interface JSONEditorOptions {
-//     onBlur?: (event: { type: 'blur', target: HTMLElement }) => void;
-//   }
-// }
-
 export default defineComponent({
-  name: 'JsonEditor',
+  name: 'RawJson',
   props: {
     mode: {
       type: <PropType<JSONEditorMode>>String,

@@ -15,15 +15,17 @@ export default class NoteRenderer {
 
   note: NoteData;
   baseSpeed: number;
+  side: number;
   effectTime = 0;
   judged = false;
 
-  constructor(judgeLineRenderer: JudgeLineRenderer, note: NoteData, hl: boolean) {
+  constructor(judgeLineRenderer: JudgeLineRenderer, note: NoteData) {
     this.judgeLineRenderer = judgeLineRenderer;
     this.player = judgeLineRenderer.player;
 
     this.note = note;
-    this.baseSpeed = (note.speed ?? 1) * (note.side ?? 1);
+    this.baseSpeed = (note.speed ?? 1);
+    this.side = (note.side ?? 1);
 
     if (note.type === 'hold') {
       this.sprite = new Container();
@@ -33,7 +35,7 @@ export default class NoteRenderer {
       this.holdHead = new Sprite(judgeLineRenderer.player.textures.HoldHead);
 
       this.holdBodyHeight = this.holdBody.height;
-      this.holdBody.scale.y = ((judgeLineRenderer.calcDist(note.endTime) - judgeLineRenderer.calcDist(note.startTime)) *
+      this.holdBody.scale.y = this.baseSpeed * ((judgeLineRenderer.calcDist(note.endTime) - judgeLineRenderer.calcDist(note.startTime)) *
         judgeLineRenderer.player.height / 2) / this.holdBodyHeight;
 
       this.holdBody.y = this.holdEnd.height;
@@ -41,7 +43,10 @@ export default class NoteRenderer {
 
       this.sprite.addChild(this.holdEnd, this.holdBody, this.holdHead);
       this.sprite.pivot.set(this.sprite.width / 2, this.holdEnd.height + this.holdBody.height);
+      this.sprite.scale.y = this.side;
     } else {
+      const hl = this.player.timeMap[note.endTime] > 1;
+
       let texture: Texture;
       switch (note.type) {
         case 'click':
@@ -62,7 +67,7 @@ export default class NoteRenderer {
     }
 
     this.sprite.position.x = judgeLineRenderer.player.calcX(note.relativeX);
-    this.sprite.position.y = judgeLineRenderer.player.calcY(this.baseSpeed * judgeLineRenderer.calcDist(this.note.startTime));
+    this.sprite.position.y = judgeLineRenderer.player.calcY(this.side * this.baseSpeed * judgeLineRenderer.calcDist(this.note.startTime));
 
     judgeLineRenderer.container.addChild(this.sprite);
   }
@@ -75,7 +80,7 @@ export default class NoteRenderer {
   }
 
   update(): void {
-    this.sprite.position.y = this.player.calcY(this.baseSpeed * this.judgeLineRenderer.calcDist(this.note.startTime));
+    this.sprite.position.y = this.player.calcY(this.side * this.baseSpeed * this.judgeLineRenderer.calcDist(this.note.startTime));
 
     if (this.player.tick >= this.note.startTime) {
       if (!this.judged) {
@@ -96,7 +101,7 @@ export default class NoteRenderer {
       }
 
       if (this.note.type === 'hold') {
-        this.holdBody.scale.y = ((this.judgeLineRenderer.calcDist(this.note.endTime)) *
+        this.holdBody.scale.y = this.baseSpeed * ((this.judgeLineRenderer.calcDist(this.note.endTime)) *
           this.player.height / 2) / this.holdBodyHeight;
         if (!this.judged) {
           this.sprite.removeChild(this.holdHead);

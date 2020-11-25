@@ -1,7 +1,7 @@
 body {
   margin: 0 auto;
   background-color: white;
-  font-family: 'Exo Regular', zcool;
+  font-family: 'Exo Regular';
 }
 
 #player {
@@ -15,7 +15,11 @@ body {
   src: url("./assets/font/Exo-Regular.otf") format("opentype");
 }
 
-@font-face {
+/* @font-face {
   font-family: zcool;
   src: url("./assets/font/zcool.ttf") format("truetype");
-}
+} */
+
+/* .ant-tabs-nav-container {
+  height: auto !important;
+} */

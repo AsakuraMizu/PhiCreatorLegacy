@@ -5,10 +5,15 @@ import chart from './chart.json';
 const store = {
   state: reactive({
     chart: <ChartData>chart,
+    offset: 0,
   }),
 
   setChart(newChart: ChartData) {
     this.state.chart = newChart;
+  },
+
+  setOffset(newOffset: number) {
+    this.state.offset = newOffset;
   },
 };
 

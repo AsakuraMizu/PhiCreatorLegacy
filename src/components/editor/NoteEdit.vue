@@ -98,10 +98,10 @@ export default defineComponent({
     };
   },
   watch: {
-    note() {
+    data() {
       this.noteData = this.data;
     },
-    'noteData.startTime'() {
+    'noteData.type'() {
       if (this.noteData.type !== 'hold') {
         this.noteData.endTime = this.noteData.startTime;
       }

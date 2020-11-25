@@ -50,6 +50,7 @@ export default class Player {
   tick: number;
   comboTotal: number;
   combo = 0;
+  timeMap: Record<number, number> = {};
 
   constructor(options: PlayerOptions, ready?: () => void) {
     this.chart = cloneDeep(options.chart);
@@ -91,6 +92,14 @@ export default class Player {
       result[<ResourceName>name] = t;
       return result;
     }, <Textures>{});
+
+    this.chart.judgeLineList.forEach(l => {
+      l.noteList.forEach(n => {
+        const time = n.type === 'hold' ? n.startTime : n.endTime;
+        this.timeMap[time] = this.timeMap[time] ?? 0;
+        ++this.timeMap[time];
+      });
+    });
 
     this.judger = new Judger(this);
 

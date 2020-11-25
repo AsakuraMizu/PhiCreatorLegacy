@@ -3,13 +3,13 @@
     <a-col :span="12">
       <a-input
         v-model:value="preview.title"
-        placeholder="Song Name"
+        :placeholder="t('songname')"
       />
     </a-col>
     <a-col :span="12">
       <a-input
         v-model:value="preview.diff"
-        placeholder="Diffculty"
+        :placeholder="t('diff')"
       />
     </a-col>
   </a-row>
@@ -25,10 +25,10 @@
           <pic />
         </p>
         <p class="ant-upload-text">
-          {{ preview.background ? preview.background.name : "Background" }}
+          {{ preview.background ? preview.background.name : t('background') }}
         </p>
         <p class="ant-upload-hint">
-          Click or drag file to this area
+          {{ t('upload') }}
         </p>
       </a-upload-dragger>
     </a-col>
@@ -42,20 +42,20 @@
           <music />
         </p>
         <p class="ant-upload-text">
-          {{ preview.music ? preview.music.name : "Music" }}
+          {{ preview.music ? preview.music.name : t('music') }}
         </p>
         <p class="ant-upload-hint">
-          Click or drag file to this area
+          {{ t('upload') }}
         </p>
       </a-upload-dragger>
     </a-col>
   </a-row>
   <a-button @click="previewing = true">
-    Preview
+    {{ t('preview') }}
   </a-button>
   <a-modal
     v-model:visible="previewing"
-    title="Preview"
+    :title="t('preview')"
     width="400"
     :destroy-on-close="true"
     :centered="true"
@@ -67,8 +67,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
+import { useI18n } from 'vue-i18n';
 import { Music, Pic } from '@icon-park/vue-next';
+
 import Player from './Player.vue';
 
 import type { PreviewOptions } from '../player/Player';
@@ -80,6 +81,13 @@ export default defineComponent({
 
     Music,
     Pic,
+  },
+  setup() {
+    const { t } = useI18n();
+
+    return {
+      t,
+    };
   },
   data() {
     return {
@@ -104,3 +112,24 @@ export default defineComponent({
   },
 })
 </script>
+
+<i18n lang="json5">
+{
+  en: {
+    songname: 'Song Name',
+    diff: 'Difficulty',
+    background: 'Background',
+    music: 'Music',
+    upload: 'Click or drag file to this area',
+    preview: 'Preview',
+  },
+  zh: {
+    songname: '名称',
+    diff: '难度',
+    background: '背景',
+    music: '音乐',
+    upload: '单击或拖拽文件到此处',
+    preview: '预览',
+  },
+}
+</i18n>

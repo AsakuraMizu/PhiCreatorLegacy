@@ -4,13 +4,14 @@
     :tab-position="tabPosition"
     type="editable-card"
     :hide-add="true"
+    :tab-bar-style="{
+      height: '300px',
+    }"
     @edit="remove"
     @tabClick="tabClick"
   >
     <template #tabBarExtraContent>
-      <a-button
-        @click="add"
-      >
+      <a-button @click="add">
         +Add
       </a-button>
     </template>
@@ -52,7 +53,7 @@ export default defineComponent({
     name: {
       type: String,
       default: '',
-    }
+    },
   },
   emits: ['edit'],
   data() {
@@ -73,6 +74,7 @@ export default defineComponent({
         --this.updateFlag;
       } else {
         this.list = new Map<number, DataType>(newDataList.map(d => [d.id, d]));
+        this.activeKey = this.lastId;
       }
     },
   },

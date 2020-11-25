@@ -85,14 +85,7 @@ export default class JudgeLineRenderer {
 
     judgeLine.noteList.sort((a, b) => a.startTime - b.startTime);
 
-    this.notes.push(...judgeLine.noteList.map((n, index, array) => {
-      let hl = false;
-      if (index > 0 && Math.abs(array[index - 1].startTime - n.startTime) < 1e-5) {
-        hl = true;
-      }
-
-      return new NoteRenderer(this, n, hl);
-    }));
+    this.notes.push(...judgeLine.noteList.map(n => new NoteRenderer(this, n)));
 
     this.cull = new Cull();
     this.cull.add(this.container);

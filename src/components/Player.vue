@@ -76,6 +76,7 @@ export default defineComponent({
       canvas: this.canvas,
       chart: this.$store.state.chart,
       preview: this.preview,
+      offset: this.$store.state.offset,
       skin,
     }, () => {
       this.ready = true;

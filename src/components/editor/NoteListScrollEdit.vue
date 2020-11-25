@@ -118,6 +118,10 @@ export default defineComponent({
       this.x = (e.clientX - this.rect.x) / this.rect.width;
       this.y = (e.clientY - this.rect.y) / this.rect.height;
 
+      if (Math.abs(this.y - Math.round(this.y * 15) / 15) <= 1e-2) {
+        this.y = Math.round(this.y * 15) / 15;
+      }
+
       if (this.holdId != -1) {
         const list: NoteData[] = [];
         for (const n of this.noteList) {

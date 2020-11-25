@@ -4,16 +4,18 @@ import chart from './chart.json';
 
 const store = {
   state: reactive({
-    chart: <ChartData>chart,
-    offset: 0,
+    chart: <ChartData>(localStorage.chart ? JSON.parse(localStorage.chart) : chart),
+    offset: localStorage.offset || 0,
   }),
 
   setChart(newChart: ChartData) {
     this.state.chart = newChart;
+    localStorage.chart = JSON.stringify(newChart);
   },
 
   setOffset(newOffset: number) {
     this.state.offset = newOffset;
+    localStorage.offset = newOffset;
   },
 };
 

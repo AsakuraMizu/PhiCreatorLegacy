@@ -5,7 +5,7 @@ import chart from './chart.json';
 const store = {
   state: reactive({
     chart: <ChartData>(localStorage.chart ? JSON.parse(localStorage.chart) : chart),
-    offset: localStorage.offset || 0,
+    offset: localStorage.offset ? Number.parseFloat(localStorage.offset) : 0,
   }),
 
   setChart(newChart: ChartData) {
@@ -15,7 +15,7 @@ const store = {
 
   setOffset(newOffset: number) {
     this.state.offset = newOffset;
-    localStorage.offset = newOffset;
+    localStorage.offset = newOffset.toString();
   },
 };
 

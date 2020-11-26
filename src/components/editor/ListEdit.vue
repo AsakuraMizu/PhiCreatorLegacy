@@ -7,6 +7,7 @@
     :tab-bar-style="{
       height: '300px',
     }"
+    :style="{ 'min-height': '350px' }"
     @edit="remove"
     @tabClick="tabClick"
   >

@@ -7,11 +7,9 @@ dependencies:
   howler: 2.2.1
   jsoneditor: 9.1.4
   lodash-es: 4.17.15
-  moveable: 0.21.1
   pixi-particles: 4.3.0_pixi.js@5.3.3
   pixi.js: 5.3.3
   screenfull: 5.0.2
-  selecto: 1.10.1
   vue: 3.0.2
   vue-i18n: 9.0.0-beta.8_vue@3.0.2
 devDependencies:
@@ -171,28 +169,6 @@ packages:
     resolution:
       integrity: sha1-FYX2dimIIAKp+OFaKUHJpDIb+Aw=
       tarball: '@ctrl/tinycolor/download/@ctrl/tinycolor-3.1.7.tgz'
-  /@daybrush/utils/1.3.1:
-    dev: false
-    resolution:
-      integrity: sha1-51+7kMAgiw1/YYbvTWv2hAR/5xE=
-      tarball: '@daybrush/utils/download/@daybrush/utils-1.3.1.tgz'
-  /@egjs/agent/2.2.1:
-    dev: false
-    resolution:
-      integrity: sha1-+xRMxxg6W7ecL87u+0p7KCbpdm8=
-      tarball: '@egjs/agent/download/@egjs/agent-2.2.1.tgz'
-  /@egjs/children-differ/1.0.1:
-    dependencies:
-      '@egjs/list-differ': 1.0.0
-    dev: false
-    resolution:
-      integrity: sha1-VGX6gGcdXKNWTr6RL0iwWz6KFP0=
-      tarball: '@egjs/children-differ/download/@egjs/children-differ-1.0.1.tgz'
-  /@egjs/list-differ/1.0.0:
-    dev: false
-    resolution:
-      integrity: sha1-Inev9S4+S9kxjVww/8O6O2IW8F4=
-      tarball: '@egjs/list-differ/download/@egjs/list-differ-1.0.0.tgz'
   /@eslint/eslintrc/0.2.1:
     dependencies:
       ajv: 6.12.6
@@ -665,27 +641,6 @@ packages:
     resolution:
       integrity: sha1-Dcxhx4DjkldVT+t/dyB9zsoTyDg=
       tarball: '@rollup/pluginutils/download/@rollup/pluginutils-4.1.0.tgz'
-  /@scena/dragscroll/0.3.1:
-    dependencies:
-      '@scena/event-emitter': 1.0.5
-    dev: false
-    resolution:
-      integrity: sha1-OoI04+qo9PT/Z5oYCMYCgAZiZrE=
-      tarball: '@scena/dragscroll/download/@scena/dragscroll-0.3.1.tgz'
-  /@scena/event-emitter/1.0.5:
-    dependencies:
-      '@daybrush/utils': 1.3.1
-    dev: false
-    resolution:
-      integrity: sha1-BH46zvk88jjXzjqMxaEuxr2cO7E=
-      tarball: '@scena/event-emitter/download/@scena/event-emitter-1.0.5.tgz'
-  /@scena/matrix/1.1.0:
-    dependencies:
-      '@daybrush/utils': 1.3.1
-    dev: false
-    resolution:
-      integrity: sha1-5qMDa32N8hwUo+P8MylhpD8vlWA=
-      tarball: '@scena/matrix/download/@scena/matrix-1.1.0.tgz'
   /@simonwep/pickr/1.7.4:
     dependencies:
       core-js: 3.7.0
@@ -1616,22 +1571,6 @@ packages:
     resolution:
       integrity: sha1-9zqFudXUHQRVUcF34ogtSshXKKY=
       tarball: cross-spawn/download/cross-spawn-7.0.3.tgz
-  /css-styled/1.0.0:
-    dependencies:
-      '@daybrush/utils': 1.3.1
-      string-hash: 1.1.3
-    dev: false
-    resolution:
-      integrity: sha1-b+EKmPlcJPpmyxxB4R58ALztrBM=
-      tarball: css-styled/download/css-styled-1.0.0.tgz
-  /css-to-mat/1.0.3:
-    dependencies:
-      '@daybrush/utils': 1.3.1
-      '@scena/matrix': 1.1.0
-    dev: false
-    resolution:
-      integrity: sha1-XA2bVytotX+ougsaTFcsGM47K2A=
-      tarball: css-to-mat/download/css-to-mat-1.0.3.tgz
   /cssesc/3.0.0:
     dev: true
     engines:
@@ -2335,11 +2274,6 @@ packages:
     resolution:
       integrity: sha1-tC6Nk6Kn7qXtiGM2dtZZe8jjhNs=
       tarball: follow-redirects/download/follow-redirects-1.13.0.tgz?cache=0&sync_timestamp=1597064460913&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ffollow-redirects%2Fdownload%2Ffollow-redirects-1.13.0.tgz
-  /framework-utils/0.3.4:
-    dev: false
-    resolution:
-      integrity: sha1-RQ5jzKaAwqeAR2kaMu2fUadI46E=
-      tarball: framework-utils/download/framework-utils-0.3.4.tgz
   /fresh/0.5.2:
     dev: true
     engines:
@@ -2389,14 +2323,6 @@ packages:
     resolution:
       integrity: sha1-+KN46tLMqno08DF7BVVIMq5BuHI=
       tarball: generic-names/download/generic-names-2.0.1.tgz
-  /gesto/1.3.0:
-    dependencies:
-      '@daybrush/utils': 1.3.1
-      '@scena/event-emitter': 1.0.5
-    dev: false
-    resolution:
-      integrity: sha1-/xQZZPrsu6444M+wCGB8UzpsaU8=
-      tarball: gesto/download/gesto-1.3.0.tgz
   /get-intrinsic/1.0.1:
     dependencies:
       function-bind: 1.1.1
@@ -2997,20 +2923,6 @@ packages:
     resolution:
       integrity: sha1-vFWyY0eTxnnsZAMJTrE2mKbsCq4=
       tarball: jsonfile/download/jsonfile-6.1.0.tgz
-  /keycode/2.2.0:
-    dev: false
-    resolution:
-      integrity: sha1-PQr1bce4uOXLqNCpfxByBO7CKwQ=
-      tarball: keycode/download/keycode-2.2.0.tgz
-  /keycon/1.1.2:
-    dependencies:
-      '@daybrush/utils': 1.3.1
-      '@scena/event-emitter': 1.0.5
-      keycode: 2.2.0
-    dev: false
-    resolution:
-      integrity: sha1-p6n18i8yAS+v0R5oxCg5EdBzi84=
-      tarball: keycon/download/keycon-1.1.2.tgz
   /keygrip/1.1.0:
     dependencies:
       tsscmp: 1.0.6
@@ -3344,14 +3256,6 @@ packages:
     resolution:
       integrity: sha1-sr52n6MZQL6e7qZGnAdeNQBvo9M=
       tarball: moment/download/moment-2.29.1.tgz?cache=0&sync_timestamp=1602220444316&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmoment%2Fdownload%2Fmoment-2.29.1.tgz
-  /moveable/0.21.1:
-    dependencies:
-      '@scena/event-emitter': 1.0.5
-      react-compat-moveable: 0.9.1
-    dev: false
-    resolution:
-      integrity: sha1-E5EOabT6GYqWRhTSh1oVZuTHmLQ=
-      tarball: moveable/download/moveable-0.21.1.tgz
   /ms/2.0.0:
     dev: true
     resolution:
@@ -3547,13 +3451,6 @@ packages:
     resolution:
       integrity: sha1-sYjPjNLU2bE/0lODvD5cujUslPg=
       tarball: ora/download/ora-5.1.0.tgz
-  /overlap-area/1.0.0:
-    dependencies:
-      '@daybrush/utils': 1.3.1
-    dev: false
-    resolution:
-      integrity: sha1-1E20W4EOwFxMLJ9DCrYMlHPyEBs=
-      tarball: overlap-area/download/overlap-area-1.0.0.tgz
   /p-limit/1.3.0:
     dependencies:
       p-try: 1.0.0
@@ -3980,58 +3877,6 @@ packages:
     resolution:
       integrity: sha1-32+ENy8CcNxlzfYpE0mrekc9Tyo=
       tarball: randombytes/download/randombytes-2.1.0.tgz
-  /react-compat-css-styled/1.0.0:
-    dependencies:
-      css-styled: 1.0.0
-      react-css-styled: 1.0.0
-      react-simple-compat: 0.1.9
-    dev: false
-    peerDependencies:
-      framework-utils: '>=0.3.4'
-    resolution:
-      integrity: sha1-Ov5VXakM26UVQ9uyMP6A5GccOfY=
-      tarball: react-compat-css-styled/download/react-compat-css-styled-1.0.0.tgz
-  /react-compat-moveable/0.9.1:
-    dependencies:
-      react-compat-css-styled: 1.0.0
-      react-moveable: 0.24.1
-      react-simple-compat: 0.1.9
-    dev: false
-    resolution:
-      integrity: sha1-pRAiCsU0WNyLDxcQVgEUUqzhAjM=
-      tarball: react-compat-moveable/download/react-compat-moveable-0.9.1.tgz
-  /react-css-styled/1.0.0:
-    dependencies:
-      css-styled: 1.0.0
-      framework-utils: 0.3.4
-    dev: false
-    resolution:
-      integrity: sha1-S0JyqiTwplnpcj6sgmPSF53G6IY=
-      tarball: react-css-styled/download/react-css-styled-1.0.0.tgz
-  /react-moveable/0.24.1:
-    dependencies:
-      '@daybrush/utils': 1.3.1
-      '@egjs/agent': 2.2.1
-      '@egjs/children-differ': 1.0.1
-      '@scena/dragscroll': 0.3.1
-      '@scena/matrix': 1.1.0
-      css-to-mat: 1.0.3
-      framework-utils: 0.3.4
-      gesto: 1.3.0
-      overlap-area: 1.0.0
-      react-css-styled: 1.0.0
-    dev: false
-    resolution:
-      integrity: sha1-+xE4wkkekzf0WjVCMutIAHpIeBE=
-      tarball: react-moveable/download/react-moveable-0.24.1.tgz
-  /react-simple-compat/0.1.9:
-    dependencies:
-      '@daybrush/utils': 1.3.1
-      '@egjs/list-differ': 1.0.0
-    dev: false
-    resolution:
-      integrity: sha1-4VQz/RcALsaRfU58Q1HSAFFlJ8U=
-      tarball: react-simple-compat/download/react-simple-compat-0.1.9.tgz
   /read-cache/1.0.0:
     dependencies:
       pify: 2.3.0
@@ -4290,21 +4135,6 @@ packages:
     resolution:
       integrity: sha1-5JF9oMggE1/2Wtb35LfXr1aMTxM=
       tarball: scroll-into-view-if-needed/download/scroll-into-view-if-needed-2.2.26.tgz
-  /selecto/1.10.1:
-    dependencies:
-      '@daybrush/utils': 1.3.1
-      '@egjs/children-differ': 1.0.1
-      '@scena/dragscroll': 0.3.1
-      '@scena/event-emitter': 1.0.5
-      css-styled: 1.0.0
-      framework-utils: 0.3.4
-      gesto: 1.3.0
-      keycon: 1.1.2
-      overlap-area: 1.0.0
-    dev: false
-    resolution:
-      integrity: sha1-lWSt6sd1/fjoW/WMcqceapqNS2w=
-      tarball: selecto/download/selecto-1.10.1.tgz
   /selfsigned/1.10.8:
     dependencies:
       node-forge: 0.10.0
@@ -4479,6 +4309,7 @@ packages:
       integrity: sha1-aYLMMEn7tM2F+LJFaLnZvznu/5c=
       tarball: string-convert/download/string-convert-0.2.1.tgz
   /string-hash/1.1.3:
+    dev: true
     resolution:
       integrity: sha1-6Kr8CsGFW0Zmkp7X3RJ1311sgRs=
       tarball: string-hash/download/string-hash-1.1.3.tgz
@@ -4980,11 +4811,9 @@ specifiers:
   howler: ^2.2.1
   jsoneditor: ^9.1.4
   lodash-es: ^4.17.15
-  moveable: ^0.21.1
   pixi-particles: ^4.3.0
   pixi.js: ^5.3.3
   screenfull: ^5.0.2
-  selecto: ^1.10.1
   typescript: ^4.1.2
   vite: ^1.0.0-rc.9
   vue: ^3.0.2

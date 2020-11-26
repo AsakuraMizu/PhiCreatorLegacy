@@ -106,6 +106,11 @@ export default defineComponent({
         this.noteData.endTime = this.noteData.startTime;
       }
     },
+    'noteData.startTime'() {
+      if (this.noteData.type !== 'hold') {
+        this.noteData.endTime = this.noteData.startTime;
+      }
+    },
   },
   methods: {
     save() {

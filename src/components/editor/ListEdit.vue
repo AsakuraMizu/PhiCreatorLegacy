@@ -13,7 +13,7 @@
   >
     <template #tabBarExtraContent>
       <a-button @click="add">
-        +Add
+        {{ t('add') }}
       </a-button>
     </template>
     <a-tab-pane
@@ -31,6 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 type DataType = {
   id: number;
@@ -57,6 +58,12 @@ export default defineComponent({
     },
   },
   emits: ['edit'],
+  setup() {
+    const { t } = useI18n();
+    return {
+      t,
+    };
+  },
   data() {
     return {
       activeKey: <number>undefined,
@@ -112,3 +119,14 @@ export default defineComponent({
   },
 });
 </script>
+
+<i18n lang="json5">
+{
+  en: {
+    add: '+Add',
+  },
+  zh: {
+    add: '+添加',
+  },
+}
+</i18n>

@@ -8,10 +8,11 @@
 
 ## 使用指南 | Usage
 
-还妹写qwq
+[http://blog.solariar.tech/2020/pc-doc/](http://blog.solariar.tech/2020/pc-doc/)
 
 ## TODO
 
++ [ ] note选择、拖拽、复制
 + [ ] 支持触屏操作
 + [ ] 更完善的 PhiFormat 支持
 + [ ] 皮肤系统

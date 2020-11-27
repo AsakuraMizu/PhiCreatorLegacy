@@ -1,6 +1,7 @@
 <template>
   <list-edit
     v-slot="{ data, edited }"
+    tab-position="top"
     :data-list="lineList"
     :empty-data="{
       eventList: [],

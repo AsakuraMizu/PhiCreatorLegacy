@@ -4,9 +4,9 @@
     :tab-position="tabPosition"
     type="editable-card"
     :hide-add="true"
-    :tab-bar-style="{
+    :tab-bar-style="tabPosition === 'left' ? {
       height: '450px',
-    }"
+    } : {}"
     :style="{ 'min-height': '500px' }"
     @edit="remove"
     @tabClick="tabClick"

@@ -38,7 +38,9 @@
       </a-row>
     </a-layout-content>
     <a-layout-footer style="text-align: center">
-      PhiCreator © 2020 PhiX Dev Team
+      PhiCreator © 2020 <a href="https://github.com/phi-x">PhiX Dev Team</a>
+      <br>
+      <a href="https://github.com/phi-x/PhiCreator">View on <github size="14" />  GitHub</a>
     </a-layout-footer>
   </a-layout>
 </template>
@@ -46,7 +48,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { DEFAULT_ICON_CONFIGS, IconProvider } from '@icon-park/vue-next';
+import { DEFAULT_ICON_CONFIGS, IconProvider, Github } from '@icon-park/vue-next';
 
 import Settings from './components/Settings.vue';
 import Editor from './components/editor/Editor.vue';
@@ -60,6 +62,7 @@ export default defineComponent({
     Editor,
     Preview,
     RawJson,
+    Github,
   },
   setup() {
     IconProvider({

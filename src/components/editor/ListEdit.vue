@@ -5,9 +5,9 @@
     type="editable-card"
     :hide-add="true"
     :tab-bar-style="{
-      height: '300px',
+      height: '450px',
     }"
-    :style="{ 'min-height': '350px' }"
+    :style="{ 'min-height': '500px' }"
     @edit="remove"
     @tabClick="tabClick"
   >

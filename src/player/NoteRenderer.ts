@@ -42,7 +42,7 @@ export default class NoteRenderer {
       this.holdHead.y = this.holdEnd.height + this.holdBody.height;
 
       this.sprite.addChild(this.holdEnd, this.holdBody, this.holdHead);
-      this.sprite.pivot.set(this.sprite.width / 2, this.holdEnd.height + this.holdBody.height);
+      this.sprite.pivot.set(this.sprite.width / 2, this.holdEnd.height);
       this.sprite.scale.y = this.side;
     } else {
       const hl = this.player.timeMap[note.endTime] > 1;
@@ -67,20 +67,22 @@ export default class NoteRenderer {
     }
 
     this.sprite.position.x = judgeLineRenderer.player.calcX(note.relativeX);
-    this.sprite.position.y = judgeLineRenderer.player.calcY(this.side * this.baseSpeed * judgeLineRenderer.calcDist(this.note.startTime));
+    this.sprite.position.y = judgeLineRenderer.player.calcY(this.side * this.baseSpeed * judgeLineRenderer.calcDist(this.note.endTime));
 
     judgeLineRenderer.container.addChild(this.sprite);
   }
 
   playJudge(): void {
-    this.player.judger.judgeAt(this.judgeLineRenderer.container.toGlobal({
-      x: this.sprite.position.x,
-      y: this.judgeLineRenderer.player.calcY(0),
-    }));
+    if (this.player.tick < this.note.endTime + 12) {
+      this.player.judger.judgeAt(this.judgeLineRenderer.container.toGlobal({
+        x: this.sprite.position.x,
+        y: this.judgeLineRenderer.player.calcY(0),
+      }));
+    }
   }
 
   update(): void {
-    this.sprite.position.y = this.player.calcY(this.side * this.baseSpeed * this.judgeLineRenderer.calcDist(this.note.startTime));
+    this.sprite.position.y = this.player.calcY(this.side * this.baseSpeed * this.judgeLineRenderer.calcDist(this.note.endTime));
 
     if (this.player.tick >= this.note.startTime) {
       if (!this.judged) {

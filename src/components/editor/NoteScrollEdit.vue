@@ -6,6 +6,7 @@
     :style="{ transform: `translate(${x}px, ${y}px)` }"
     :width="width"
     :height="height"
+    @auxclick="$emit('delete')"
   >
 </template>
 
@@ -38,6 +39,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ['delete'],
   computed: {
     width(): number {
       return this.fullWidth / 8;

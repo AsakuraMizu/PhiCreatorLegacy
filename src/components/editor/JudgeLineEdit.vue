@@ -1,8 +1,11 @@
 <template>
-  <a-tabs>
+  <a-tabs
+    :active-key="$store.state.activePage"
+    @update:activeKey="$store.setActivePage($event)"
+  >
     <a-tab-pane
       key="note"
-      tab="Notes"
+      :tab="t('notes')"
     >
       <note-list-edit
         :note-list="noteList"
@@ -10,8 +13,8 @@
       />
     </a-tab-pane>
     <a-tab-pane
-      key="anim"
-      tab="Events"
+      key="event"
+      :tab="t('events')"
     >
       <event-list-edit
         :event-list="eventList"
@@ -23,6 +26,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import NoteListEdit from './NoteListEdit.vue';
 import EventListEdit from './EventListEdit.vue';
@@ -42,6 +46,12 @@ export default defineComponent({
     },
   },
   emits: ['edit'],
+  setup() {
+    const { t } = useI18n();
+    return {
+      t,
+    };
+  },
   computed: {
     noteList: {
       get(): NoteData[] {
@@ -68,3 +78,16 @@ export default defineComponent({
   }
 });
 </script>
+
+<i18n lang="json5">
+{
+  en: {
+    notes: 'Notes',
+    events: 'Events',
+  },
+  zh: {
+    notes: '音符',
+    events: '事件',
+  },
+}
+</i18n>

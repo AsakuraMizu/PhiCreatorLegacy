@@ -14,6 +14,7 @@
       :full-width="rect.width"
       :full-height="rect.height"
       :block="block"
+      @delete="$emit('edit', noteList.filter(n => n.id !== note.id))"
     />
   </div>
   <br>

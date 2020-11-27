@@ -179,7 +179,7 @@ export function easeSumCalc(l: number, r: number, st: number, et: number, ease?:
   const eps = 1e-3;
   let t = st;
   let sum = 0;
-  while (Math.abs(et - t) >= eps) {
+  while (t <= et) {
     sum += easeCalc(l, r, t, ease);
     t += eps;
   }

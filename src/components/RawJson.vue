@@ -1,7 +1,7 @@
 <template>
   <div
     ref="editor"
-    style="height: 400px;"
+    style="height: 800px;"
   />
 </template>
 

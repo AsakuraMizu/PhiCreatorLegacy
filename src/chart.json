@@ -11,65 +11,376 @@
   },
   "judgeLineList": [
     {
-      "id": 0,
       "eventList": [
         {
-          "id": 0,
           "type": "construct",
           "startTime": 0,
-          "endTime": 550,
+          "endTime": 1000,
           "properties": {
-            "x": -0.1,
-            "y": -0.1,
+            "x": 0,
+            "y": 0,
             "angle": 0,
             "alpha": 1,
             "speed": 0.01
-          }
+          },
+          "id": 0
         },
         {
-          "id": 1,
           "type": "rotate",
-          "startTime": 200,
-          "endTime": 600,
+          "startTime": 432,
+          "endTime": 576,
           "properties": {
-            "angle": -3.1415926,
-            "ease": "backOut"
-          }
+            "angle": 3.14159,
+            "ease": "backIn"
+          },
+          "id": 1
         },
         {
-          "id": 2,
-          "type": "fade",
-          "startTime": 0,
-          "endTime": 600,
+          "type": "speed",
+          "startTime": 432,
+          "endTime": 576,
           "properties": {
-            "alpha": 0.5,
-            "ease": "linear"
-          }
-        },
-        {
-          "id": 3,
-          "type": "move",
-          "startTime": 400,
-          "endTime": 600,
-          "properties": {
-            "x": 0.1,
-            "y": 0.1,
-            "easeX": "linear",
-            "easeY": "linear"
-          }
+            "speed": 0.005,
+            "ease": "jump"
+          },
+          "id": 2
         }
       ],
       "noteList": [
         {
-          "id": 0,
+          "id": 1,
+          "type": "click",
+          "startTime": 216,
+          "endTime": 216,
+          "relativeX": -0.27,
+          "showTime": 0,
+          "side": 1,
+          "speed": 1,
+          "isFake": false
+        },
+        {
+          "id": 2,
+          "type": "flick",
+          "startTime": 288,
+          "endTime": 288,
+          "relativeX": -0.009965139617592156,
+          "showTime": 0,
+          "side": 1,
+          "speed": 1,
+          "isFake": false
+        },
+        {
+          "id": 3,
+          "type": "drag",
+          "startTime": 359.99999999999994,
+          "endTime": 359.99999999999994,
+          "relativeX": 0.29201732455368146,
+          "showTime": 0,
+          "side": 1,
+          "speed": 1,
+          "isFake": false
+        },
+        {
+          "id": 4,
+          "type": "drag",
+          "startTime": 359.99999999999994,
+          "endTime": 359.99999999999994,
+          "relativeX": -0.4246276277333709,
+          "showTime": 0,
+          "side": 1,
+          "speed": 1,
+          "isFake": false
+        },
+        {
+          "id": 5,
+          "type": "flick",
+          "startTime": 288,
+          "endTime": 288,
+          "relativeX": -0.5012500440156343,
+          "showTime": 0,
+          "side": 1,
+          "speed": 1,
+          "isFake": false
+        },
+        {
+          "id": 6,
+          "type": "click",
+          "startTime": 216,
+          "endTime": 216,
+          "relativeX": 0.15680129582027535,
+          "showTime": 0,
+          "side": 1,
+          "speed": 1,
+          "isFake": false
+        },
+        {
+          "id": 7,
           "type": "hold",
-          "startTime": 72,
-          "endTime": 144,
-          "relativeX": -0.3,
-          "side": -1,
+          "startTime": 432,
+          "endTime": 576,
+          "relativeX": 0,
+          "showTime": 0,
+          "side": 1,
+          "speed": 1,
+          "isFake": false
+        },
+        {
+          "id": 9,
+          "type": "drag",
+          "startTime": 504,
+          "endTime": 504,
+          "relativeX": 0,
+          "showTime": 0,
+          "side": 1,
+          "speed": 1,
+          "isFake": false
+        },
+        {
+          "id": 10,
+          "type": "drag",
+          "startTime": 432,
+          "endTime": 432,
+          "relativeX": 0,
+          "showTime": 0,
+          "side": 1,
+          "speed": 1,
+          "isFake": false
+        },
+        {
+          "id": 11,
+          "type": "flick",
+          "startTime": 576,
+          "endTime": 576,
+          "relativeX": 0,
+          "showTime": 0,
+          "side": 1,
+          "speed": 1,
           "isFake": false
         }
-      ]
+      ],
+      "id": 0
+    },
+    {
+      "eventList": [
+        {
+          "type": "construct",
+          "startTime": 216,
+          "endTime": 250,
+          "properties": {
+            "x": -0.271382795168844,
+            "y": 0,
+            "angle": 1.5707,
+            "alpha": 1,
+            "speed": 0.01
+          },
+          "id": 0
+        },
+        {
+          "type": "fade",
+          "startTime": 216,
+          "endTime": 250,
+          "properties": {
+            "alpha": 0,
+            "ease": "linear"
+          },
+          "id": 1
+        }
+      ],
+      "noteList": [],
+      "id": 1
+    },
+    {
+      "eventList": [
+        {
+          "type": "construct",
+          "startTime": 216,
+          "endTime": 250,
+          "properties": {
+            "x": 0.15680129582027535,
+            "y": 0,
+            "angle": 1.5707,
+            "alpha": 1,
+            "speed": 0.01
+          },
+          "id": 0
+        },
+        {
+          "type": "fade",
+          "startTime": 216,
+          "endTime": 250,
+          "properties": {
+            "alpha": 0,
+            "ease": "linear"
+          },
+          "id": 1
+        }
+      ],
+      "noteList": [],
+      "id": 2
+    },
+    {
+      "eventList": [
+        {
+          "type": "construct",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "x": -0.009965139617592156,
+            "y": 0,
+            "angle": 1.5707,
+            "alpha": 1,
+            "speed": 0.01
+          },
+          "id": 0
+        },
+        {
+          "type": "fade",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "alpha": 0,
+            "ease": "linear"
+          },
+          "id": 1
+        },
+        {
+          "type": "move",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "x": -0.20996513961759217,
+            "y": 0,
+            "easeX": "linear",
+            "easeY": "linear"
+          },
+          "id": 2
+        }
+      ],
+      "noteList": [],
+      "id": 3
+    },
+    {
+      "eventList": [
+        {
+          "type": "construct",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "x": -0.009965139617592156,
+            "y": 0,
+            "angle": 1.5707,
+            "alpha": 1,
+            "speed": 0.01
+          },
+          "id": 0
+        },
+        {
+          "type": "fade",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "alpha": 0,
+            "ease": "linear"
+          },
+          "id": 1
+        },
+        {
+          "type": "move",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "x": 0.19003486038240786,
+            "y": 0,
+            "easeX": "linear",
+            "easeY": "linear"
+          },
+          "id": 2
+        }
+      ],
+      "noteList": [],
+      "id": 4
+    },
+    {
+      "eventList": [
+        {
+          "type": "construct",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "x": -0.5012500440156343,
+            "y": 0,
+            "angle": 1.5707,
+            "alpha": 1,
+            "speed": 0.01
+          },
+          "id": 0
+        },
+        {
+          "type": "fade",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "alpha": 0,
+            "ease": "linear"
+          },
+          "id": 1
+        },
+        {
+          "type": "move",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "x": -0.7012500440156344,
+            "y": 0,
+            "easeX": "linear",
+            "easeY": "linear"
+          },
+          "id": 2
+        }
+      ],
+      "noteList": [],
+      "id": 5
+    },
+    {
+      "eventList": [
+        {
+          "type": "construct",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "x": -0.5012500440156343,
+            "y": 0,
+            "angle": 1.5707,
+            "alpha": 1,
+            "speed": 0.01
+          },
+          "id": 0
+        },
+        {
+          "type": "fade",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "alpha": 0,
+            "ease": "linear"
+          },
+          "id": 1
+        },
+        {
+          "type": "move",
+          "startTime": 288,
+          "endTime": 350,
+          "properties": {
+            "x": -0.3012500440156343,
+            "y": 0,
+            "easeX": "linear",
+            "easeY": "linear"
+          },
+          "id": 2
+        }
+      ],
+      "noteList": [],
+      "id": 6
     }
   ]
 }

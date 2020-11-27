@@ -7,10 +7,9 @@
     "lint": "eslint src --ext .ts,.vue"
   },
   "dependencies": {
-    "@icon-park/vue-next": "^1.0.14",
+    "@icon-park/vue-next": "^1.1.1",
     "@pixi-essentials/cull": "^1.0.9",
-    "@vue/runtime-core": "^3.0.2",
-    "ant-design-vue": "^2.0.0-rc.1",
+    "ant-design-vue": "^2.0.0-rc.2",
     "hotkeys-js": "^3.8.1",
     "howler": "^2.2.1",
     "jsoneditor": "^9.1.4",
@@ -18,7 +17,7 @@
     "pixi-particles": "^4.3.0",
     "pixi.js": "^5.3.3",
     "screenfull": "^5.0.2",
-    "vue": "^3.0.2",
+    "vue": "^3.0.3",
     "vue-i18n": "^9.0.0-beta.8"
   },
   "devDependencies": {
@@ -26,15 +25,15 @@
     "@types/howler": "^2.2.1",
     "@types/jsoneditor": "^8.6.0",
     "@types/lodash-es": "^4.17.3",
-    "@typescript-eslint/eslint-plugin": "^4.8.1",
-    "@typescript-eslint/parser": "^4.8.1",
-    "@vue/compiler-sfc": "^3.0.2",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
+    "@vue/compiler-sfc": "^3.0.3",
     "eslint": "^7.14.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-unicorn": "^23.0.0",
     "eslint-plugin-vue": "^7.1.0",
     "typescript": "^4.1.2",
-    "vite": "^1.0.0-rc.9"
+    "vite": "^1.0.0-rc.13"
   }
 }

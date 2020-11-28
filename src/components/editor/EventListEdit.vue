@@ -4,8 +4,8 @@
     :data-list="eventList"
     :empty-data="{
       type: 'construct',
-      startTime: 0,
-      endTime: 0,
+      startTime: $store.state.offset,
+      endTime: $store.state.offset,
       properties: {
         x: 0,
         y: 0,

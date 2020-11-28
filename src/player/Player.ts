@@ -59,7 +59,7 @@ export default class Player {
     this.height = options.height ?? 720;
     this.bpm = this.chart.timing.bpmList[0].bpm;
     this.chart.timing.bpmList.shift();
-    this.tick = (- this.chart.timing.offset) * this.bpm * 1.2 + (options.offset ?? 0);
+    this.tick = (options.offset ?? 0) - this.chart.timing.offset;
     this.comboTotal = sumBy(this.chart.judgeLineList, l => l.noteList.length);
     this.app = new Application({
       width: this.width,

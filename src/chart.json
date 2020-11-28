@@ -30,7 +30,7 @@
           "startTime": 432,
           "endTime": 576,
           "properties": {
-            "angle": 3.14159,
+            "angle": 180,
             "ease": "backIn"
           },
           "id": 1

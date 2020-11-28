@@ -82,6 +82,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { useI18n } from 'vue-i18n';
+
 import type { NoteData } from "../../player/ChartData";
 
 export default defineComponent({
@@ -111,11 +112,13 @@ export default defineComponent({
     'noteData.type'() {
       if (this.noteData.type !== 'hold') {
         this.noteData.endTime = this.noteData.startTime;
+        this.save();
       }
     },
     'noteData.startTime'() {
       if (this.noteData.type !== 'hold') {
         this.noteData.endTime = this.noteData.startTime;
+        this.save();
       }
     },
   },

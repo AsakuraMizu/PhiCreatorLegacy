@@ -138,6 +138,28 @@
   resolved "https://registry.npm.taobao.org/@ctrl/tinycolor/download/@ctrl/tinycolor-3.2.0.tgz?cache=0&sync_timestamp=1606349454493&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40ctrl%2Ftinycolor%2Fdownload%2F%40ctrl%2Ftinycolor-3.2.0.tgz#77a8a33edb2fdc02318c828be78f6fb3d6c65eb2"
   integrity sha1-d6ijPtsv3AIxjIKL549vs9bGXrI=
 
+"@daybrush/utils@^1.0.0", "@daybrush/utils@^1.1.1", "@daybrush/utils@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.npm.taobao.org/@daybrush/utils/download/@daybrush/utils-1.3.1.tgz#e75fbb90c0208b0d7f6186ef4d6bf684047fe711"
+  integrity sha1-51+7kMAgiw1/YYbvTWv2hAR/5xE=
+
+"@egjs/agent@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.npm.taobao.org/@egjs/agent/download/@egjs/agent-2.2.1.tgz#fb144cc7183a5bb79c2fceeefb4a7b2826e9766f"
+  integrity sha1-+xRMxxg6W7ecL87u+0p7KCbpdm8=
+
+"@egjs/children-differ@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.npm.taobao.org/@egjs/children-differ/download/@egjs/children-differ-1.0.1.tgz#5465fa80671d5ca3564ebe912f48b05b3e8a14fd"
+  integrity sha1-VGX6gGcdXKNWTr6RL0iwWz6KFP0=
+  dependencies:
+    "@egjs/list-differ" "^1.0.0"
+
+"@egjs/list-differ@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/@egjs/list-differ/download/@egjs/list-differ-1.0.0.tgz#2277aff52e3e4bd9318d5c30ffc3ba3b6216f05e"
+  integrity sha1-Inev9S4+S9kxjVww/8O6O2IW8F4=
+
 "@eslint/eslintrc@^0.2.1":
   version "0.2.1"
   resolved "https://registry.npm.taobao.org/@eslint/eslintrc/download/@eslint/eslintrc-0.2.1.tgz?cache=0&sync_timestamp=1603766539273&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40eslint%2Feslintrc%2Fdownload%2F%40eslint%2Feslintrc-0.2.1.tgz#f72069c330461a06684d119384435e12a5d76e3c"
@@ -561,6 +583,27 @@
   dependencies:
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
+
+"@scena/dragscroll@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.npm.taobao.org/@scena/dragscroll/download/@scena/dragscroll-0.3.1.tgz#3a8234e3eaa8f4f4ff679a1808c60280066266b1"
+  integrity sha1-OoI04+qo9PT/Z5oYCMYCgAZiZrE=
+  dependencies:
+    "@scena/event-emitter" "^1.0.2"
+
+"@scena/event-emitter@^1.0.2", "@scena/event-emitter@^1.0.3", "@scena/event-emitter@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.npm.taobao.org/@scena/event-emitter/download/@scena/event-emitter-1.0.5.tgz#047e3acef93cf238d7ce3a8cc5a12ec6bd9c3bb1"
+  integrity sha1-BH46zvk88jjXzjqMxaEuxr2cO7E=
+  dependencies:
+    "@daybrush/utils" "^1.1.1"
+
+"@scena/matrix@^1.0.0", "@scena/matrix@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/@scena/matrix/download/@scena/matrix-1.1.0.tgz#e6a3036b7d8df21c14a3e3fc332961a43f2f9560"
+  integrity sha1-5qMDa32N8hwUo+P8MylhpD8vlWA=
+  dependencies:
+    "@daybrush/utils" "^1.3.1"
 
 "@simonwep/pickr@~1.7.0":
   version "1.7.4"
@@ -1405,6 +1448,22 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.2:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+css-styled@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/css-styled/download/css-styled-1.0.0.tgz#6fe10a98f95c24fa66cb1c41e11e7c00bcedac13"
+  integrity sha1-b+EKmPlcJPpmyxxB4R58ALztrBM=
+  dependencies:
+    "@daybrush/utils" "^1.0.0"
+    string-hash "^1.1.3"
+
+css-to-mat@^1.0.2:
+  version "1.0.3"
+  resolved "https://registry.npm.taobao.org/css-to-mat/download/css-to-mat-1.0.3.tgz#5c0d9b572b68b57fa8ba0b1a4c572c18ce3b2b60"
+  integrity sha1-XA2bVytotX+ougsaTFcsGM47K2A=
+  dependencies:
+    "@daybrush/utils" "^1.3.1"
+    "@scena/matrix" "^1.0.0"
+
 cssesc@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/cssesc/download/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
@@ -1983,6 +2042,11 @@ follow-redirects@^1.0.0:
   resolved "https://registry.npm.taobao.org/follow-redirects/download/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
   integrity sha1-tC6Nk6Kn7qXtiGM2dtZZe8jjhNs=
 
+framework-utils@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.npm.taobao.org/framework-utils/download/framework-utils-0.3.4.tgz#450e63cca680c2a78047691a32ed9f51a748e3a1"
+  integrity sha1-RQ5jzKaAwqeAR2kaMu2fUadI46E=
+
 fresh@~0.5.2:
   version "0.5.2"
   resolved "https://registry.npm.taobao.org/fresh/download/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
@@ -2024,6 +2088,14 @@ generic-names@^2.0.1:
   integrity sha1-+KN46tLMqno08DF7BVVIMq5BuHI=
   dependencies:
     loader-utils "^1.1.0"
+
+gesto@^1.2.1, gesto@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.npm.taobao.org/gesto/download/gesto-1.3.0.tgz#ff141964faecbbae38e0cfb008607c533a6c694f"
+  integrity sha1-/xQZZPrsu6444M+wCGB8UzpsaU8=
+  dependencies:
+    "@daybrush/utils" "^1.0.0"
+    "@scena/event-emitter" "^1.0.2"
 
 get-intrinsic@^1.0.0, get-intrinsic@^1.0.1:
   version "1.0.1"
@@ -2533,6 +2605,20 @@ jsonfile@^6.0.1:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
+keycode@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npm.taobao.org/keycode/download/keycode-2.2.0.tgz#3d0af56dc7b8b8e5cba8d0a97f107204eec22b04"
+  integrity sha1-PQr1bce4uOXLqNCpfxByBO7CKwQ=
+
+keycon@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.npm.taobao.org/keycon/download/keycon-1.1.2.tgz#a7a9f5f22f32012fafd11e68c4283911d0738bce"
+  integrity sha1-p6n18i8yAS+v0R5oxCg5EdBzi84=
+  dependencies:
+    "@daybrush/utils" "^1.0.0"
+    "@scena/event-emitter" "^1.0.2"
+    keycode "^2.2.0"
+
 keygrip@~1.1.0:
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/keygrip/download/keygrip-1.1.0.tgz#871b1681d5e159c62a445b0c74b615e0917e7226"
@@ -2824,6 +2910,14 @@ moment@^2.27.0:
   resolved "https://registry.npm.taobao.org/moment/download/moment-2.29.1.tgz?cache=0&sync_timestamp=1601983320283&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmoment%2Fdownload%2Fmoment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha1-sr52n6MZQL6e7qZGnAdeNQBvo9M=
 
+moveable@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.npm.taobao.org/moveable/download/moveable-0.21.1.tgz#13910e69b4fa198a964614d2875a1566e4c798b4"
+  integrity sha1-E5EOabT6GYqWRhTSh1oVZuTHmLQ=
+  dependencies:
+    "@scena/event-emitter" "^1.0.3"
+    react-compat-moveable "^0.9.1"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.npm.taobao.org/ms/download/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -2992,6 +3086,13 @@ ora@^5.1.0:
     mute-stream "0.0.8"
     strip-ansi "^6.0.0"
     wcwidth "^1.0.1"
+
+overlap-area@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/overlap-area/download/overlap-area-1.0.0.tgz#d44db45b810ec05c4c2c9f430ab60c9473f2101b"
+  integrity sha1-1E20W4EOwFxMLJ9DCrYMlHPyEBs=
+  dependencies:
+    "@daybrush/utils" "^1.3.1"
 
 p-limit@^1.1.0:
   version "1.3.0"
@@ -3348,6 +3449,56 @@ randombytes@^2.1.0:
   dependencies:
     safe-buffer "^5.1.0"
 
+react-compat-css-styled@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/react-compat-css-styled/download/react-compat-css-styled-1.0.0.tgz#3afe555da90cdba51543dbb230fe80e4671c39f6"
+  integrity sha1-Ov5VXakM26UVQ9uyMP6A5GccOfY=
+  dependencies:
+    css-styled "^1.0.0"
+    react-css-styled "^1.0.0"
+    react-simple-compat "^0.1.1"
+
+react-compat-moveable@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.npm.taobao.org/react-compat-moveable/download/react-compat-moveable-0.9.1.tgz#a510220ac53458dc8b0f171056011452ace10233"
+  integrity sha1-pRAiCsU0WNyLDxcQVgEUUqzhAjM=
+  dependencies:
+    react-compat-css-styled "^1.0.0"
+    react-moveable "^0.24.1"
+    react-simple-compat "^0.1.9"
+
+react-css-styled@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/react-css-styled/download/react-css-styled-1.0.0.tgz#4b4272aa24f0a659e9723eac8263d2179dc6e886"
+  integrity sha1-S0JyqiTwplnpcj6sgmPSF53G6IY=
+  dependencies:
+    css-styled "^1.0.0"
+    framework-utils "^0.3.4"
+
+react-moveable@^0.24.1:
+  version "0.24.1"
+  resolved "https://registry.npm.taobao.org/react-moveable/download/react-moveable-0.24.1.tgz#fb1138c2491e9337f45a354232eb48007a487811"
+  integrity sha1-+xE4wkkekzf0WjVCMutIAHpIeBE=
+  dependencies:
+    "@daybrush/utils" "^1.3.1"
+    "@egjs/agent" "^2.2.1"
+    "@egjs/children-differ" "^1.0.1"
+    "@scena/dragscroll" "^0.3.1"
+    "@scena/matrix" "^1.1.0"
+    css-to-mat "^1.0.2"
+    framework-utils "^0.3.4"
+    gesto "^1.2.1"
+    overlap-area "^1.0.0"
+    react-css-styled "^1.0.0"
+
+react-simple-compat@^0.1.1, react-simple-compat@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.npm.taobao.org/react-simple-compat/download/react-simple-compat-0.1.9.tgz#e15433fd17002ec6917d4e7c4351d200516527c5"
+  integrity sha1-4VQz/RcALsaRfU58Q1HSAFFlJ8U=
+  dependencies:
+    "@daybrush/utils" "^1.0.0"
+    "@egjs/list-differ" "^1.0.0"
+
 read-cache@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/read-cache/download/read-cache-1.0.0.tgz#e664ef31161166c9751cdbe8dbcf86b5fb58f774"
@@ -3564,6 +3715,21 @@ scroll-into-view-if-needed@^2.2.25:
   dependencies:
     compute-scroll-into-view "^1.0.16"
 
+selecto@^1.10.1:
+  version "1.10.1"
+  resolved "https://registry.npm.taobao.org/selecto/download/selecto-1.10.1.tgz#9564adeac775fdf8e85bf58c72a71e6a9a8d4b6c"
+  integrity sha1-lWSt6sd1/fjoW/WMcqceapqNS2w=
+  dependencies:
+    "@daybrush/utils" "^1.3.1"
+    "@egjs/children-differ" "^1.0.1"
+    "@scena/dragscroll" "^0.3.1"
+    "@scena/event-emitter" "^1.0.5"
+    css-styled "^1.0.0"
+    framework-utils "^0.3.4"
+    gesto "^1.3.0"
+    keycon "^1.1.2"
+    overlap-area "^1.0.0"
+
 selfsigned@^1.10.8:
   version "1.10.8"
   resolved "https://registry.npm.taobao.org/selfsigned/download/selfsigned-1.10.8.tgz#0d17208b7d12c33f8eac85c41835f27fc3d81a30"
@@ -3718,7 +3884,7 @@ string-convert@^0.2.0:
   resolved "https://registry.npm.taobao.org/string-convert/download/string-convert-0.2.1.tgz#6982cc3049fbb4cd85f8b24568b9d9bf39eeff97"
   integrity sha1-aYLMMEn7tM2F+LJFaLnZvznu/5c=
 
-string-hash@^1.1.1:
+string-hash@^1.1.1, string-hash@^1.1.3:
   version "1.1.3"
   resolved "https://registry.npm.taobao.org/string-hash/download/string-hash-1.1.3.tgz#e8aafc0ac1855b4666929ed7dd1275df5d6c811b"
   integrity sha1-6Kr8CsGFW0Zmkp7X3RJ1311sgRs=

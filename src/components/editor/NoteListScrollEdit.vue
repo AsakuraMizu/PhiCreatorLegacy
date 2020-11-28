@@ -45,16 +45,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, nextTick, PropType } from 'vue';
+import Moveable from 'moveable';
+import Selecto from 'selecto';
 
 import NoteScrollEdit from './NoteScrollEdit.vue';
 
 import type { NoteData } from '../../player/ChartData';
 
+function parsePx(px: string) {
+  return Number.parseFloat(/(.*)px/.exec(px)[1]);
+}
+
 export default defineComponent({
   name: 'NoteListScrollEdit',
   components: {
     NoteScrollEdit,
+  },
+  provide() {
+    return {
+      elMap: this.elMap,
+    };
   },
   props: {
     noteList: {
@@ -62,7 +73,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['edit'],
+  emits: ['edit', 'select'],
   data() {
     return {
       area: <HTMLDivElement>undefined,
@@ -72,6 +83,10 @@ export default defineComponent({
       y: 0,
       block: 1,
       holdId: -1,
+      targets: [],
+      moveable: <Moveable>undefined,
+      selecto: <Selecto>undefined,
+      elMap: new Map<Element, number>(),
     };
   },
   computed: {
@@ -83,10 +98,10 @@ export default defineComponent({
         }
       });
       return lastId;
-    }
+    },
   },
   mounted() {
-    this.area = this.$refs.area as HTMLDivElement;
+    this.area = <HTMLDivElement>this.$refs.area;
     this.updateRect();
     window.addEventListener('resize', this.updateRect);
     window.addEventListener('scroll', this.updateRect);
@@ -95,6 +110,89 @@ export default defineComponent({
     this.$key('3', this.addDragNote);
     this.$key('4', { keydown: true, keyup: false }, this.addHoldNote);
     this.$key('4', { keydown: false, keyup: true }, this.addHoldNoteEnd);
+
+    this.selecto = new Selecto({
+      dragContainer: this.area,
+      selectableTargets: ['.note'],
+      toggleContinueSelect: 'ctrl',
+    }).on('dragStart', e => {
+      const target = e.inputEvent.target;
+      if (this.moveable.isMoveableElement(target) || this.targets.some(t => t === target)) {
+        e.stop();
+      }
+    }).on('select', e => {
+      this.targets = e.selected;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.moveable.target = this.targets;
+      this.$emit('select', this.elMap.get(e.selected[e.selected.length - 1]));
+    }).on('selectEnd', e => {
+      if (e.isDragStart) {
+        e.inputEvent.preventDefault();
+        setTimeout(() => this.moveable.dragStart(e.inputEvent));
+      }
+    });
+
+    this.moveable = new Moveable(this.area, {
+      draggable: true,
+    }).on('clickGroup', e => {
+      this.selecto.clickTarget(e.inputEvent, e.inputTarget);
+    }).on('dragStart', ({ set, target }) => {
+      const [, x, y ] = /translate\((.*?), (.*?)\)/.exec(target.style.transform);
+      set([parsePx(x), parsePx(y)]);
+    }).on('drag', ({ beforeTranslate, target }) => {
+      const [ x, y ] = beforeTranslate;
+      const id = this.elMap.get(target);
+      const list: NoteData[] = [];
+      for (const n of this.noteList) {
+        if (n.id !== id) {
+          list.push(n);
+        } else {
+          const relativeX = (x + parsePx(target.style.width) / 2) / this.rect.width * 2 - 1;
+          const endTime = (this.rect.height - y) / (this.rect.height / 15) / this.block * 72 + this.$store.state.offset;
+          list.push({
+            ...n,
+            relativeX,
+            startTime: n.startTime + (endTime - n.endTime),
+            endTime,
+            showTime: n.showTime === 0 ? n.showTime : n.showTime + (endTime - n.endTime),
+          });
+        }
+      }
+      this.$emit('edit', list);
+      nextTick(() => this.moveable.updateRect());
+    }).on('dragGroupStart', ({ events }) => {
+      events.forEach(({ set, target }) => {
+        const [, x, y ] = /translate\((.*?), (.*?)\)/.exec(target.style.transform);
+        set([parsePx(x), parsePx(y)]);
+      });
+    }).on('dragGroup', ({ events }) => {
+      const updated = new Map<number, NoteData>();
+      events.forEach(({ beforeTranslate, target }) => {
+        const [ x, y ] = beforeTranslate;
+        const id = this.elMap.get(target);
+        const n = this.noteList.find(n => n.id === id);
+        const relativeX = (x + parsePx(target.style.width) / 2) / this.rect.width * 2 - 1;
+        const endTime = (this.rect.height - y) / (this.rect.height / 15) / this.block * 72 + this.$store.state.offset;
+        updated.set(id, {
+          ...n,
+          relativeX,
+          startTime: n.startTime + (endTime - n.endTime),
+          endTime,
+          showTime: n.showTime === 0 ? n.showTime : n.showTime + (endTime - n.endTime),
+        });
+      });
+      const list: NoteData[] = [];
+      for (const n of this.noteList) {
+        if (updated.has(n.id)) {
+          list.push(updated.get(n.id));
+        } else {
+          list.push(n);
+        }
+      }
+      this.$emit('edit', list);
+      nextTick(() => this.moveable.updateRect());
+    });
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.updateRect);
@@ -104,6 +202,9 @@ export default defineComponent({
     this.$key.unbind('3', this.addDragNote);
     this.$key.unbind('4', this.addHoldNote);
     this.$key.unbind('4', this.addHoldNoteEnd);
+
+    this.selecto.destroy();
+    this.moveable.destroy();
   },
   methods: {
     updateRect() {
@@ -114,6 +215,9 @@ export default defineComponent({
       if (this.block != 0) {
         this.$store.setOffset(this.$store.state.offset - Math.sign(e.deltaY) * 72 / this.block);
       }
+      nextTick(() => {
+        this.moveable.updateTarget();
+      });
     },
     mousemove(e: MouseEvent) {
       this.x = (e.clientX - this.rect.x) / this.rect.width;
@@ -188,5 +292,6 @@ export default defineComponent({
   height: 480px;
   overflow: hidden;
   transform: translateZ(0);
+  user-select: none;
 }
 </style>

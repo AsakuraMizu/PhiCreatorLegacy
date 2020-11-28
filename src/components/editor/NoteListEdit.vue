@@ -4,6 +4,7 @@
       <note-list-scroll-edit
         :note-list="noteList"
         @edit="$emit('edit', $event)"
+        @select="list.activeKey = $event"
       />
     </a-col>
     <a-col :md="12">
@@ -13,8 +14,8 @@
         :data-list="noteList"
         :empty-data="{
           type: 'click',
-          startTime: 0,
-          endTime: 0,
+          startTime: $store.state.offset,
+          endTime: $store.state.offset,
           showTime: 0,
           relativeX: 0,
           side: 1,
@@ -56,5 +57,13 @@ export default defineComponent({
     },
   },
   emits: ['edit'],
+  data() {
+    return {
+      list: <InstanceType<typeof ListEdit>>undefined,
+    };
+  },
+  mounted() {
+    this.list = <InstanceType<typeof ListEdit>>this.$refs.list;
+  },
 });
 </script>

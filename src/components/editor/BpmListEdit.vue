@@ -1,13 +1,9 @@
 <template>
   <a-tabs
     v-model:activeKey="activeKey"
-    :tab-position="tabPosition"
+    tab-position="top"
     type="editable-card"
     :hide-add="true"
-    :tab-bar-style="tabPosition === 'left' ? {
-      height: '450px',
-    } : {}"
-    :style="{ 'min-height': '500px' }"
     @edit="remove"
     @tabClick="tabClick"
   >
@@ -19,45 +15,30 @@
     <a-tab-pane
       v-for="[id, data] in list"
       :key="id"
-      :tab="`${name} #${id}`"
+      :tab="`Bpm #${id}`"
+      :closable="id !== 0"
     >
-      <slot
+      <BpmEdit
         :data="data"
-        :edited="onEditData.bind(this, id)"
+        @edit="onEditData(id, $event)"
       />
     </a-tab-pane>
   </a-tabs>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-type DataType = {
-  id: number;
-};
+import BpmEdit from './BpmEdit.vue';
+
+import type { BpmData } from '../../player/ChartData';
 
 export default defineComponent({
-  name: 'ListEdit',
-  props: {
-    tabPosition: {
-      type: String,
-      default: 'left',
-    },
-    dataList: {
-      type: <PropType<DataType[]>>Object,
-      required: true,
-    },
-    emptyData: {
-      type: <PropType<DataType>>Object,
-      required: true,
-    },
-    name: {
-      type: String,
-      default: '',
-    },
+  name: 'BpmListEdit',
+  components: {
+    BpmEdit,
   },
-  emits: ['edit'],
   setup() {
     const { t } = useI18n();
     return {
@@ -67,7 +48,7 @@ export default defineComponent({
   data() {
     return {
       activeKey: <number>undefined,
-      list: new Map<number, DataType>(this.dataList.map(d => [d.id, d])),
+      list: new Map<number, BpmData>(this.$store.state.chart.timing.bpmList.map(b => [b.id, b])),
       updateFlag: 0,
     };
   },
@@ -77,18 +58,25 @@ export default defineComponent({
     },
   },
   watch: {
-    dataList(newDataList: DataType[]) {
+    '$store.state.chart.timing.bpmList'(newBpmList: BpmData[]) {
       if (this.updateFlag > 0) {
         --this.updateFlag;
       } else {
-        this.list = new Map<number, DataType>(newDataList.map(d => [d.id, d]));
+        this.list = new Map<number, BpmData>(newBpmList.map(b => [b.id, b]));
+        this.activeKey = this.lastId;
       }
     },
   },
   methods: {
     save() {
       ++this.updateFlag;
-      this.$emit('edit', [...this.list.values()]);
+      this.$store.setChart({
+        ...this.$store.state.chart,
+        timing: {
+          offset: this.$store.state.chart.timing.offset,
+          bpmList: [...this.list.values()],
+        },
+      })
     },
     remove(targetKey: number) {
       this.list.delete(targetKey);
@@ -100,18 +88,19 @@ export default defineComponent({
     add() {
       const id = this.lastId + 1;
       this.list.set(id, {
-        ...this.emptyData,
         id,
+        time: this.$store.state.offset,
+        bpm: 222.22,
       });
       this.activeKey = id;
       this.save();
     },
-    onEditData(id: number, data: DataType) {
+    onEditData(id: number, data: BpmData) {
       this.list.set(id, data);
       this.save();
     },
     tabClick(targetKey: number) {
-      if (this.$key.isPressed('ctrl') || this.$key.isPressed('command')) {
+      if ((this.$key.isPressed('ctrl') || this.$key.isPressed('command')) && targetKey !== 0) {
         this.remove(targetKey);
       }
     },

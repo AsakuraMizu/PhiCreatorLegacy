@@ -6,6 +6,8 @@ import NoteRenderer from './NoteRenderer';
 import Player from './Player';
 import { forEach } from 'lodash-es';
 
+const factor = Math.PI / 180;
+
 export default class JudgeLineRenderer {
   player: Player;
 
@@ -72,7 +74,7 @@ export default class JudgeLineRenderer {
     player.app.stage.addChild(this.container);
 
     this.prevPosition = this.container.position.clone();
-    this.prevRotation = this.container.rotation;
+    this.prevRotation = this.container.rotation / factor;
     this.prevAlpha = this.container.alpha;
     this.prevSpeed = this.constructEvent.properties.speed;
 
@@ -125,10 +127,10 @@ export default class JudgeLineRenderer {
 
       const dt = Math.min(this.player.tick - event.startTime, event.endTime - event.startTime);
       const all = event.endTime - event.startTime;
-      this.container.rotation = easeCalc(this.prevRotation, event.properties.angle, dt / all, event.properties.ease);
+      this.container.rotation = easeCalc(this.prevRotation, event.properties.angle, dt / all, event.properties.ease) * factor;
 
       if (event.endTime < this.player.tick) {
-        this.prevRotation = this.container.rotation;
+        this.prevRotation = this.container.rotation / factor;
         this.rotateEventList.shift();
         continue;
       }

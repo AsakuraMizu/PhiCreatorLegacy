@@ -12,7 +12,7 @@
   let editable = false;
   let x = 0;
   let y = 0;
-  let holdid = -1;
+  let holdindex = -1;
 
   $: lastid = $chart.judgeLineList[$currentLineIndex].noteList.reduce((p, c) => Math.max(p, c.id), -1);
 
@@ -39,6 +39,10 @@
     const yy = Math.round(y * 15 - $currentTick * block / 72 + Math.round($currentTick * block / 72)) / 15 + $currentTick * block / 72 / 15 - Math.round($currentTick * block / 72) / 15;
     if (Math.abs(y - yy) <= 1e-2) {
       y = yy;
+    }
+
+    if (holdindex !== -1) {
+      $chart.judgeLineList[$currentLineIndex].noteList[holdindex].endTime = $currentTick + (1 - y) * 15 * 72 / block;
     }
   };
 
@@ -75,12 +79,12 @@
   const addFlick = () => addNote('flick');
   const addDrag = () => addNote('drag');
   const addHold = () => {
-    if (holdid === -1) {
-      holdid = lastid + 1;
+    if (holdindex === -1) {
+      holdindex = $chart.judgeLineList[$currentLineIndex].noteList.length;
       addNote('hold');
     }
   };
-  const addHoldEnd = () => holdid = -1;
+  const addHoldEnd = () => holdindex = -1;
 
   onMount(() => {
     hotkeys('1', addClick);

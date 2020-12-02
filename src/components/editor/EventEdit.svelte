@@ -1,6 +1,5 @@
 <script>
   import { _ } from 'svelte-i18n';
-  import { afterUpdate } from 'svelte';
   import { Tile } from 'carbon-components-svelte/src/Tile';
   import { Form } from 'carbon-components-svelte/src/Form';
   import { FormGroup } from 'carbon-components-svelte/src/FormGroup';
@@ -11,65 +10,65 @@
   import EaseSelect from './EaseSelect.svelte';
   import { chart, currentLineIndex, currentEventIndex } from '../../store';
 
-  let prevType = $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].type;
+  let prevEvent = $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex];
 
-  afterUpdate(() => {
-    const type = $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].type;
-    if (prevType !== type) {
-      switch (type) {
-        case 'construct':
-          $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
-            x: 0,
-            y: 0,
-            angle: 0,
-            alpha: 1,
-            speed: 0.01,
-          };
-          break;
-        case 'move':
-          $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
-            x: 0,
-            y: 0,
-            easeX: 'linear',
-            easeY: 'linear',
-          };
-          break;
-        case 'rotate':
-          $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
-            angle: 0,
-            ease: 'linear',
-          };
-          break;
-        case 'fade':
-          $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
-            alpha: 1,
-            ease: 'linear',
-          };
-          break;
-        case 'speed':
-          $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
-            speed: 0.01,
-            ease: 'jump',
-          };
-          break;
-        case 'notevis':
-          $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
-            visibility: false,
-          };
-          break;
-        default:
-          break;
-      }
-      prevType = type;
+  const fix = async () => {
+    if ($chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex] !== prevEvent) {
+      prevEvent = $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex];
+      return;
     }
-  });
+    switch ($chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].type) {
+      case 'construct':
+        $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
+          x: 0,
+          y: 0,
+          angle: 0,
+          alpha: 1,
+          speed: 0.01,
+        };
+        break;
+      case 'move':
+        $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
+          x: 0,
+          y: 0,
+          easeX: 'linear',
+          easeY: 'linear',
+        };
+        break;
+      case 'rotate':
+        $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
+          angle: 0,
+          ease: 'linear',
+        };
+        break;
+      case 'fade':
+        $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
+          alpha: 1,
+          ease: 'linear',
+        };
+        break;
+      case 'speed':
+        $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
+          speed: 0.01,
+          ease: 'jump',
+        };
+        break;
+      case 'notevis':
+        $chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties = {
+          visibility: false,
+        };
+        break;
+      default:
+        break;
+    }
+  };
 </script>
 
 <Tile>
   <Form>
     <NumberInput label="ID" value={$chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].id} disabled />
     <FormGroup legendText={$_('type')}>
-      <RadioButtonGroup bind:selected={$chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].type}>
+      <RadioButtonGroup bind:selected={$chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].type} on:change={fix}>
         {#each ['construct', 'move', 'rotate', 'fade', 'speed', 'notevis'] as type}
           <RadioButton value={type} labelText={type} />
         {/each}
@@ -95,7 +94,7 @@
       <NumberInput label={$_('alpha')} bind:value={$chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties.alpha} />
     {/if}
     {#if ['construct', 'speed'].includes($chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].type)}
-      <NumberInput label={$_('speed')} bind:value={$chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties.speed} />
+      <NumberInput label={$_('speed')} bind:value={$chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties.speed} step={0.001} />
     {/if}
     {#if ['rotate', 'fade', 'speed'].includes($chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].type)}
       <EaseSelect labelText={$_('ease')} bind:selected={$chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].properties.ease} />

@@ -25,9 +25,11 @@
     'sineIn',
     'sineOut',
   ];
+
+  export let selected;
 </script>
 
-<Select {...$$restProps}>
+<Select {...$$restProps} bind:selected>
   {#each eases as ease}
     <SelectItem value={ease} text={ease} />
   {/each}

@@ -43,5 +43,11 @@
   "options": "Options",
   "language": "Language",
   "en": "English",
-  "zh-CN": "简体中文"
+  "zh-CN": "简体中文",
+  "construct-event": "construct",
+  "fade-event": "fade",
+  "move-event": "move",
+  "rotate-event": "rotate",
+  "speed-event": "speed",
+  "notevis-event": "notevis"
 }

@@ -80,7 +80,6 @@ export default class JudgeLineRenderer {
 
     this.prevPosition = this.container.position.clone();
     this.prevRotation = this.container.rotation / factor;
-    this.prevAlpha = this.container.alpha;
     this.prevSpeed = this.constructEvent.properties.speed;
 
     this.line = new Graphics();
@@ -88,6 +87,7 @@ export default class JudgeLineRenderer {
     this.line.moveTo(player.calcX(-2), 0);
     this.line.lineTo(player.calcX(2), 0);
     this.line.y = player.calcY(0);
+    this.prevAlpha = this.line.alpha;
     this.container.addChild(this.line);
 
     judgeLine.noteList.sort((a, b) => a.startTime - b.startTime);

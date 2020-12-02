@@ -43,5 +43,11 @@
   "options": "选项",
   "language": "语言",
   "en": "English",
-  "zh-CN": "简体中文"
+  "zh-CN": "简体中文",
+  "construct-event": "构造(construct)",
+  "fade-event": "消失(fade)",
+  "move-event": "移动(move)",
+  "rotate-event": "旋转(rotate)",
+  "speed-event": "速度(speed)",
+  "notevis-event": "音符可见性(notevis)"
 }

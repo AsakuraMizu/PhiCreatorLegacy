@@ -70,7 +70,7 @@
     <FormGroup legendText={$_('type')}>
       <RadioButtonGroup bind:selected={$chart.judgeLineList[$currentLineIndex].eventList[$currentEventIndex].type} on:change={fix}>
         {#each ['construct', 'move', 'rotate', 'fade', 'speed', 'notevis'] as type}
-          <RadioButton value={type} labelText={type} />
+          <RadioButton value={type} labelText={$_(`${type}-event`)} />
         {/each}
       </RadioButtonGroup>
     </FormGroup>

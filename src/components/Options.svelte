@@ -10,11 +10,11 @@
   import { FileUploader } from 'carbon-components-svelte/src/FileUploader';
   import { NumberInput } from 'carbon-components-svelte/src/NumberInput';
   import { Slider } from 'carbon-components-svelte/src/Slider';
-  import { title, difficulty, music, background, currentTime, currentTick, rate, musicVolume, fxVolume } from '../store';
+  import { title, difficulty, music, background, currentTime, currentTick, rate, musicVolume, fxVolume, chart } from '../store';
   export let isOpen = true;
 </script>
 
-<SideNav {isOpen} style="padding: 15px 7px">
+<SideNav {isOpen} style="padding: 15px 7px; overflow-y: scroll;">
   <h3>{$_('options')}</h3>
   <br>
   <Form>
@@ -45,6 +45,10 @@
     <NumberInput
       bind:value={$rate}
       label={$_('rate')}
+    />
+    <NumberInput
+      bind:value={$chart.timing.offset}
+      label={$_('offset')}
     />
     <Slider
       bind:value={$musicVolume}

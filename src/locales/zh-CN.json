@@ -49,5 +49,6 @@
   "move-event": "移动(move)",
   "rotate-event": "旋转(rotate)",
   "speed-event": "速度(speed)",
-  "notevis-event": "音符可见性(notevis)"
+  "notevis-event": "音符可见性(notevis)",
+  "offset": "谱面偏移"
 }

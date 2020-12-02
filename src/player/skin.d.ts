@@ -22,8 +22,15 @@ export interface UiOptions {
   scoreFontSize: number;
 }
 
+export interface Fx {
+  tap: string;
+  flick: string;
+  drag: string;
+}
+
 export interface Skin {
   resources: Resources;
+  fx: Fx;
   noteRatio: number;
   effect: EffectOptions;
   ui: UiOptions;

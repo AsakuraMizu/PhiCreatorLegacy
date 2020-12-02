@@ -1,11 +1,20 @@
 {
-  "parser": "vue-eslint-parser",
-  "parserOptions": {
-    "parser": "@typescript-eslint/parser"
-  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "svelte3"
+  ],
+  "overrides": [
+    {
+      "files": ["*.svelte"],
+      "processor": "svelte3/svelte3",
+      "rules": {
+        "unicorn/filename-case": ["error", {"case": "pascalCase"}]
+      }
+    }
+  ],
+  "ignorePatterns": "*.config.js",
   "extends": [
     "eslint:recommended",
-    "plugin:vue/vue3-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
@@ -14,16 +23,8 @@
     "plugin:unicorn/recommended"
   ],
   "rules": {
-    "unicorn/filename-case": [
-      "error",
-      {
-        "cases": {
-          "camelCase": true,
-          "pascalCase": true
-        }
-      }
-    ],
     "import/no-unassigned-import": "off",
+    "import/no-duplicates": "off",
     "unicorn/prefer-node-remove": "off",
     "unicorn/prevent-abbreviations": "off"
   }

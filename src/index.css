@@ -1,25 +1,16 @@
-body {
-  margin: 0 auto;
-  background-color: white;
-  font-family: 'Exo Regular';
+.bx--accordion__content {
+  padding-right: 1rem !important;
 }
 
-#player {
-  padding: 0;
-  margin: auto;
-  display: block;
+.bx--data-table--sticky-header {
+  max-height: 500px !important;
+}
+
+body {
+  font-family: 'Exo Regular';
 }
 
 @font-face {
   font-family: "Exo Regular";
   src: url("./assets/font/Exo-Regular.otf") format("opentype");
 }
-
-/* @font-face {
-  font-family: zcool;
-  src: url("./assets/font/zcool.ttf") format("truetype");
-} */
-
-/* .ant-tabs-nav-container {
-  height: auto !important;
-} */

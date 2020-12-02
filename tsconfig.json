@@ -1,14 +1,24 @@
 {
+  "include": ["src", "types"],
   "compilerOptions": {
-    "target": "esnext",
     "module": "esnext",
-    // this enables stricter inference for data properties on `this`
-    "strict": true,
-    "strictNullChecks": false,
-    "jsx": "preserve",
+    "target": "esnext",
     "moduleResolution": "node",
-    "experimentalDecorators": true,
+    "jsx": "preserve",
+    /* noEmit - Snowpack builds (emits) files, not tsc. */
+    "noEmit": true,
+    "types": [
+      "svelte",
+      "vite/dist/importMeta"
+    ],
+    /* Additional Options */
+    "skipLibCheck": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "allowSyntheticDefaultImports": true,
+    "importsNotUsedAsValues": "error"
   }
 }

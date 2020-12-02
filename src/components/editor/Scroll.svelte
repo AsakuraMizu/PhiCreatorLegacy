@@ -27,7 +27,11 @@
   const wheel = e => {
     e.preventDefault();
     currentTime.update(time => {
-      return Math.round(time * 5 * block - Math.sign(e.deltaY)) / 5 / block;
+      if (block === 0) {
+        return time;
+      } else {
+        return Math.round(time * 5 * block - Math.sign(e.deltaY)) / 5 / block;
+      }
     });
   };
 

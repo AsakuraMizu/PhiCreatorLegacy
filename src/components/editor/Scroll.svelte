@@ -1,9 +1,13 @@
 <script>
-  import { onDestroy, onMount } from 'svelte';
+  import { getContext, onDestroy, onMount, tick } from 'svelte';
   import { Slider } from 'carbon-components-svelte/src/Slider';
+  import Moveable from 'moveable';
+  import Selecto from 'selecto';
   import hotkeys from 'hotkeys-js';
 
   import { chart, currentLineIndex, currentTime, currentTick } from '../../store';
+
+  let { selectedIds } = getContext('selectedIds');
 
   /** @type {HTMLDivElement} */
   let ref;
@@ -49,8 +53,6 @@
       $chart.judgeLineList[$currentLineIndex].noteList[holdindex].endTime = $currentTick + (1 - y) * 15 * 72 / block;
     }
   };
-
-  $: refs = new Array($chart.judgeLineList[$currentLineIndex].noteList.length);
 
   const colors = {
     click: '#0ac3ff',
@@ -105,6 +107,96 @@
     hotkeys.unbind('4', addHold);
     hotkeys.unbind('4', addHoldEnd);
   });
+
+  /** @type {HTMLDivElement[]} */
+  let targets = [];
+  /** @type {Selecto} */
+  let selecto;
+  /** @type {Moveable} */
+  let moveable;
+
+  let refs = [];
+
+  /** @param {string} px */
+  function parsePx(px) {
+    return Number.parseFloat(/(.*)px/.exec(px)[1]);
+  }
+
+  onMount(() => {
+    selecto = new Selecto({
+      dragContainer: ref,
+      selectableTargets: ['.note'],
+      toggleContinueSelect: 'ctrl',
+    }).on('dragStart', e => {
+      const target = e.inputEvent.target;
+      if (moveable.isMoveableElement(target) || targets.some(t => t === target)) {
+        e.stop();
+      }
+    }).on('select', e => {
+      targets = e.selected;
+      moveable.target = targets;
+      $selectedIds = targets.map(t => $chart.judgeLineList[$currentLineIndex].noteList[refs.findIndex(e => e === t)].id);
+    }).on('selectEnd', e => {
+      if (e.isDragStart) {
+        e.inputEvent.preventDefault();
+        setTimeout(() => moveable.dragStart(e.inputEvent));
+      }
+    });
+
+    moveable = new Moveable(ref, {
+      draggable: true,
+    }).on('clickGroup', e => {
+      selecto.clickTarget(e.inputEvent, e.inputTarget);
+    }).on('dragStart', ({ set, target }) => {
+      const [, x, y ] = /translate\((.*?), (.*?)\)/.exec(target.style.transform);
+      set([parsePx(x), parsePx(y)]);
+    }).on('drag', ({ beforeTranslate, target }) => {
+      const [ x, y ] = beforeTranslate;
+      const index = refs.findIndex(e => e === target);
+      const relativeX = (x + parsePx(target.style.width) / 2) / rect.width * 2 - 1;
+      const endTime = (rect.height - y) / (rect.height / 15) / block * 72 + $currentTick;
+      const n = $chart.judgeLineList[$currentLineIndex].noteList[index];
+      $chart.judgeLineList[$currentLineIndex].noteList[index] = {
+        ...n,
+        relativeX,
+        startTime: n.startTime + (endTime - n.endTime),
+        endTime,
+      };
+      tick().then(() => moveable.updateTarget());
+    }).on('dragGroupStart', ({ events }) => {
+      events.forEach(({ set, target }) => {
+        const [, x, y ] = /translate\((.*?), (.*?)\)/.exec(target.style.transform);
+        set([parsePx(x), parsePx(y)]);
+      });
+    }).on('dragGroup', ({ events }) => {
+      events.forEach(({ beforeTranslate, target }) => {
+        const [ x, y ] = beforeTranslate;
+        const index = refs.findIndex(e => e === target);
+        const relativeX = (x + parsePx(target.style.width) / 2) / rect.width * 2 - 1;
+        const endTime = (rect.height - y) / (rect.height / 15) / block * 72 + $currentTick;
+        const n = $chart.judgeLineList[$currentLineIndex].noteList[index];
+        $chart.judgeLineList[$currentLineIndex].noteList[index] = {
+          ...n,
+          relativeX,
+          startTime: n.startTime + (endTime - n.endTime),
+          endTime,
+        };
+      });
+      tick().then(() => moveable.updateTarget());
+    });
+  });
+
+  $: {
+    targets = $selectedIds.map(id => refs[$chart.judgeLineList[$currentLineIndex].noteList.findIndex(n => n.id === id)]);
+    if (moveable) {
+      moveable.target = targets;
+    }
+  }
+
+  onDestroy(() => {
+    selecto.destroy();
+    moveable.destroy();
+  });
 </script>
 
 <style>
@@ -152,4 +244,4 @@
     />
   {/each}
 </div>
-<Slider bind:value={block} max={32} />
+<Slider bind:value={block} min={0} max={32} />

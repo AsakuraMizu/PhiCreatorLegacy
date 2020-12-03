@@ -50,5 +50,6 @@
   "rotate-event": "rotate",
   "speed-event": "speed",
   "notevis-event": "notevis",
-  "offset": "Offset"
+  "offset": "Offset",
+  "copy": "Copy"
 }

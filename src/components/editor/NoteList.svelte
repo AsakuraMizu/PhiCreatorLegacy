@@ -1,8 +1,11 @@
 <!-- Note: this is a bug fix. -->
 <script>
+  import { getContext } from 'svelte';
   import { _ } from 'svelte-i18n';
   import ListEdit from './ListEdit.svelte';
   import { chart, currentLineIndex, currentNoteIndex, currentTick } from '../../store';
+
+  let { selectedIds } = getContext('selectedIds');
 </script>
 
 <ListEdit
@@ -22,4 +25,5 @@
   }}
   bind:rows={$chart.judgeLineList[$currentLineIndex].noteList}
   bind:selected={$currentNoteIndex}
+  bind:selectedRowIds={$selectedIds}
 />

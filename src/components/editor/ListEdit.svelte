@@ -9,21 +9,24 @@
   import { Button } from 'carbon-components-svelte/src/Button';
   import Add16 from 'carbon-icons-svelte/lib/Add16';
   import TrashCan16 from 'carbon-icons-svelte/lib/TrashCan16';
+  import Copy16 from 'carbon-icons-svelte/lib/Copy16';
   import hotkeys from 'hotkeys-js';
+import { chart, currentLineIndex } from '../../store';
 
   export let fields = [];
   export let rows = [];
   export let empty = {};
   export let selected;
+  export let selectedRowIds;
 
+  selectedRowIds = selected in rows ? [rows[selected].id] : [];
+
+  $: headers = fields.concat({ key: 'ops', value: $_('operations'), sort: () => 0 });
+  $: lastid = rows.reduce((p, c) => Math.max(p, c.id), -1);
   $: if (!(selected in rows)) {
     selected = -1;
     selectedRowIds = [];
   }
-  let selectedRowIds = selected in rows ? [rows[selected].id] : [];
-
-  $: headers = fields.concat({ key: 'ops', value: $_('operations'), sort: () => 0 });
-  $: lastid = rows.reduce((p, c) => Math.max(p, c.id), -1);
   $: selected = rows.findIndex(r => r.id === selectedRowIds[selectedRowIds.length - 1]);
 
   const remove = (...ids) => {
@@ -35,6 +38,25 @@
       ...empty,
       id: lastid + 1,
     });
+  };
+
+  const copy = (...ids) => {
+    const idxs = ids.map(id => rows.findIndex(r => r.id === id));
+    const iid = lastid + 1, iidx = $chart.judgeLineList[$currentLineIndex].noteList.length;
+    selectedRowIds = [];
+    idxs.forEach((idx, i) => {
+      const n = $chart.judgeLineList[$currentLineIndex].noteList[idx];
+      $chart.judgeLineList[$currentLineIndex].noteList.push({
+        ...n,
+        id: iid + i,
+      });
+      selectedRowIds.push(iid + i);
+      if (selected === idx) {
+        selected = iidx + i;
+      }
+    });
+    $chart.judgeLineList[$currentLineIndex].noteList = $chart.judgeLineList[$currentLineIndex].noteList;
+    selectedRowIds = selectedRowIds;
   };
 </script>
 
@@ -78,6 +100,12 @@
   </span>
   <Toolbar size="sm">
     <ToolbarBatchActions>
+      <Button
+        icon={Copy16}
+        on:click={() => copy(...selectedRowIds)}
+      >
+        {$_('copy')}
+      </Button>
       <Button
         icon={TrashCan16}
         on:click={() => remove(...selectedRowIds)}

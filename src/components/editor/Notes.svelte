@@ -1,4 +1,6 @@
 <script>
+  import { setContext } from 'svelte';
+  import { writable } from 'svelte/store';
   import {
     Grid,
     Row,
@@ -8,6 +10,8 @@
   import NoteEdit from './NoteEdit.svelte';
   import Scroll from './Scroll.svelte';
   import { chart, currentLineIndex, currentNoteIndex } from '../../store';
+
+  setContext('selectedIds', { selectedIds: writable([]) });
 </script>
 
 {#if $currentLineIndex in $chart.judgeLineList}

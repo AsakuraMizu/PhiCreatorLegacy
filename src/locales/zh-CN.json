@@ -50,5 +50,6 @@
   "rotate-event": "旋转(rotate)",
   "speed-event": "速度(speed)",
   "notevis-event": "音符可见性(notevis)",
-  "offset": "谱面偏移"
+  "offset": "谱面偏移",
+  "copy": "复制"
 }

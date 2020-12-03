@@ -1,6 +1,6 @@
 {
   "name": "phi-creator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "license": "MIT",
   "author": "water_lift <0xWATERx0@gmail.com>",
@@ -15,9 +15,11 @@
     "howler": "^2.2.1",
     "jsoneditor": "^9.1.4",
     "lodash-es": "^4.17.15",
+    "moveable": "^0.21.1",
     "pixi-particles": "^4.3.0",
     "pixi.js": "^5.3.3",
     "screenfull": "^5.0.2",
+    "selecto": "^1.10.1",
     "svelte-i18n": "^3.3.0"
   },
   "devDependencies": {

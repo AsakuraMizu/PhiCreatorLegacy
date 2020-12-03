@@ -11,7 +11,7 @@
   import TrashCan16 from 'carbon-icons-svelte/lib/TrashCan16';
   import Copy16 from 'carbon-icons-svelte/lib/Copy16';
   import hotkeys from 'hotkeys-js';
-import { chart, currentLineIndex } from '../../store';
+  import { cloneDeep } from 'lodash-es';
 
   export let fields = [];
   export let rows = [];
@@ -42,20 +42,18 @@ import { chart, currentLineIndex } from '../../store';
 
   const copy = (...ids) => {
     const idxs = ids.map(id => rows.findIndex(r => r.id === id));
-    const iid = lastid + 1, iidx = $chart.judgeLineList[$currentLineIndex].noteList.length;
+    const iid = lastid + 1, iidx = rows.length;
     selectedRowIds = [];
     idxs.forEach((idx, i) => {
-      const n = $chart.judgeLineList[$currentLineIndex].noteList[idx];
-      $chart.judgeLineList[$currentLineIndex].noteList.push({
-        ...n,
-        id: iid + i,
-      });
+      const r = cloneDeep(rows[idx]);
+      r.id = iid + i;
+      rows.push(r);
       selectedRowIds.push(iid + i);
       if (selected === idx) {
         selected = iidx + i;
       }
     });
-    $chart.judgeLineList[$currentLineIndex].noteList = $chart.judgeLineList[$currentLineIndex].noteList;
+    rows = rows;
     selectedRowIds = selectedRowIds;
   };
 </script>

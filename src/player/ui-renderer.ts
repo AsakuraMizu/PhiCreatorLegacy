@@ -50,7 +50,7 @@ export default class UiRenderer {
 
     const pause = new Sprite(this.player.textures.Pause);
     pause.position.x = 20;
-    pause.position.y = 30;
+    pause.position.y = 25;
     this.container.addChild(pause);
 
     this.progressBar = new Sprite(this.player.textures.Progress);

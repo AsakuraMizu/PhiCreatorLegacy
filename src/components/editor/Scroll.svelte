@@ -37,6 +37,7 @@
         return Math.round(time * 5 * block - Math.sign(e.deltaY)) / 5 / block;
       }
     });
+    tick().then(() => moveable.updateTarget());
   };
 
   /** @param {MouseEvent} e */

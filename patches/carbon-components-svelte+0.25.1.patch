@@ -1,5 +1,5 @@
 diff --git a/node_modules/carbon-components-svelte/src/NumberInput/NumberInput.svelte b/node_modules/carbon-components-svelte/src/NumberInput/NumberInput.svelte
-index 46df8b8..5a824a3 100644
+index 46df8b8..de17315 100644
 --- a/node_modules/carbon-components-svelte/src/NumberInput/NumberInput.svelte
 +++ b/node_modules/carbon-components-svelte/src/NumberInput/NumberInput.svelte
 @@ -118,9 +118,11 @@
@@ -15,7 +15,7 @@ index 46df8b8..5a824a3 100644
    $: error =
      invalid || (!allowEmpty && value === "") || value > max || value < min;
    $: errorId = `error-${id}`;
-@@ -230,14 +232,14 @@
+@@ -181,7 +183,7 @@
            aria-label="{label ? undefined : ariaLabel}"
            on:input
            on:input="{({ target }) => {
@@ -24,11 +24,12 @@ index 46df8b8..5a824a3 100644
            }}"
            disabled="{disabled}"
            id="{id}"
-           max="{max}"
-           min="{min}"
-           step="{step}"
--          value="{value}"
-+          value="{inputValue}"
-           readonly="{readonly}"
-         />
-         {#if invalid}
+@@ -230,7 +232,7 @@
+           aria-label="{label ? undefined : ariaLabel}"
+           on:input
+           on:input="{({ target }) => {
+-            value = target.value;
++            inputValue = target.value;
+           }}"
+           disabled="{disabled}"
+           id="{id}"

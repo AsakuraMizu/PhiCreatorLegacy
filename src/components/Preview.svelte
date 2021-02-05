@@ -7,7 +7,7 @@
   import Play16 from 'carbon-icons-svelte/lib/Play16';
   import Pause16 from 'carbon-icons-svelte/lib/Pause16';
   import Maximize16 from 'carbon-icons-svelte/lib/Maximize16';
-  import { background, chart, currentTick, difficulty, fxVolume, music, musicVolume, rate, title } from '../store';
+  import { background, chart, currentTime, difficulty, fxVolume, music, musicVolume, rate, title } from '../store';
 
   import Player from '../player/player';
   import skin from '../player/skins/phigros';
@@ -33,7 +33,7 @@
           background: $background,
           music: $music,
         },
-        offset: $currentTick,
+        time: $currentTime,
         rate: $rate,
         volume: {
           music: $musicVolume,

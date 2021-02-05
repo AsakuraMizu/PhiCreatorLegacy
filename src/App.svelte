@@ -20,7 +20,7 @@
 
 <Header company="PhiX Project" platformName="PhiCreator" bind:isSideNavOpen>
   <HeaderUtilities>
-    <Music />
+<!--     <Music /> -->
   </HeaderUtilities>
 </Header>
 

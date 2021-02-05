@@ -238,7 +238,7 @@
       style="
         width: {rect.width / 8}px;
         height: {note.type === 'hold' ? rect.height / 15 * (note.endTime - note.startTime) / 72 * block : rect.height / 50}px;
-        transform: translate({(note.relativeX / 2 + 0.5 - 1 / 16) * rect.width}px, {rect.height * (1 - (note.endTime - $currentTick + $chart.timing.offset) * block / 72 / 15)}px);
+        transform: translate({(note.relativeX / 2 + 0.5 - 1 / 16) * rect.width}px, {rect.height * (1 - (note.endTime - $currentTick) * block / 72 / 15)}px);
         background: {colors[note.type]};
       "
       bind:this={refs[i]}

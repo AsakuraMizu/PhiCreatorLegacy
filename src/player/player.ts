@@ -7,7 +7,7 @@ import JudgeLineRenderer from './judge-line-renderer';
 import type { ChartData } from '../shared/chart-data';
 import type { ResourceName, Skin } from './skin';
 import { load } from './utils';
-import { calcTime } from '../shared/tick';
+import { calcTick } from '../shared/tick';
 
 export type Textures = {
   [k in ResourceName]: Texture;
@@ -29,14 +29,14 @@ export interface PlayerOptions {
   volume: VolumeOptions;
   width?: number;
   height?: number;
-  offset?: number;
+  time?: number;
 }
 
 const emptyState = (): void => { /** */ };
 
 export default class Player {
   app: Application;
-  state: (dt: number) => void = emptyState;
+  state: () => void = emptyState;
 
   chart: ChartData;
   width: number;
@@ -57,13 +57,12 @@ export default class Player {
   timeMap: Record<number, number> = {};
 
   constructor(options: PlayerOptions, ready?: () => void) {
-    const time = calcTime(options.chart.timing, options.offset);
     this.chart = cloneDeep(options.chart);
     this.skin = options.skin;
     this.width = options.width ?? 1280;
     this.height = options.height ?? 720;
     this.rate = options.rate;
-    this.tick = (options.offset ?? 0) - this.chart.timing.offset;
+    this.tick = calcTick(this.chart.timing, options.time ?? 0) - this.chart.timing.offset;
     this.bpm = this.chart.timing.bpmList[0].bpm;
     this.chart.timing.bpmList.shift();
     this.comboTotal = sumBy(this.chart.judgeLineList, l => l.noteList.filter(n => !n.isFake).length);
@@ -83,7 +82,7 @@ export default class Player {
     load(this.app.loader).then(async () => {
       await this.setup();
       await this.uiRenderer.setup(options.preview);
-      this.audioPlayer.init(options.preview.music, time);
+      this.audioPlayer.init(options.preview.music, options.time);
       ready?.();
       return;
     }).catch(() => { /** */ });
@@ -109,7 +108,7 @@ export default class Player {
 
     this.judgeLines.push(...this.chart.judgeLineList.map(l => new JudgeLineRenderer(this, l)));
 
-    this.app.ticker.add(dt => this.gameLoop(dt));
+    this.app.ticker.add(() => this.gameLoop());
   }
 
   destroy(): void {
@@ -129,12 +128,12 @@ export default class Player {
     this.audioPlayer.pause(paused);
   }
 
-  gameLoop(dt: number): void {
-    this.state(dt);
+  gameLoop(): void {
+    this.state();
   }
 
-  play(dt: number): void {
-    dt /= 100;
+  play(): void {
+    const dt = this.app.ticker.elapsedMS / 1000;
     while (this.chart.timing.bpmList.length > 0) {
       const b = this.chart.timing.bpmList[0];
       if (b.time > this.tick) {
@@ -146,6 +145,7 @@ export default class Player {
     }
 
     this.tick += this.bpm * dt * 1.2 * this.rate;
+    console.log(this.tick, this.audioPlayer.music?.seek());
 
     this.judgeLines = this.judgeLines.filter(l => {
       l.update();

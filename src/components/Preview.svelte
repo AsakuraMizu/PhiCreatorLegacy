@@ -1,7 +1,8 @@
 <script>
   import { _ } from 'svelte-i18n';
-  import { afterUpdate } from 'svelte';
+  import { afterUpdate, onDestroy, onMount } from 'svelte';
   import screenfull from 'screenfull';
+  import hotkeys from 'hotkeys-js';
   import { Button } from 'carbon-components-svelte/src/Button';
   import { Toggle } from 'carbon-components-svelte/src/Toggle';
   import Play16 from 'carbon-icons-svelte/lib/Play16';
@@ -50,6 +51,19 @@
       ready = false;
     }
   });
+
+  const toggle = () => {
+    player.pause(!paused);
+    paused = !paused;
+  }
+
+  onMount(() => {
+    hotkeys('space', toggle);
+  });
+
+  onDestroy(() => {
+    hotkeys.unbind('space', toggle);
+  });
 </script>
 
 <Toggle labelText={$_('preview')} labelA={$_('no')} labelB={$_('yes')} bind:toggled={previewing} />
@@ -60,10 +74,7 @@
     skeleton={!ready}
     iconDescription={paused ? $_('play') : $_('pause')}
     icon={paused ? Play16 : Pause16}
-    on:click={() => {
-      player.pause(!paused);
-      paused = !paused;
-    }}
+    on:click={toggle}
   />
   {#if screenfull.isEnabled}
   <Button

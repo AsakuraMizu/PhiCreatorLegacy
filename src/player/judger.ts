@@ -46,7 +46,7 @@ export default class Judger {
     const emitter = new Emitter(this.container, this.player.textures.Particle, this.player.skin.effect.particle);
     emitter.updateSpawnPos(x, y);
     emitter.emit = true;
-    emitter.update(0);
+    emitter.update(0.01);
     emitter.emit = false;
 
     const next = (dt: number) => {

@@ -25,7 +25,7 @@
   "rules": {
     "import/no-unassigned-import": "off",
     "import/no-duplicates": "off",
-    "unicorn/prefer-node-remove": "off",
+    "unicorn/prefer-dom-node-remove": "off",
     "unicorn/prevent-abbreviations": "off"
   }
 }

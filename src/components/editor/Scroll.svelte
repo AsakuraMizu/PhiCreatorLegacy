@@ -6,6 +6,7 @@
   import hotkeys from 'hotkeys-js';
 
   import { chart, currentLineIndex, currentTime, currentTick } from '../../store';
+  import { float } from '../../shared/utils';
 
   let { selectedIds } = getContext('selectedIds');
 
@@ -67,7 +68,7 @@
       return;
     }
 
-    const time = $currentTick + (1 - y) * 15 * 72 / block;
+    const time = float($currentTick + (1 - y) * 15 * 72 / block);
     $chart.judgeLineList[$currentLineIndex].noteList = [
       ...$chart.judgeLineList[$currentLineIndex].noteList,
       {

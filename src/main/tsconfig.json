@@ -3,17 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "/@/*": [
-        "./*"
-      ]
+      "/@/*": ["./*"]
     },
-    "types": [
-      "../../types/env",
-      "vite/client",
-      "electron-devtools-installer"
-    ]
+    "types": ["../../types/env", "vite/client", "electron-devtools-installer"]
   },
-  "files": [
-    "./index.ts"
-  ]
+  "files": ["./index.ts"]
 }

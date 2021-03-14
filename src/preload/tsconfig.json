@@ -3,20 +3,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "/@/*": [
-        "./*"
-      ]
+      "/@/*": ["./*"]
     },
-    "types": [
-      "../../types/env",
-      "vite/client",
-    ]
+    "types": ["../../types/env", "vite/client"]
   },
-  "files": [
-    "./index.ts"
-  ],
-  "exclude": [
-    "**/node_modules",
-    "**/.*"
-  ]
+  "files": ["./index.ts"],
+  "exclude": ["**/node_modules", "**/.*"]
 }

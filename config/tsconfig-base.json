@@ -9,12 +9,7 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "types": [
-      "../types/env",
-      "vite/client"
-    ]
+    "types": ["../types/env", "vite/client"]
   },
-  "exclude": [
-    "../**/node_modules"
-  ]
+  "exclude": ["../**/node_modules"]
 }

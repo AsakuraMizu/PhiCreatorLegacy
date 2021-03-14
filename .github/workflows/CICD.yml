@@ -57,7 +57,7 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ windows-latest ]
+        os: [windows-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -71,7 +71,7 @@ jobs:
       - run: npm test
 
   draft_release:
-    needs: [ test, lint, typechecking ]
+    needs: [test, lint, typechecking]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
@@ -112,11 +112,11 @@ jobs:
           body: ${{ steps.changelog.outputs.changelog }}
 
   compile:
-    needs: [ draft_release ]
+    needs: [draft_release]
 
     strategy:
       matrix:
-        os: [ windows-latest ]
+        os: [windows-latest]
     #    To compile the application for different platforms, use:
     #    os: [ macos-latest, ubuntu-latest, windows-latest ]
 

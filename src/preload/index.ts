@@ -1,14 +1,55 @@
-import { contextBridge } from 'electron';
+import { extname, join } from 'path';
+import { contextBridge, remote, shell } from 'electron';
+import {
+  ensureDir,
+  outputJSON,
+  pathExists,
+  readFile,
+  readJSON,
+} from 'fs-extra';
+import settings from 'electron-settings';
 
-const apiKey = 'electron';
+const apiKey = 'api';
+
+let chartFolder: string;
+
+process.on('loaded', async () => {
+  chartFolder = join(remote.app.getPath('userData'), 'chart');
+  await ensureDir(chartFolder);
+});
+
 /**
  * @see https://github.com/electron/electron/issues/21437#issuecomment-573522360
  */
 const api = {
-  versions: process.versions,
+  readJSON: async <T>(file: string, fallback: T): Promise<T> => {
+    const path = join(chartFolder, file);
+    if (!(await pathExists(path))) {
+      await outputJSON(path, fallback);
+      return fallback;
+    }
+    return await readJSON(path);
+  },
+  outputJSON: async <T>(file: string, data: T): Promise<void> => {
+    const path = join(chartFolder, file);
+    await outputJSON(path, data);
+  },
+  pathExists: async (file: string): Promise<boolean> => {
+    const path = join(chartFolder, file);
+    return file !== '' && (await pathExists(path));
+  },
+  readFile: async (file: string): Promise<Buffer> => {
+    const path = join(chartFolder, file);
+    return await readFile(path);
+  },
+  openChartFolder: () => {
+    shell.openPath(chartFolder);
+  },
+  extname,
+  settings,
 } as const;
 
-export type ExposedInMainWorld = Readonly<typeof api>;
+export type Api = Readonly<typeof api>;
 
 if (import.meta.env.MODE !== 'test') {
   /**

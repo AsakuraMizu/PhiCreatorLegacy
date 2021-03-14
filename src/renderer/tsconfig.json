@@ -11,6 +11,7 @@
     "types": [
       "../../types/env",
       "vite/client",
+      "@types/css-font-loading-module"
     ]
   }
 }

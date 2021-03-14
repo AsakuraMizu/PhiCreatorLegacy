@@ -1,0 +1,8 @@
+body {
+  font-family: 'Exo Regular' !important;
+}
+
+@font-face {
+  font-family: 'Exo Regular';
+  src: url('./assets/font/Exo-Regular.ttf');
+}

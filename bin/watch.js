@@ -53,7 +53,8 @@ function debounce(f, ms) {
     }
 
     spawnProcess = spawn(electronPath, [
-      join(process.cwd(), 'dist/source/main/index.cjs.js'),
+      // join(process.cwd(), 'dist/source/main/index.cjs.js'),
+      process.cwd(),
     ]);
 
     spawnProcess.stdout.on('data', (d) => console.log(d.toString()));

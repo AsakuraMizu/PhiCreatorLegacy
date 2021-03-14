@@ -8,4 +8,7 @@ module.exports = {
     buildResources: 'build',
     app: 'dist/source',
   },
+  win: {
+    target: 'portable',
+  },
 };

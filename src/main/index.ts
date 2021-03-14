@@ -4,7 +4,7 @@
 
 import { join } from 'path';
 import { URL } from 'url';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, shell } from 'electron';
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -23,7 +23,8 @@ if (!gotTheLock) {
       .then(() => import('electron-devtools-installer'))
       .then(({ default: installExtension }) => {
         const REACT_DEVELOPER_TOOLS = 'fmkadmapgofadopljbjfkapdkoienihi';
-        return installExtension([REACT_DEVELOPER_TOOLS]);
+        const MOBX_DEVELOPER_TOOLS = 'pfgnfdagidkfgccljigdamigbcnndkod';
+        return installExtension([REACT_DEVELOPER_TOOLS, MOBX_DEVELOPER_TOOLS]);
       })
       .catch((e) => console.error('Failed install extension:', e));
   }
@@ -52,7 +53,8 @@ if (!gotTheLock) {
         webPreferences: {
           preload: join(__dirname, '../preload/index.cjs.js'),
           contextIsolation: env.MODE !== 'test', // Spectron tests can't work with contextIsolation: true
-          enableRemoteModule: env.MODE === 'test', // Spectron tests can't work with enableRemoteModule: false
+          // enableRemoteModule: env.MODE === 'test', // Spectron tests can't work with enableRemoteModule: false
+          enableRemoteModule: true,
         },
       });
 
@@ -73,6 +75,13 @@ if (!gotTheLock) {
       if (env.MODE === 'development') {
         mainWindow.webContents.openDevTools();
       }
+
+      mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        shell.openExternal(url);
+        return {
+          action: 'deny',
+        };
+      });
     })
     .catch((e) => console.error('Failed create window:', e));
 

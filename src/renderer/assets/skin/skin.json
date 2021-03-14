@@ -1,0 +1,65 @@
+{
+  "noteRatio": 0.14,
+  "effect": {
+    "ratio": 0.8,
+    "size": 256,
+    "duration": 7.5,
+    "interval": 200,
+    "particle": {
+      "alpha": {
+        "start": 1,
+        "end": 0.5
+      },
+      "color": {
+        "start": "#ffeca0",
+        "end": "#ffeca0"
+      },
+      "speed": {
+        "start": 500,
+        "end": 500,
+        "minimumSpeedMultiplier": 0.8
+      },
+      "acceleration": {
+        "x": 0,
+        "y": 0
+      },
+      "maxSpeed": 0,
+      "startRotation": {
+        "min": 0,
+        "max": 360
+      },
+      "noRotation": true,
+      "rotationSpeed": {
+        "min": 0,
+        "max": 0
+      },
+      "lifetime": {
+        "min": 0.4,
+        "max": 0.4
+      },
+      "blendMode": "normal",
+      "frequency": 1e-5,
+      "emitterLifetime": -1,
+      "maxParticles": 5,
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "addAtBack": false,
+      "spawnType": "circle",
+      "spawnCircle": {
+        "x": 0,
+        "y": 0,
+        "r": 0
+      }
+    }
+  },
+  "ui": {
+    "fontFamily": ["Exo Regular"],
+    "fill": 16777215,
+    "fontSize": 26,
+    "comboFontSize": 45,
+    "scoreFontSize": 33
+  },
+  "color": 16772256
+}

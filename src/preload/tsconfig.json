@@ -1,12 +1,6 @@
 {
+  "extends": "../../config/tsconfig-base.json",
   "compilerOptions": {
-    "module": "esnext",
-    "target": "esnext",
-    "sourceMap": true,
-    "moduleResolution": "Node",
-    "skipLibCheck": true,
-    "strict": true,
-    "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
       "/@/*": [

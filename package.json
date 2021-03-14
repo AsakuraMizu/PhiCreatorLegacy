@@ -1,7 +1,23 @@
 {
-  "name": "electron-vite-template",
-  "private": true,
-  "main": "main/index.cjs.js",
+  "name": "phi-creator",
+  "version": "1.0.0-beta.1",
+  "description": "Chart previewer and editor for PhiX Project",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phi-x/phi-creator.git"
+  },
+  "author": "AsakuraMizu <0xWATERx0@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/phi-x/phi-creator/issues"
+  },
+  "keywords": [
+    "phiformat",
+    "phigros",
+    "phix"
+  ],
+  "homepage": "https://github.com/phi-x/phi-creator#readme",
+  "main": "dist/source/main/index.cjs.js",
   "scripts": {
     "buildEnvTypes": "node ./bin/buildEnvTypes.js",
     "postinstall": "run-s buildEnvTypes",
@@ -19,14 +35,21 @@
     "typecheck": "run-p typecheck:*"
   },
   "devDependencies": {
+    "@types/css-font-loading-module": "^0.0.4",
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/fs-extra": "^9.0.8",
+    "@types/howler": "^2.2.1",
+    "@types/lodash-es": "^4.17.4",
+    "@types/object-hash": "^1.3.4",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.2",
+    "@types/react-router-dom": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
     "@vitejs/plugin-react-refresh": "^1.3.1",
     "chokidar": "^3.5.1",
     "cross-env": "^7.0.3",
+    "cz-conventional-changelog": "^3.3.0",
     "electron": "^12.0.1",
     "electron-builder": "^22.10.5",
     "electron-devtools-installer": "^3.1.1",
@@ -41,8 +64,33 @@
     "vite": "^2.0.5"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@pixi-essentials/cull": "^1.0.12",
+    "@pixi/unsafe-eval": "^6.0.0",
+    "@rooks/use-boundingclientrect": "^4.9.2",
+    "@rooks/use-on-window-resize": "^4.9.2",
+    "clsx": "^1.1.1",
+    "dayjs": "^1.10.4",
+    "electron-settings": "^4.0.2",
     "electron-updater": "^4.3.8",
+    "electron-util": "^0.14.2",
+    "fs-extra": "^9.1.0",
+    "howler": "^2.2.1",
+    "lodash-es": "^4.17.21",
+    "material-ui-popup-state": "^1.7.2",
+    "mobx": "^6.1.8",
+    "mobx-react-lite": "^3.2.0",
+    "object-hash": "^2.1.1",
+    "pixi-particles": "^4.3.0",
+    "pixi.js": "^6.0.0",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-hotkeys-hook": "^3.2.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

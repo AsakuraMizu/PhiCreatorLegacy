@@ -146,9 +146,6 @@ class TrackState {
     );
   }
 
-  editing = false;
-  editingTime = 0;
-
   get propData() {
     const map = new Map<number, Partial<Record<Props, State>>>();
     props.forEach((name) => {

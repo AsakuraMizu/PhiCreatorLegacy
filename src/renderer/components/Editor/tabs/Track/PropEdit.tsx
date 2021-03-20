@@ -22,7 +22,7 @@ import { Easing, Props } from '/@/common';
 import track, { props } from './state';
 
 const SingleProp = observer(({ prop }: { prop: Props }) => {
-  const data = track.propData.get(track.editingTime);
+  const data = track.propData.get(track.startTime);
 
   return (
     <Grid item container alignItems="center">
@@ -90,7 +90,7 @@ const SingleProp = observer(({ prop }: { prop: Props }) => {
               onClick={action(() => {
                 const list = track.lineData?.props[prop];
                 const idx = list?.findIndex(
-                  (state) => state.time === track.editingTime
+                  (state) => state.time === track.startTime
                 );
                 if (idx) list?.splice(idx, 1);
               })}
@@ -106,7 +106,7 @@ const SingleProp = observer(({ prop }: { prop: Props }) => {
               const id = maxBy(track.lineData?.props[prop], 'id')?.id ?? -1;
               track.lineData?.props[prop].push({
                 id: id + 1,
-                time: track.editingTime,
+                time: track.startTime,
                 value: 0,
               });
             })}

@@ -54,11 +54,7 @@ export default function Track(): JSX.Element {
       track.virtualNote.holdTime = 0;
       track.virtualNote.x = track.x;
     } else if (track.tool === 'prop') {
-      if (!track.editing) {
-        setOpen(true);
-        track.editingTime = track.time;
-        track.editing = true;
-      }
+      setOpen(true);
     }
     track.pressing = true;
   });
@@ -86,7 +82,7 @@ export default function Track(): JSX.Element {
   const onMouseUp = action(() => {
     if (track.pressing) {
       track.pressing = false;
-      if (track.tool === 'cursor' && !track.editing) {
+      if (track.tool === 'cursor') {
         track.selecting.forEach((idx) => track.selected.add(idx));
         track.selecting.clear();
         track.unselecting.forEach((idx) => track.selected.add(idx));
@@ -121,28 +117,29 @@ export default function Track(): JSX.Element {
   };
 
   return (
-    <div
-      className={cn.track}
-      onContextMenu={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-      ref={ref}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onWheel={onWheel}
-    >
-      <Grid />
-      <Notes />
-      <PropGrid />
+    <>
+      <div
+        className={cn.track}
+        onContextMenu={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+        ref={ref}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onWheel={onWheel}
+      >
+        <Grid />
+        <Notes />
+        <PropGrid />
+      </div>
       <PropEdit
         open={open}
         onClose={action(() => {
           setOpen(false);
-          track.editing = false;
         })}
       />
-    </div>
+    </>
   );
 }

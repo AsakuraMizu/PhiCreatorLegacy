@@ -124,8 +124,19 @@ class TrackState {
   }
 
   get deltaX(): number {
-    return this.align
-      ? pround(this.exactX - this.startExactX, 0.1)
+    return this.align && this.selected.size !== 0
+      ? Math.min(
+          ...Array.from(this.selected).map((idx) => {
+            if (this.lineData) {
+              const newX = pround(
+                this.lineData?.noteList[idx].x + this.exactX - this.startExactX,
+                0.1
+              );
+              return newX - this.lineData?.noteList[idx].x;
+            }
+            return 0;
+          })
+        )
       : this.exactX - this.startExactX;
   }
   get deltaTime(): number {

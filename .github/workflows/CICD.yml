@@ -54,24 +54,8 @@ jobs:
       - run: npm run typecheck-preload
       - run: npm run typecheck-renderer
 
-  test:
-    strategy:
-      matrix:
-        os: [windows-latest]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - run: npm ci
-      - run: npm test
-
   draft_release:
-    needs: [test, lint, typechecking]
+    needs: [lint, typechecking]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:

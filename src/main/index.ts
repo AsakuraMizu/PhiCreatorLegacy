@@ -53,8 +53,7 @@ if (!gotTheLock) {
         webPreferences: {
           preload: join(__dirname, '../preload/index.cjs.js'),
           contextIsolation: env.MODE !== 'test', // Spectron tests can't work with contextIsolation: true
-          // enableRemoteModule: env.MODE === 'test', // Spectron tests can't work with enableRemoteModule: false
-          enableRemoteModule: true,
+          enableRemoteModule: env.MODE === 'test', // Spectron tests can't work with enableRemoteModule: false
         },
       });
 
@@ -94,3 +93,5 @@ if (!gotTheLock) {
       .catch((e) => console.error('Failed check updates:', e));
   }
 }
+
+import './ipcHandler';

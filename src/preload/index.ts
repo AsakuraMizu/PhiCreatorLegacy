@@ -1,5 +1,5 @@
 import { extname, join } from 'path';
-import { contextBridge, remote, shell } from 'electron';
+import { contextBridge, ipcRenderer, shell } from 'electron';
 import {
   ensureDir,
   outputJSON,
@@ -14,7 +14,7 @@ const apiKey = 'api';
 let chartFolder: string;
 
 process.on('loaded', async () => {
-  chartFolder = join(remote.app.getPath('userData'), 'chart');
+  chartFolder = join(await ipcRenderer.invoke('get-data-dir'), 'chart');
   await ensureDir(chartFolder);
 });
 

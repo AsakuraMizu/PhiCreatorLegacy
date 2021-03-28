@@ -114,7 +114,7 @@ const Note = observer(({ idx }: NoteProps) => {
         draggable={false}
         src={{ 1: Tap, 2: Drag, 3: Hold, 4: Flick }[data.type]}
         style={{
-          width: track.rect.width / 10,
+          width: (track.rect.width / 10) * data.width,
           height:
             data.type === 3
               ? track.timeToY(data.time) -
@@ -144,7 +144,7 @@ const VNote = observer(() => {
         draggable={false}
         src={{ 1: Tap, 2: Drag, 3: Hold, 4: Flick }[data.type]}
         style={{
-          width: track.rect.width / 10,
+          width: (track.rect.width / 10) * data.width,
           height:
             data.type === 3
               ? track.timeToY(data.time) -

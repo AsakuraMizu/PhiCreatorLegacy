@@ -92,6 +92,17 @@ const SingleEdit = observer(() => {
           />
         </Grid>
         <Grid item>
+          <TextField
+            fullWidth
+            label="Width"
+            type="number"
+            value={data.width}
+            onChange={action((event) => {
+              data.width = parseFloat(event.target.value);
+            })}
+          />
+        </Grid>
+        <Grid item>
           <FormControl>
             <FormLabel>Side</FormLabel>
             <RadioGroup

@@ -53,6 +53,7 @@ export default function Track(): JSX.Element {
       track.virtualNote.time = track.time;
       track.virtualNote.holdTime = 0;
       track.virtualNote.x = track.x;
+      track.virtualNote.width = 1;
     } else if (track.tool === 'prop') {
       setOpen(true);
     }

@@ -47,7 +47,7 @@ export default class NoteRenderer {
       this.container.pivot.y = this.holdEnd.height;
     }
     this.container.pivot.x = this.container.width / 2;
-    this.container.scale.x = skin.noteRatio;
+    this.container.scale.x = skin.noteRatio * this.data.width;
     this.container.scale.y = this.data.side * skin.noteRatio;
 
     this.judgeLineRenderer.noteContainer.addChild(this.container);

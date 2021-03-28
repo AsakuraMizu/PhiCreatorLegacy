@@ -40,8 +40,8 @@ export default function Viewer(): JSX.Element {
     <canvas
       ref={ref}
       className={clsx(cn.small, bigger && cn.bigger)}
-      onMouseOver={() => setBigger(true)}
-      onMouseLeave={() => setBigger(false)}
+      onMouseDown={() => setBigger(true)}
+      onMouseUp={() => setBigger(false)}
     />
   );
 }

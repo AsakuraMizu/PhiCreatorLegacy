@@ -14,6 +14,7 @@ import {
   Switch,
   Typography,
   Button,
+  TextField,
 } from '@material-ui/core';
 import { ZoomIn, ZoomOut } from '@material-ui/icons';
 import { action } from 'mobx';
@@ -86,6 +87,25 @@ const SelectDivisor = observer(() => {
   );
 });
 
+const GuidelineNum = observer(() => {
+  return (
+    <Grid item>
+      <TextField
+        fullWidth
+        label="Number of Guidelines"
+        value={track.guideline}
+        type="number"
+        onChange={action((e) => {
+          const value = e.target.value;
+          if (Number.isInteger(Number(value))) {
+            track.guideline = Number(value);
+          }
+        })}
+      />
+    </Grid>
+  );
+});
+
 const ZoomInOut = observer(() => {
   return (
     <Grid item container spacing={2} alignItems="center">
@@ -129,6 +149,7 @@ export default function Tools(): JSX.Element {
         <NoteEditButton />
         <Align />
         <SelectDivisor />
+        <GuidelineNum />
         <ZoomInOut />
       </Grid>
     </Box>

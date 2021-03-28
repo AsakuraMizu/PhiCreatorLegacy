@@ -137,11 +137,11 @@ const Guideline = observer(() => {
 
   return (
     <>
-      {Array.from({ length: 10 }, (_, i) => i).map((i) => (
+      {Array.from({ length: track.guideline }, (_, i) => i).map((i) => (
         <div
           key={i}
           className={cn.gdline}
-          style={{ left: (track.rect.width / 10) * i }}
+          style={{ left: (track.rect.width / track.guideline) * i }}
         />
       ))}
     </>

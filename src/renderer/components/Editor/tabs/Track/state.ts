@@ -164,6 +164,7 @@ class TrackState {
   }
 
   division = 1;
+  guideline = 10;
   align = true;
 
   shiftHeight = 200;

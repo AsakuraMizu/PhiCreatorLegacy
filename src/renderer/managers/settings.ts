@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from 'mobx';
+import { makeAutoObservable, reaction, toJS } from 'mobx';
 import { get, merge } from 'lodash-es';
 import { RPartial } from '/@/common';
 
@@ -24,9 +24,10 @@ class SettingsManager implements ISettings {
       watch: false,
     });
 
-    api.settings.get().then((value) => {
+    api.storage.get('settings', (error, value) => {
+      if (error) throw error;
       this.update(value);
-      ['volume.music', 'volume.fx', 'helper.ap', 'rate', 'bgAlpha'].forEach(
+      ['volume.music', 'volume.fx', 'helper.ap', 'rate', 'dim'].forEach(
         (path) => {
           this.watch(path);
         }
@@ -41,8 +42,10 @@ class SettingsManager implements ISettings {
   watch(path: string) {
     reaction(
       () => get(this, path),
-      (value) => {
-        api.settings.set(path, value);
+      () => {
+        api.storage.set('settings', toJS(this), (error) => {
+          if (error) throw error;
+        });
       }
     );
   }

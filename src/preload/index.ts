@@ -7,14 +7,16 @@ import {
   readFile,
   readJSON,
 } from 'fs-extra';
-import settings from 'electron-settings';
+import storage from 'electron-json-storage';
 
 const apiKey = 'api';
 
 let chartFolder: string;
 
 process.on('loaded', async () => {
-  chartFolder = join(await ipcRenderer.invoke('get-data-dir'), 'chart');
+  const userData = await ipcRenderer.invoke('get-data-dir');
+  storage.setDataPath(userData);
+  chartFolder = join(userData, 'chart');
   await ensureDir(chartFolder);
 });
 
@@ -46,7 +48,7 @@ const api = {
     shell.openPath(chartFolder);
   },
   extname,
-  settings,
+  storage,
 } as const;
 
 export type Api = Readonly<typeof api>;

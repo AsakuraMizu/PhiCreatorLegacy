@@ -1,6 +1,6 @@
 {
   "name": "phi-creator",
-  "version": "1.0.0-beta.1",
+  "version": "0.1.0",
   "description": "Chart previewer and editor for PhiX Project",
   "repository": {
     "type": "git",

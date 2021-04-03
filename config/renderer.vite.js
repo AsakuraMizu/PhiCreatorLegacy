@@ -20,6 +20,7 @@ module.exports = {
     polyfillDynamicImport: false,
     outDir: join(process.cwd(), 'dist/source/renderer'),
     assetsDir: '.',
+    minify: process.env.MODE === 'development' ? false : 'esbuild',
     emptyOutDir: true,
   },
 };

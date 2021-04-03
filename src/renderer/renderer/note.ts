@@ -14,6 +14,9 @@ export default class NoteRenderer {
   holdEnd!: Sprite;
   restTime = 0;
 
+  hl = false;
+  forceUpdate = false;
+
   constructor(judgeLineRenderer: JudgeLineRenderer, data: NoteData) {
     this.data = data;
     this.judgeLineRenderer = judgeLineRenderer;
@@ -22,9 +25,11 @@ export default class NoteRenderer {
     if (this.data.type !== 3) {
       const { noteList } = this.judgeLineRenderer.renderer;
       const l = search(noteList, this.data.time);
+      this.hl =
+        Math.abs(noteList[l]?.time - this.data.time) < 1e-5 ||
+        Math.abs(noteList[l + 2]?.time - this.data.time) < 1e-5;
       this.sprite = new Sprite(
-        (Math.abs(noteList[l]?.time - this.data.time) < 1e-5 ||
-        Math.abs(noteList[l + 1]?.time - this.data.time) < 1e-5
+        (this.hl
           ? {
               1: loadedRes.TapHL,
               2: loadedRes.DragHL,
@@ -87,7 +92,10 @@ export default class NoteRenderer {
       this.holdHead.renderable = d1 >= -1e-5;
     }
 
-    if (this.data.time - timing.tick < 1e-5) {
+    if (
+      this.data.time - timing.tick < 1e-5 &&
+      this.data.time - timing.tick > 1
+    ) {
       if (this.restTime < 1e-5) {
         this.judgeLineRenderer.renderer.judger.playOnce(
           this.judgeLineRenderer.noteContainer.toGlobal({
@@ -101,5 +109,16 @@ export default class NoteRenderer {
         this.restTime = skin.effect.interval;
     }
     this.restTime -= this.judgeLineRenderer.renderer.app.ticker.elapsedMS;
+
+    const { noteList } = this.judgeLineRenderer.renderer;
+    const l = search(noteList, this.data.time);
+    const hl =
+      this.data.type !== 3 &&
+      (Math.abs(noteList[l]?.time - this.data.time) < 1e-5 ||
+        Math.abs(noteList[l + 2]?.time - this.data.time) < 1e-5);
+    if (hl !== this.hl) {
+      this.forceUpdate = true;
+      this.judgeLineRenderer.updateNotes();
+    }
   }
 }

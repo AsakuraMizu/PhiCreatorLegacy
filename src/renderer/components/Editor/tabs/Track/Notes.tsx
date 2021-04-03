@@ -68,8 +68,12 @@ const Note = observer(({ idx }: NoteProps) => {
     );
 
     const onMouseDown = action((event: React.MouseEvent<HTMLImageElement>) => {
-      if (track.tool === 'cursor') {
+      if (
+        (track.tool === 'note' && !event.ctrlKey) ||
+        track.tool === 'cursor'
+      ) {
         event.stopPropagation();
+        track.tool = 'cursor';
         if (event.button === 0) {
           track.left = true;
         } else {
@@ -87,6 +91,12 @@ const Note = observer(({ idx }: NoteProps) => {
           () => track.dragging,
           (notDragging, dragging) => {
             if (track.selected.has(idx) && !notDragging && dragging) {
+              if (track.ctrl) {
+                track.lineData?.noteList.push({
+                  ...data,
+                  id: track.lastId + 1,
+                });
+              }
               data.x += track.deltaX;
               data.time += track.deltaTime;
             }
@@ -165,7 +175,7 @@ export default observer(function Notes() {
   return (
     <>
       {track.lineData?.noteList.map((n, idx) => (
-        <Note key={n.id} idx={idx} />
+        <Note key={idx} idx={idx} />
       ))}
       <VNote />
     </>

@@ -80,27 +80,34 @@ export default class JudgeLineRenderer {
         );
         this.line.y = this.renderer.calcY(0);
       }),
-      autorun(() => {
-        const hashs: string[] = [];
-        const added: { h: string; n: NoteRenderer }[] = [];
-        chart.data?.judgeLineList[this.i]?.noteList.forEach((n) => {
-          const h = hash(n);
-          hashs.push(h);
-          if (!this.notes.has(h)) {
-            added.push({ h, n: new NoteRenderer(this, n) });
-          }
-        });
-        runInAction(() => {
-          this.notes.forEach((n, h) => {
-            if (!hashs.includes(h)) {
-              n.destory();
-              this.notes.delete(h);
-            }
-          });
-          added.forEach(({ h, n }) => this.notes.set(h, n));
-        });
-      })
+      autorun(() => this.updateNotes())
     );
+  }
+
+  updateNotes(): void {
+    const hashs: string[] = [];
+    const added: { h: string; n: NoteRenderer }[] = [];
+    chart.data?.judgeLineList[this.i]?.noteList.forEach((n) => {
+      const h = hash(n);
+      hashs.push(h);
+      const note = this.notes.get(h);
+      if (!note || note.forceUpdate) {
+        if (note) {
+          note.destory();
+          this.notes.delete(h);
+        }
+        added.push({ h, n: new NoteRenderer(this, n) });
+      }
+    });
+    runInAction(() => {
+      this.notes.forEach((n, h) => {
+        if (!hashs.includes(h)) {
+          n.destory();
+          this.notes.delete(h);
+        }
+      });
+      added.forEach(({ h, n }) => this.notes.set(h, n));
+    });
   }
 
   assign(i: number): void {

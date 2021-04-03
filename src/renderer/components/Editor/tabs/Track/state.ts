@@ -94,6 +94,7 @@ class TrackState {
     time: 0,
     holdTime: 0,
     x: 0,
+    width: 1,
     speed: 1,
     side: 1,
     isFake: false,
@@ -121,6 +122,7 @@ class TrackState {
     if (list) {
       remove(list, (_, index) => this.selected.has(index));
     }
+    this.selected.clear();
   }
 
   get deltaX(): number {

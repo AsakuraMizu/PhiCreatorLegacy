@@ -9,8 +9,8 @@ import Judger from './judger';
 export default class Renderer {
   canvas: HTMLCanvasElement;
   app: Application;
-  width = 800;
-  height = 600;
+  width = 1200;
+  height = 900;
   ui: UiRenderer;
   judger: Judger;
   judgeLines: JudgeLineRenderer[] = [];
@@ -27,6 +27,8 @@ export default class Renderer {
     this.canvas = canvas;
     this.app = new Application({
       view: canvas,
+      width: this.width,
+      height: this.height,
     });
 
     this.ui = new UiRenderer(this);
@@ -40,8 +42,8 @@ export default class Renderer {
   resize(): void {
     const width = this.canvas.clientWidth;
     const height = this.canvas.clientHeight;
-    if (width < 800 && height < 600) {
-      this.width = 800;
+    if (width < 1200 && height < 900) {
+      this.width = 1200;
       this.height = (this.width * height) / width;
       this.app.renderer.resolution = width / this.width;
     } else {

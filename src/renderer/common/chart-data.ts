@@ -16,45 +16,11 @@ export interface NoteData {
   isFake: boolean;
 }
 
-export type Easing =
-  | 'easeInBack'
-  | 'easeInBounce'
-  | 'easeInCirc'
-  | 'easeInCubic'
-  | 'easeInElastic'
-  | 'easeInExpo'
-  | 'easeInOutBack'
-  | 'easeInOutBounce'
-  | 'easeInOutCirc'
-  | 'easeInOutCubic'
-  | 'easeInOutElastic'
-  | 'easeInOutExpo'
-  | 'easeInOutQuad'
-  | 'easeInOutQuart'
-  | 'easeInOutQuint'
-  | 'easeInOutSine'
-  | 'easeInQuad'
-  | 'easeInQuart'
-  | 'easeInQuint'
-  | 'easeInSine'
-  | 'easeOutBack'
-  | 'easeOutBounce'
-  | 'easeOutCirc'
-  | 'easeOutCubic'
-  | 'easeOutElastic'
-  | 'easeOutExpo'
-  | 'easeOutQuad'
-  | 'easeOutQuart'
-  | 'easeOutQuint'
-  | 'easeOutSine'
-  | 'linear'
-  | 'none';
-
 export interface State {
   id: number;
   time: number;
   value: number;
-  easing?: Easing;
+  easing?: number;
 }
 
 export type Props =
@@ -69,13 +35,12 @@ export type Props =
 export interface JudgeLineData {
   id: number;
   name?: string;
-  constructTime: number;
-  destructTime: number;
   noteList: NoteData[];
   props: Record<Props, State[]>;
 }
 
 export interface ChartData {
+  schemaVersion: number;
   musicOffset: number;
   timingBase?: number;
   bpmList: BpmData[];

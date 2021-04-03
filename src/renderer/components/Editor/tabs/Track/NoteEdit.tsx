@@ -37,7 +37,8 @@ const SingleEdit = observer(() => {
             type="number"
             value={data.id}
             onChange={action((event) => {
-              data.id = parseInt(event.target.value);
+              const value = parseInt(event.target.value);
+              if (Number.isFinite(value)) data.id = value;
             })}
           />
         </Grid>
@@ -64,7 +65,8 @@ const SingleEdit = observer(() => {
             type="number"
             value={data.time}
             onChange={action((event) => {
-              data.time = parseFloat(event.target.value);
+              const value = parseFloat(event.target.value);
+              if (Number.isFinite(value)) data.time = value;
             })}
           />
         </Grid>
@@ -76,7 +78,8 @@ const SingleEdit = observer(() => {
             value={data.holdTime}
             disabled={data.type !== 3}
             onChange={action((event) => {
-              data.holdTime = parseFloat(event.target.value);
+              const value = parseFloat(event.target.value);
+              if (Number.isFinite(value)) data.holdTime = value;
             })}
           />
         </Grid>
@@ -86,8 +89,10 @@ const SingleEdit = observer(() => {
             label="X"
             type="number"
             value={data.x}
+            inputProps={{ step: '0.1', min: '-1', max: '1' }}
             onChange={action((event) => {
-              data.x = parseFloat(event.target.value);
+              const value = parseFloat(event.target.value);
+              if (Number.isFinite(value)) data.x = value;
             })}
           />
         </Grid>
@@ -97,8 +102,10 @@ const SingleEdit = observer(() => {
             label="Width"
             type="number"
             value={data.width}
+            inputProps={{ min: '0', step: '0.1' }}
             onChange={action((event) => {
-              data.width = parseFloat(event.target.value);
+              const value = parseFloat(event.target.value);
+              if (Number.isFinite(value)) data.width = value;
             })}
           />
         </Grid>
@@ -123,8 +130,10 @@ const SingleEdit = observer(() => {
             label="Speed (factor)"
             type="number"
             value={data.speed}
+            inputProps={{ min: '0', step: '0.1' }}
             onChange={action((event) => {
-              data.speed = parseFloat(event.target.value);
+              const value = parseFloat(event.target.value);
+              if (Number.isFinite(value)) data.speed = value;
             })}
           />
         </Grid>

@@ -106,12 +106,6 @@ export default class JudgeLineRenderer {
       const data = chart.data.judgeLineList[this.i];
       const { tick } = timing;
 
-      if (data.constructTime - tick < 1e-5 && tick - data.destructTime < 1e-5) {
-        this.container.visible = true;
-      } else {
-        this.container.visible = false;
-      }
-
       this.container.x = this.renderer.calcX(
         updater(data.props.controlX, tick)
       );

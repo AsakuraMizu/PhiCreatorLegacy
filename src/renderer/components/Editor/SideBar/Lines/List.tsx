@@ -31,8 +31,7 @@ export default observer(function Left() {
             <TableRow>
               <TableCell>Id</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>Construct Time</TableCell>
-              <TableCell>Destruct Time</TableCell>
+              <TableCell>Note Count</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -48,8 +47,7 @@ export default observer(function Left() {
               >
                 <TableCell>{l.id}</TableCell>
                 <TableCell>{l.name}</TableCell>
-                <TableCell>{l.constructTime}</TableCell>
-                <TableCell>{l.destructTime}</TableCell>
+                <TableCell>{l.noteList.length}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -62,8 +60,6 @@ export default observer(function Left() {
             if (chart.data) {
               chart.data.judgeLineList.push({
                 id: editor.lastId + 1,
-                constructTime: 0,
-                destructTime: 4800,
                 noteList: [],
                 props: {
                   controlX: [{ id: 0, time: 0, value: 0 }],

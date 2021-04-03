@@ -18,7 +18,7 @@ import {
 } from '@material-ui/core';
 import { Add, Close } from '@material-ui/icons';
 import { maxBy } from 'lodash-es';
-import { Easing, Props } from '/@/common';
+import { easingNames, Props } from '/@/common';
 import track, { props } from './state';
 
 const SingleProp = observer(({ prop }: { prop: Props }) => {
@@ -36,8 +36,10 @@ const SingleProp = observer(({ prop }: { prop: Props }) => {
               label="Value"
               type="number"
               value={data[prop]?.value}
+              inputProps={{ step: '0.1' }}
               onChange={action((event) => {
-                data[prop]!.value = parseFloat(event.target.value);
+                const value = parseFloat(event.target.value);
+                if (Number.isFinite(value)) data[prop]!.value = value;
               })}
             />
           </Grid>
@@ -45,43 +47,17 @@ const SingleProp = observer(({ prop }: { prop: Props }) => {
             <FormControl>
               <InputLabel>Easing</InputLabel>
               <Select
-                value={data[prop]?.easing ?? 'none'}
+                value={data[prop]?.easing ?? 0}
                 onChange={action((event) => {
-                  data[prop]!.easing = event.target.value as Easing;
+                  console.log(typeof event.target.value);
+                  data[prop]!.easing = event.target.value as number;
                 })}
               >
-                <MenuItem value="easeInBack">easeInBack</MenuItem>
-                <MenuItem value="easeInBounce">easeInBounce</MenuItem>
-                <MenuItem value="easeInCirc">easeInCirc</MenuItem>
-                <MenuItem value="easeInCubic">easeInCubic</MenuItem>
-                <MenuItem value="easeInElastic">easeInElastic</MenuItem>
-                <MenuItem value="easeInExpo">easeInExpo</MenuItem>
-                <MenuItem value="easeInOutBack">easeInOutBack</MenuItem>
-                <MenuItem value="easeInOutBounce">easeInOutBounce</MenuItem>
-                <MenuItem value="easeInOutCirc">easeInOutCirc</MenuItem>
-                <MenuItem value="easeInOutCubic">easeInOutCubic</MenuItem>
-                <MenuItem value="easeInOutElastic">easeInOutElastic</MenuItem>
-                <MenuItem value="easeInOutExpo">easeInOutExpo</MenuItem>
-                <MenuItem value="easeInOutQuad">easeInOutQuad</MenuItem>
-                <MenuItem value="easeInOutQuart">easeInOutQuart</MenuItem>
-                <MenuItem value="easeInOutQuint">easeInOutQuint</MenuItem>
-                <MenuItem value="easeInOutSine">easeInOutSine</MenuItem>
-                <MenuItem value="easeInQuad">easeInQuad</MenuItem>
-                <MenuItem value="easeInQuart">easeInQuart</MenuItem>
-                <MenuItem value="easeInQuint">easeInQuint</MenuItem>
-                <MenuItem value="easeInSine">easeInSine</MenuItem>
-                <MenuItem value="easeOutBack">easeOutBack</MenuItem>
-                <MenuItem value="easeOutBounce">easeOutBounce</MenuItem>
-                <MenuItem value="easeOutCirc">easeOutCirc</MenuItem>
-                <MenuItem value="easeOutCubic">easeOutCubic</MenuItem>
-                <MenuItem value="easeOutElastic">easeOutElastic</MenuItem>
-                <MenuItem value="easeOutExpo">easeOutExpo</MenuItem>
-                <MenuItem value="easeOutQuad">easeOutQuad</MenuItem>
-                <MenuItem value="easeOutQuart">easeOutQuart</MenuItem>
-                <MenuItem value="easeOutQuint">easeOutQuint</MenuItem>
-                <MenuItem value="easeOutSine">easeOutSine</MenuItem>
-                <MenuItem value="linear">linear</MenuItem>
-                <MenuItem value="none">none</MenuItem>
+                {easingNames.map((name, index) => (
+                  <MenuItem key={index} value={index}>
+                    {name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>

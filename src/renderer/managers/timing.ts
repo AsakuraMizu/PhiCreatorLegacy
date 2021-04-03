@@ -18,7 +18,7 @@ class TimingManager {
             bpm: 1,
           },
         ],
-        time: music.progress * music.duration - (chart.data?.musicOffset ?? 0),
+        time: music.progress * music.duration - (chart.data?.musicOffset || 0),
       }),
       ({ bpmList, time }, prev) => {
         let { tick } = this;

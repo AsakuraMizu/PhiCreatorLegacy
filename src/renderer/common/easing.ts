@@ -3,8 +3,6 @@
 /* eslint-disable no-nested-ternary */
 // based on https://github.com/ai/easings.net/blob/master/src/easings/easingsFunctions.ts
 
-import type { Easing } from './chart-data';
-
 const { sqrt, sin, cos, PI } = Math;
 const c1 = 1.70158;
 const c2 = c1 * 1.525;
@@ -154,13 +152,48 @@ const easingsFunctions = {
   },
 };
 
+export const easingNames: (keyof typeof easingsFunctions)[] = [
+  'none',
+  'easeInSine',
+  'easeOutSine',
+  'easeInOutSine',
+  'easeInQuad',
+  'easeOutQuad',
+  'easeInOutQuad',
+  'easeInCubic',
+  'easeOutCubic',
+  'easeInOutCubic',
+  'easeInQuart',
+  'easeOutQuart',
+  'easeInOutQuart',
+  'easeInQuint',
+  'easeOutQuint',
+  'easeInOutQuint',
+  'easeInExpo',
+  'easeOutExpo',
+  'easeInOutExpo',
+  'easeInCirc',
+  'easeOutCirc',
+  'easeInOutCirc',
+  'easeInBack',
+  'easeOutBack',
+  'easeInOutBack',
+  'easeInElastic',
+  'easeOutElastic',
+  'easeInOutElastic',
+  'easeInBounce',
+  'easeOutBounce',
+  'easeInOutBounce',
+  'linear',
+];
+
 export function easeCalc(
   l: number,
   r: number,
   t: number,
-  easing?: Easing
+  easing?: number
 ): number {
-  const func = easingsFunctions[easing ?? 'none'];
+  const func = easingsFunctions[easingNames[easing ?? 0]];
   return l + (r - l) * func(t);
 }
 
@@ -169,7 +202,7 @@ export function easeSumCalc(
   r: number,
   st: number,
   et: number,
-  easing?: Easing
+  easing?: number
 ): number {
   const eps = 1e-2;
   let t = st;

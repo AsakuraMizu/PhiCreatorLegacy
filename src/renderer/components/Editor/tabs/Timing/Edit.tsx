@@ -18,7 +18,8 @@ export default observer(function Edit() {
             type="number"
             value={data?.id}
             onChange={action((event) => {
-              data.id = parseInt(event.target.value);
+              const value = parseInt(event.target.value);
+              if (Number.isFinite(value)) data.id = value;
             })}
           />
         </Grid>
@@ -29,7 +30,8 @@ export default observer(function Edit() {
             type="number"
             value={data?.time}
             onChange={action((event) => {
-              data.time = parseFloat(event.target.value);
+              const value = parseFloat(event.target.value);
+              if (Number.isFinite(value)) data.time = value;
             })}
           />
         </Grid>
@@ -40,7 +42,8 @@ export default observer(function Edit() {
             type="number"
             value={data?.bpm}
             onChange={action((event) => {
-              data.bpm = parseFloat(event.target.value);
+              const value = parseFloat(event.target.value);
+              if (Number.isFinite(value)) data.bpm = value;
             })}
           />
         </Grid>

@@ -18,7 +18,8 @@ export default observer(function Edit() {
             type="number"
             value={data?.id}
             onChange={action((event) => {
-              data.id = parseInt(event.target.value);
+              const value = parseInt(event.target.value);
+              if (Number.isFinite(value)) data.id = value;
             })}
           />
         </Grid>
@@ -29,28 +30,6 @@ export default observer(function Edit() {
             value={data?.name ?? ''}
             onChange={action((event) => {
               data.name = event.target.value;
-            })}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Construct Time"
-            type="number"
-            value={data?.constructTime}
-            onChange={action((event) => {
-              data.constructTime = parseFloat(event.target.value);
-            })}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Destruct Time"
-            type="number"
-            value={data?.destructTime}
-            onChange={action((event) => {
-              data.destructTime = parseFloat(event.target.value);
             })}
           />
         </Grid>

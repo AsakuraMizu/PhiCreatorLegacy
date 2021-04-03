@@ -11,13 +11,11 @@ import storage from 'electron-json-storage';
 
 const apiKey = 'api';
 
-let chartFolder: string;
+let chartFolder = '';
 
 process.on('loaded', async () => {
   const userData = await ipcRenderer.invoke('get-data-dir');
   storage.setDataPath(userData);
-  chartFolder = join(userData, 'chart');
-  await ensureDir(chartFolder);
 });
 
 /**
@@ -26,15 +24,17 @@ process.on('loaded', async () => {
 const api = {
   readJSON: async <T>(file: string, fallback: T): Promise<T> => {
     const path = join(chartFolder, file);
-    if (!(await pathExists(path))) {
-      await outputJSON(path, fallback);
+    if (chartFolder) {
+      return await readJSON(path);
+    } else {
       return fallback;
     }
-    return await readJSON(path);
   },
   outputJSON: async <T>(file: string, data: T): Promise<void> => {
-    const path = join(chartFolder, file);
-    await outputJSON(path, data);
+    if (chartFolder) {
+      const path = join(chartFolder, file);
+      await outputJSON(path, data);
+    }
   },
   pathExists: async (file: string): Promise<boolean> => {
     const path = join(chartFolder, file);
@@ -46,6 +46,14 @@ const api = {
   },
   openChartFolder: () => {
     shell.openPath(chartFolder);
+  },
+  openProject: (folder: string) => {
+    ensureDir(folder);
+    chartFolder = folder;
+  },
+  dirSelector: async (): Promise<string> => {
+    const res = await ipcRenderer.invoke('dir-selector');
+    return res.filePaths.toString();
   },
   extname,
   storage,

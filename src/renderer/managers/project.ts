@@ -16,12 +16,10 @@ class ProjectManager {
   }
 
   async reload() {
-    this.mark(false);
     await meta.load();
     await chart.load();
     await music.load();
     await background.load();
-    this.mark(true);
   }
 
   async save() {

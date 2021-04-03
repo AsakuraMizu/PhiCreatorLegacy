@@ -30,8 +30,12 @@ const useStyles = makeStyles((theme: Theme) =>
 function WelcomeCard() {
   function openProject() {
     api.dirSelector().then((result) => {
-      if (result) api.openProject(result);
-      project.reload();
+      if (result) {
+        project.mark(false);
+        api.openProject(result);
+        project.reload();
+        project.mark(true);
+      }
     });
   }
 
@@ -42,7 +46,7 @@ function WelcomeCard() {
       </CardContent>
       <CardActions>
         <Button onClick={openProject} size="small">
-          Open/Create Project
+          Create/Open Project
         </Button>
       </CardActions>
     </Card>
@@ -62,6 +66,7 @@ export default observer(function Meta() {
           <Grid item xs>
             <TextField
               fullWidth
+              disabled={!project.loaded}
               label="Title"
               value={meta.title}
               onChange={action((event) => {
@@ -72,6 +77,7 @@ export default observer(function Meta() {
           <Grid item xs>
             <TextField
               fullWidth
+              disabled={!project.loaded}
               label="Difficulty"
               value={meta.difficulty}
               onChange={action((event) => {
@@ -84,6 +90,7 @@ export default observer(function Meta() {
           <Grid item xs>
             <TextField
               fullWidth
+              disabled={!project.loaded}
               label="Artist"
               value={meta.artist}
               onChange={action((event) => {
@@ -94,6 +101,7 @@ export default observer(function Meta() {
           <Grid item xs>
             <TextField
               fullWidth
+              disabled={!project.loaded}
               label="Illustrator"
               value={meta.illustrator}
               onChange={action((event) => {
@@ -106,6 +114,7 @@ export default observer(function Meta() {
           <Grid item xs>
             <TextField
               fullWidth
+              disabled={!project.loaded}
               label="Charter"
               value={meta.charter}
               onChange={action((event) => {
@@ -116,6 +125,7 @@ export default observer(function Meta() {
           <Grid item xs>
             <TextField
               fullWidth
+              disabled={!project.loaded}
               label="Music (file)"
               value={meta.music}
               onChange={action((event) => {
@@ -128,6 +138,7 @@ export default observer(function Meta() {
           <Grid item xs={6}>
             <TextField
               fullWidth
+              disabled={!project.loaded}
               label="Background (file)"
               value={meta.background}
               onChange={action((event) => {
@@ -140,6 +151,7 @@ export default observer(function Meta() {
           <Grid item>
             <Tooltip title="Hotkey: ctrl+s">
               <Button
+                disabled={!project.loaded}
                 variant="outlined"
                 color="primary"
                 onClick={() => project.save()}
@@ -159,7 +171,11 @@ export default observer(function Meta() {
             </Button>
           </Grid>
           <Grid item>
-            <Button variant="outlined" onClick={() => api.openChartFolder()}>
+            <Button
+              disabled={!project.loaded}
+              variant="outlined"
+              onClick={() => api.openChartFolder()}
+            >
               Open chart folder
             </Button>
           </Grid>

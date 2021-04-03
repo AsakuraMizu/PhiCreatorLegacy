@@ -30,12 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function WelcomeCard() {
   function openProject() {
     api.dirSelector().then((result) => {
-      if (result) {
-        project.mark(false);
-        api.openProject(result);
-        project.reload();
-        project.mark(true);
-      }
+      if (result) project.load(result);
     });
   }
 
@@ -150,14 +145,16 @@ export default observer(function Meta() {
         <Grid className={cn.row} container direction="row" spacing={3}>
           <Grid item>
             <Tooltip title="Hotkey: ctrl+s">
-              <Button
-                disabled={!project.loaded}
-                variant="outlined"
-                color="primary"
-                onClick={() => project.save()}
-              >
-                Save
-              </Button>
+              <span>
+                <Button
+                  disabled={!project.loaded}
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => project.save()}
+                >
+                  Save
+                </Button>
+              </span>
             </Tooltip>
           </Grid>
           <Grid item>

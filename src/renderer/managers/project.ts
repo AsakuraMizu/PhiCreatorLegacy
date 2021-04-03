@@ -15,6 +15,13 @@ class ProjectManager {
     this.loaded = loaded;
   }
 
+  async load(folder: string) {
+    this.mark(false);
+    api.openProject(folder);
+    this.reload();
+    this.mark(true);
+  }
+
   async reload() {
     await meta.load();
     await chart.load();

@@ -52,8 +52,8 @@ const api = {
     chartFolder = folder;
   },
   dirSelector: async (): Promise<string> => {
-    const res = await ipcRenderer.invoke('dir-selector');
-    return res.filePaths.toString();
+    const result = await ipcRenderer.invoke('dir-selector');
+    return result.filePaths.toString();
   },
   extname,
   storage,

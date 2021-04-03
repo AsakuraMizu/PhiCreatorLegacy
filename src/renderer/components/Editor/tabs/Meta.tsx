@@ -29,8 +29,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function WelcomeCard() {
   function openProject() {
-    api.dirSelector().then((res) => api.openProject(res));
-    project.reload();
+    api.dirSelector().then((result) => {
+      if (result) api.openProject(result);
+      project.reload();
+    });
   }
 
   return (

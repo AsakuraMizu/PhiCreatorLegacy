@@ -24,15 +24,15 @@ process.on('loaded', async () => {
 const api = {
   readJSON: async <T>(file: string, fallback: T): Promise<T> => {
     const path = join(chartFolder, file);
-    if (chartFolder) {
+    if (chartFolder && (await pathExists(path))) {
       return await readJSON(path);
     } else {
       return fallback;
     }
   },
   outputJSON: async <T>(file: string, data: T): Promise<void> => {
+    const path = join(chartFolder, file);
     if (chartFolder) {
-      const path = join(chartFolder, file);
       await outputJSON(path, data);
     }
   },

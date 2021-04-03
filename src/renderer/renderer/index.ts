@@ -1,4 +1,4 @@
-import { action, autorun, makeAutoObservable } from 'mobx';
+import { autorun, IReactionDisposer, makeAutoObservable } from 'mobx';
 import { Application } from 'pixi.js';
 import { search } from '/@/common';
 import { chart, timing } from '/@/managers';
@@ -15,24 +15,24 @@ export default class Renderer {
   judger: Judger;
   judgeLines: JudgeLineRenderer[] = [];
 
+  disposers: IReactionDisposer[] = [];
+
   constructor(canvas: HTMLCanvasElement) {
     makeAutoObservable(this, {
       canvas: false,
       app: false,
       ui: false,
-      updateLines: action.bound,
     });
 
     this.canvas = canvas;
     this.app = new Application({
       view: canvas,
     });
-    this.resize();
 
     this.ui = new UiRenderer(this);
     this.judger = new Judger(this);
 
-    autorun(() => this.updateLines());
+    this.disposers.push(autorun(() => this.updateLines()));
 
     this.app.ticker.add(() => this.update());
   }
@@ -77,17 +77,20 @@ export default class Renderer {
   }
 
   destroy(): void {
+    this.disposers.forEach((disposer) => disposer());
+    this.ui.destory();
+    this.judgeLines.forEach((l) => l.destory());
+    this.judgeLines = [];
     this.app?.destroy(false, {
       children: true,
       texture: false,
       baseTexture: false,
     });
-    this.judgeLines.forEach((l) => l.destory());
-    this.judgeLines = [];
   }
 
   update(): void {
     this.ui.update();
+    // this.updateLines();
     this.judgeLines.forEach((l) => l.update());
   }
 

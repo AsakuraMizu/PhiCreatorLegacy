@@ -13,7 +13,7 @@ export default function Viewer(): JSX.Element {
   const cn = useStyles();
 
   const ref = React.useRef<HTMLCanvasElement>(null);
-  useRenderer(ref);
+  useRenderer(ref, true);
 
   return <canvas ref={ref} className={cn.canvas} />;
 }

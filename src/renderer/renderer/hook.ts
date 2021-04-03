@@ -4,7 +4,8 @@ import { preload } from './resources';
 import Renderer from '.';
 
 export default function useRenderer(
-  ref: RefObject<HTMLCanvasElement>
+  ref: RefObject<HTMLCanvasElement>,
+  resize = false
 ): Renderer | undefined {
   let renderer: Renderer | undefined;
 
@@ -13,13 +14,16 @@ export default function useRenderer(
       if (ref.current) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         renderer = new Renderer(ref.current);
+        if (resize) renderer.resize();
       }
     });
     return () => renderer?.destroy();
   }, []);
 
   useOnWindowResize(() => {
-    renderer?.resize();
+    if (resize) {
+      renderer?.resize();
+    }
   });
 
   return renderer;

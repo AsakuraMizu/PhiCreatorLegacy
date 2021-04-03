@@ -12,6 +12,7 @@ class ChartManager {
 
   async load() {
     const data: ChartData = await api.readJSON('chart.json', {
+      schemaVersion: 1,
       musicOffset: 0,
       timingBase: 48,
       bpmList: [{ id: 0, time: 0, bpm: 100 }],

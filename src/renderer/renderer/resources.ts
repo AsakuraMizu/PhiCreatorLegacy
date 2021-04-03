@@ -60,10 +60,11 @@ export async function preload(): Promise<void> {
   const loader = Loader.shared;
   Object.entries(rawRes).forEach(([name, url]) => loader.add(name, url));
   return new Promise((resolve, reject) => {
-    loader.onError.add((err) => reject(err));
+    loader.onError.add((err: unknown) => reject(err));
     loader.load(() => {
       Object.keys(rawRes).forEach((name) => {
-        loadedRes[<keyof typeof rawRes>name] = loader.resources[name].texture;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        loadedRes[<keyof typeof rawRes>name] = loader.resources[name].texture!;
       });
       resolve();
     });

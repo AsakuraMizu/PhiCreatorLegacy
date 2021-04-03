@@ -10,6 +10,7 @@ import {
 import Editor from './components/Editor';
 import FullViewer from './components/FullViewer';
 import FooterBar from './components/FooterBar';
+import Hotkeys from './components/Hotkeys';
 import { control, fx, project } from './managers';
 import theme from './theme';
 
@@ -43,12 +44,19 @@ export default observer(function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Hotkeys />
       <Fade in>
         <Box className={cn.root}>
-          {control.full ? <FullViewer /> : <Editor />}
-          <Box className={cn.bar}>
-            <FooterBar />
-          </Box>
+          {control.full ? (
+            <FullViewer />
+          ) : (
+            <>
+              <Editor />
+              <Box className={cn.bar}>
+                <FooterBar />
+              </Box>
+            </>
+          )}
         </Box>
       </Fade>
     </ThemeProvider>

@@ -1,4 +1,11 @@
-import { action, autorun, makeObservable, observable, runInAction } from 'mobx';
+import {
+  action,
+  autorun,
+  IReactionDisposer,
+  makeObservable,
+  observable,
+  runInAction,
+} from 'mobx';
 import { Container, Graphics } from 'pixi.js';
 import { Cull } from '@pixi-essentials/cull';
 import hash from 'object-hash';
@@ -27,6 +34,7 @@ function updater(stateList: State[], tick: number) {
 
 export default class JudgeLineRenderer {
   renderer: Renderer;
+
   i: number;
   container: Container;
   cull: Cull;
@@ -34,6 +42,8 @@ export default class JudgeLineRenderer {
   noteContainer: Container;
   displayRange = -1;
   notes = new Map<string, NoteRenderer>();
+
+  disposers: IReactionDisposer[] = [];
 
   constructor(renderer: Renderer, i: number) {
     this.renderer = renderer;
@@ -62,31 +72,35 @@ export default class JudgeLineRenderer {
     this.cull = new Cull();
     this.cull.add(this.noteContainer);
 
-    autorun(() => {
-      this.container.pivot.set(this.renderer.calcX(0), this.renderer.calcY(0));
-      this.line.y = this.renderer.calcY(0);
-    });
-
-    autorun(() => {
-      const hashs: string[] = [];
-      const added: { h: string; n: NoteRenderer }[] = [];
-      chart.data?.judgeLineList[this.i]?.noteList.forEach((n) => {
-        const h = hash(n);
-        hashs.push(h);
-        if (!this.notes.has(h)) {
-          added.push({ h, n: new NoteRenderer(this, n) });
-        }
-      });
-      runInAction(() => {
-        this.notes.forEach((n, h) => {
-          if (!hashs.includes(h)) {
-            n.destory();
-            this.notes.delete(h);
+    this.disposers.push(
+      autorun(() => {
+        this.container.pivot.set(
+          this.renderer.calcX(0),
+          this.renderer.calcY(0)
+        );
+        this.line.y = this.renderer.calcY(0);
+      }),
+      autorun(() => {
+        const hashs: string[] = [];
+        const added: { h: string; n: NoteRenderer }[] = [];
+        chart.data?.judgeLineList[this.i]?.noteList.forEach((n) => {
+          const h = hash(n);
+          hashs.push(h);
+          if (!this.notes.has(h)) {
+            added.push({ h, n: new NoteRenderer(this, n) });
           }
         });
-        added.forEach(({ h, n }) => this.notes.set(h, n));
-      });
-    });
+        runInAction(() => {
+          this.notes.forEach((n, h) => {
+            if (!hashs.includes(h)) {
+              n.destory();
+              this.notes.delete(h);
+            }
+          });
+          added.forEach(({ h, n }) => this.notes.set(h, n));
+        });
+      })
+    );
   }
 
   assign(i: number): void {

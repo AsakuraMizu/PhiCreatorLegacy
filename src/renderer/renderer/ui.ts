@@ -1,11 +1,12 @@
-import { autorun, reaction } from 'mobx';
+import { autorun, IReactionDisposer, reaction } from 'mobx';
 import { Container, Sprite, Text } from 'pixi.js';
-import { background, meta, music, settings } from '/@/managers';
+import { background, control, meta, music, settings } from '/@/managers';
 import { loadedRes, skin } from './resources';
 import type Renderer from '.';
 
 export default class UiRenderer {
   renderer: Renderer;
+
   container: Container;
   background: Sprite;
   prefix: Sprite;
@@ -22,6 +23,8 @@ export default class UiRenderer {
   illustrator: Text;
   charter: Text;
 
+  disposers: IReactionDisposer[] = [];
+
   constructor(renderer: Renderer) {
     this.renderer = renderer;
 
@@ -29,21 +32,23 @@ export default class UiRenderer {
     renderer.app.stage.addChild(this.container);
 
     this.background = new Sprite();
-    autorun(() => {
-      this.background.alpha = settings.dim;
-    });
-    reaction(
-      () => background.dirty,
-      () => {
-        if (background.texture) {
-          this.background.texture = background.texture;
-          this.background.texture.update();
-          this.updateBackground();
+    this.disposers.push(
+      autorun(() => {
+        this.background.alpha = settings.dim;
+      }),
+      reaction(
+        () => background.dirty,
+        () => {
+          if (background.texture) {
+            this.background.texture = background.texture;
+            this.background.texture.update();
+            this.updateBackground();
+          }
+        },
+        {
+          fireImmediately: true,
         }
-      },
-      {
-        fireImmediately: true,
-      }
+      )
     );
     this.container.addChild(this.background);
 
@@ -75,10 +80,12 @@ export default class UiRenderer {
       fontSize,
       align: 'left',
     });
-    autorun(() => {
-      this.title.text = meta.title;
-      this.title.pivot.y = this.title.height;
-    });
+    this.disposers.push(
+      autorun(() => {
+        this.title.text = meta.title;
+        this.title.pivot.y = this.title.height;
+      })
+    );
     this.title.x = 30;
     this.container.addChild(this.title);
 
@@ -88,11 +95,13 @@ export default class UiRenderer {
       fontSize,
       align: 'right',
     });
-    autorun(() => {
-      this.difficulty.text = meta.difficulty;
-      this.difficulty.pivot.x = this.difficulty.width;
-      this.difficulty.pivot.y = this.difficulty.height;
-    });
+    this.disposers.push(
+      autorun(() => {
+        this.difficulty.text = meta.difficulty;
+        this.difficulty.pivot.x = this.difficulty.width;
+        this.difficulty.pivot.y = this.difficulty.height;
+      })
+    );
     this.container.addChild(this.difficulty);
 
     this.combo = new Text('', {
@@ -126,40 +135,48 @@ export default class UiRenderer {
       fontSize: comboFontSize,
       align: 'center',
     });
-    autorun(() => {
-      this.songname.text = meta.title;
-      this.songname.pivot.x = this.songname.width / 2;
-    });
+    this.disposers.push(
+      autorun(() => {
+        this.songname.text = meta.title;
+        this.songname.pivot.x = this.songname.width / 2;
+      })
+    );
     this.artist = new Text('', {
       fontFamily,
       fill,
       fontSize,
       align: 'center',
     });
-    autorun(() => {
-      this.artist.text = meta.artist;
-      this.artist.pivot.x = this.artist.width / 2;
-    });
+    this.disposers.push(
+      autorun(() => {
+        this.artist.text = meta.artist;
+        this.artist.pivot.x = this.artist.width / 2;
+      })
+    );
     this.illustrator = new Text('', {
       fontFamily,
       fill,
       fontSize,
       align: 'center',
     });
-    autorun(() => {
-      this.illustrator.text = `Illustration designed by ${meta.illustrator}`;
-      this.illustrator.pivot.x = this.illustrator.width / 2;
-    });
+    this.disposers.push(
+      autorun(() => {
+        this.illustrator.text = `Illustration designed by ${meta.illustrator}`;
+        this.illustrator.pivot.x = this.illustrator.width / 2;
+      })
+    );
     this.charter = new Text('', {
       fontFamily,
       fill,
       fontSize,
       align: 'center',
     });
-    autorun(() => {
-      this.charter.text = `Chart designed by ${meta.charter}`;
-      this.charter.pivot.x = this.charter.width / 2;
-    });
+    this.disposers.push(
+      autorun(() => {
+        this.charter.text = `Chart designed by ${meta.charter}`;
+        this.charter.pivot.x = this.charter.width / 2;
+      })
+    );
     this.intro.addChild(
       this.songname,
       this.artist,
@@ -168,27 +185,29 @@ export default class UiRenderer {
     );
     this.container.addChild(this.intro);
 
-    autorun(() => {
-      const { width, height } = this.renderer;
+    this.disposers.push(
+      autorun(() => {
+        const { width, height } = this.renderer;
 
-      this.prefix.y = height - 18;
-      this.progress.scale.x = width / this.progress.texture.width;
-      this.title.y = height - 17;
-      this.difficulty.x = width - 20;
-      this.difficulty.y = height - 17;
-      this.combo.x = width / 2;
-      this.label.x = width / 2;
-      this.score.x = width - 20;
-      this.songname.x = width / 2;
-      this.songname.y = height * (1 / 4);
-      this.artist.x = width / 2;
-      this.artist.y = this.songname.y + this.songname.height + 10;
-      this.illustrator.x = width / 2;
-      this.illustrator.y = height * (2 / 3);
-      this.charter.x = width / 2;
-      this.charter.y = this.illustrator.y + this.illustrator.height + 10;
-      this.updateBackground();
-    });
+        this.prefix.y = height - 18;
+        this.progress.scale.x = width / this.progress.texture.width;
+        this.title.y = height - 17;
+        this.difficulty.x = width - 20;
+        this.difficulty.y = height - 17;
+        this.combo.x = width / 2;
+        this.label.x = width / 2;
+        this.score.x = width - 20;
+        this.songname.x = width / 2;
+        this.songname.y = height * (1 / 4);
+        this.artist.x = width / 2;
+        this.artist.y = this.songname.y + this.songname.height + 10;
+        this.illustrator.x = width / 2;
+        this.illustrator.y = height * (2 / 3);
+        this.charter.x = width / 2;
+        this.charter.y = this.illustrator.y + this.illustrator.height + 10;
+        this.updateBackground();
+      })
+    );
   }
 
   updateBackground(): void {
@@ -224,6 +243,10 @@ export default class UiRenderer {
     this.score.text = Math.round(score).toString().padStart(7, '0');
     this.score.pivot.x = this.score.width;
 
-    this.intro.alpha = Math.max(0, (0.5 - music.progress * music.duration) * 2);
+    this.intro.alpha = control.delay >= 500 ? 1 : control.delay / 500;
+  }
+
+  destory(): void {
+    this.disposers.forEach((disposer) => disposer());
   }
 }

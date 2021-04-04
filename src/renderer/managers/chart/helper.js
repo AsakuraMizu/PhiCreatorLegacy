@@ -34,7 +34,7 @@ export function diffClone(origin, data) {
       } else {
         const rtn = {};
         Object.keys(data).forEach((key) => {
-          if (hash(origin[key]) === hash(data[key])) {
+          if (hash(origin[key] ?? null) === hash(data[key] ?? null)) {
             rtn[key] = origin[key];
           } else if (key in origin) {
             rtn[key] = diffClone(origin[key], data[key]);

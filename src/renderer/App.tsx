@@ -7,11 +7,13 @@ import {
   Fade,
   ThemeProvider,
 } from '@material-ui/core';
+import { SnackbarProvider } from 'notistack';
+import { control, fx, project } from './managers';
+import Hotkeys from './components/Hotkeys';
+import Toast from './components/Toast';
 import Editor from './components/Editor';
 import FullViewer from './components/FullViewer';
 import FooterBar from './components/FooterBar';
-import Hotkeys from './components/Hotkeys';
-import { control, fx, project } from './managers';
 import theme from './theme';
 
 const useStyles = makeStyles(() => ({
@@ -37,28 +39,31 @@ export default observer(function App() {
   const cn = useStyles();
 
   React.useEffect(() => {
-    project.reload();
+    project.reload(false, true);
     fx.enable();
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Hotkeys />
-      <Fade in>
-        <Box className={cn.root}>
-          {control.full ? (
-            <FullViewer />
-          ) : (
-            <>
-              <Editor />
-              <Box className={cn.bar}>
-                <FooterBar />
-              </Box>
-            </>
-          )}
-        </Box>
-      </Fade>
+      <SnackbarProvider>
+        <CssBaseline />
+        <Hotkeys />
+        <Toast />
+        <Fade in>
+          <Box className={cn.root}>
+            {control.full ? (
+              <FullViewer />
+            ) : (
+              <>
+                <Editor />
+                <Box className={cn.bar}>
+                  <FooterBar />
+                </Box>
+              </>
+            )}
+          </Box>
+        </Fade>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 });

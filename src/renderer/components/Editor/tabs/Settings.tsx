@@ -1,11 +1,11 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Box, Grid, Slider, Typography } from '@material-ui/core';
-import { settings } from '/@/managers';
+import { project, settings } from '/@/managers';
 
 export default observer(function Settings() {
   return (
-    <Box margin="20px">
+    <Box margin="20px auto" width="80%">
       <Grid container direction="column" spacing={3}>
         <Grid item>
           <Typography gutterBottom>Music volume</Typography>
@@ -64,6 +64,23 @@ export default observer(function Settings() {
             value={settings.dim}
             onChange={(_, v) => {
               settings.update({ dim: v as number });
+            }}
+          />
+        </Grid>
+        <Grid item>
+          <Typography gutterBottom>
+            Auto save interval (minutes, 0 to disable)
+            <br />
+            Last save: {project.lastSave ? project.lastSave.fromNow() : 'never'}
+          </Typography>
+          <Slider
+            min={0.5}
+            max={10}
+            step={0.5}
+            valueLabelDisplay="auto"
+            value={settings.autosave}
+            onChange={(_, v) => {
+              settings.update({ autosave: v as number });
             }}
           />
         </Grid>

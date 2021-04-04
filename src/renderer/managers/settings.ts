@@ -9,6 +9,7 @@ interface ISettings {
   };
   rate: number;
   dim: number;
+  autosave: number;
 }
 
 class SettingsManager implements ISettings {
@@ -18,6 +19,7 @@ class SettingsManager implements ISettings {
   };
   rate = 1.0;
   dim = 0.3;
+  autosave = 2;
 
   constructor() {
     makeAutoObservable(this, {
@@ -27,11 +29,16 @@ class SettingsManager implements ISettings {
     api.storage.get('settings', (error, value) => {
       if (error) throw error;
       this.update(value);
-      ['volume.music', 'volume.fx', 'helper.ap', 'rate', 'dim'].forEach(
-        (path) => {
-          this.watch(path);
-        }
-      );
+      [
+        'volume.music',
+        'volume.fx',
+        'helper.ap',
+        'rate',
+        'dim',
+        'autosave',
+      ].forEach((path) => {
+        this.watch(path);
+      });
     });
   }
 

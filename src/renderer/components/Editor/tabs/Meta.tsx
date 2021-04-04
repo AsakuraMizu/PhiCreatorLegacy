@@ -14,7 +14,7 @@ import {
   CardActions,
 } from '@material-ui/core';
 import { createStyles, Theme } from '@material-ui/core/styles';
-import { meta, project } from '/@/managers';
+import { meta, project, toast } from '/@/managers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +39,7 @@ function WelcomeCard() {
             const dir = await api.dirSelector();
             if (!dir) return;
             await api.openProject(dir);
-            await project.reload();
+            await project.reload(false);
           }}
           size="small"
         >

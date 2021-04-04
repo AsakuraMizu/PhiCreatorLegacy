@@ -15,18 +15,13 @@ class ProjectManager {
     this.loaded = loaded;
   }
 
-  async load(folder: string) {
-    this.mark(false);
-    api.openProject(folder);
-    this.reload();
-    this.mark(true);
-  }
-
   async reload() {
+    this.mark(false);
     await meta.load();
     await chart.load();
     await music.load();
     await background.load();
+    this.mark(true);
   }
 
   async save() {

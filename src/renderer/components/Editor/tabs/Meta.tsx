@@ -28,19 +28,21 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function WelcomeCard() {
-  function openProject() {
-    api.dirSelector().then((result) => {
-      if (result) project.load(result);
-    });
-  }
-
   return (
     <Card>
       <CardContent>
         <Typography variant="h6">Welcome to PhiCreator</Typography>
       </CardContent>
       <CardActions>
-        <Button onClick={openProject} size="small">
+        <Button
+          onClick={async () => {
+            const dir = await api.dirSelector();
+            if (!dir) return;
+            await api.openProject(dir);
+            await project.reload();
+          }}
+          size="small"
+        >
           Create/Open Project
         </Button>
       </CardActions>

@@ -1,5 +1,10 @@
 import { extname, join } from 'path';
-import { contextBridge, ipcRenderer, shell } from 'electron';
+import {
+  contextBridge,
+  ipcRenderer,
+  shell,
+  OpenDialogReturnValue,
+} from 'electron';
 import {
   ensureDir,
   outputJSON,
@@ -47,12 +52,14 @@ const api = {
   openChartFolder: () => {
     shell.openPath(chartFolder);
   },
-  openProject: (folder: string) => {
-    ensureDir(folder);
+  openProject: async (folder: string) => {
     chartFolder = folder;
+    await ensureDir(folder);
   },
   dirSelector: async (): Promise<string> => {
-    const result = await ipcRenderer.invoke('dir-selector');
+    const result: OpenDialogReturnValue = await ipcRenderer.invoke(
+      'dir-selector'
+    );
     return result.filePaths.toString();
   },
   extname,

@@ -20,6 +20,7 @@ export default observer(function Edit() {
             onChange={action((event) => {
               const value = parseInt(event.target.value);
               if (Number.isFinite(value)) data.id = value;
+              chart.patch();
             })}
           />
         </Grid>
@@ -30,6 +31,7 @@ export default observer(function Edit() {
             value={data?.name ?? ''}
             onChange={action((event) => {
               data.name = event.target.value;
+              chart.patch();
             })}
           />
         </Grid>

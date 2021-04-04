@@ -15,11 +15,13 @@ import {
   Typography,
   Button,
   TextField,
+  Tooltip,
 } from '@material-ui/core';
-import { ZoomIn, ZoomOut } from '@material-ui/icons';
+import { Redo, Undo, ZoomIn, ZoomOut } from '@material-ui/icons';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { chart } from '/@/managers';
 import track, { ToolType } from './state';
 import NoteEdit from './NoteEdit';
 
@@ -41,15 +43,37 @@ const SelectTool = observer(() => {
         </Grid>
       </Box>
       <RadioGroup value={track.tool} onChange={(e, v) => update(v as ToolType)}>
-        <FormControlLabel value="cursor" control={<Radio />} label="Cursor" />
-        <FormControlLabel value="note" control={<Radio />} label="Note" />
-        <FormControlLabel value="prop" control={<Radio />} label="Prop" />
+        <FormControlLabel
+          value="cursor"
+          control={<Radio />}
+          label="Cursor"
+          title="Hotkey: 1"
+        />
+        <FormControlLabel
+          value="note"
+          control={<Radio />}
+          label="Note"
+          title="Hotkey: 2"
+        />
+        <FormControlLabel
+          value="prop"
+          control={<Radio />}
+          label="Prop"
+          title="Hotkey: 3"
+        />
       </RadioGroup>
     </Grid>
   );
 });
 
 const Align = observer(() => {
+  useHotkeys(
+    'a',
+    action(() => {
+      track.align = !track.align;
+    })
+  );
+
   return (
     <FormControlLabel
       label="Align to guideline"
@@ -130,15 +154,52 @@ const ZoomInOut = observer(() => {
 const NoteEditButton = observer(() => {
   const [open, setOpen] = React.useState(false);
 
+  useHotkeys('e', () => {
+    if (track.selected.size !== 0) setOpen(true);
+  });
+
   return (
     <>
-      {track.selected.size !== 0 && (
-        <Button variant="outlined" onClick={() => setOpen(true)}>
-          Edit
-        </Button>
-      )}
+      <Tooltip title="Hotkey: e">
+        <span>
+          <Button
+            variant="outlined"
+            onClick={() => setOpen(true)}
+            disabled={track.selected.size === 0}
+          >
+            Edit
+          </Button>
+        </span>
+      </Tooltip>
       <NoteEdit open={open} onClose={() => setOpen(false)} />
     </>
+  );
+});
+
+const UndoRedo = observer(() => {
+  // The hotkey is global
+
+  return (
+    <Grid item container spacing={2} alignItems="center">
+      <Grid item>
+        <Tooltip title="Hotkey: ctrl+z">
+          <span>
+            <IconButton onClick={() => chart.undo()} disabled={!chart.canUndo}>
+              <Undo />
+            </IconButton>
+          </span>
+        </Tooltip>
+      </Grid>
+      <Grid item>
+        <Tooltip title="Hotkey: ctrl+y">
+          <span>
+            <IconButton onClick={() => chart.redo()} disabled={!chart.canRedo}>
+              <Redo />
+            </IconButton>
+          </span>
+        </Tooltip>
+      </Grid>
+    </Grid>
   );
 });
 
@@ -152,6 +213,7 @@ export default function Tools(): JSX.Element {
         <SelectDivisor />
         <GuidelineNum />
         <ZoomInOut />
+        <UndoRedo />
       </Grid>
     </Box>
   );

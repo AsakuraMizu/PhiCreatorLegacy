@@ -85,26 +85,6 @@ const Note = observer(({ idx }: NoteProps) => {
         track.pressingNote = true;
       }
     });
-    React.useEffect(
-      () =>
-        reaction(
-          () => track.dragging,
-          (notDragging, dragging) => {
-            if (track.selected.has(idx) && !notDragging && dragging) {
-              if (track.ctrl) {
-                track.lineData?.noteList.push({
-                  ...data,
-                  id: track.lastId + 1,
-                });
-              }
-              data.x += track.deltaX;
-              data.time += track.deltaTime;
-            }
-          }
-        ),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [idx]
-    );
 
     const x =
         ((data.x +

@@ -19,6 +19,7 @@ import {
 import { Add, Close } from '@material-ui/icons';
 import { maxBy } from 'lodash-es';
 import { easingNames, Props } from '/@/common';
+import { chart } from '/@/managers';
 import track, { props } from './state';
 
 const SingleProp = observer(({ prop }: { prop: Props }) => {
@@ -39,7 +40,10 @@ const SingleProp = observer(({ prop }: { prop: Props }) => {
               inputProps={{ step: '0.1' }}
               onChange={action((event) => {
                 const value = parseFloat(event.target.value);
-                if (Number.isFinite(value)) data[prop]!.value = value;
+                if (Number.isFinite(value)) {
+                  data[prop]!.value = value;
+                  chart.patch();
+                }
               })}
             />
           </Grid>
@@ -49,8 +53,8 @@ const SingleProp = observer(({ prop }: { prop: Props }) => {
               <Select
                 value={data[prop]?.easing ?? 0}
                 onChange={action((event) => {
-                  console.log(typeof event.target.value);
                   data[prop]!.easing = event.target.value as number;
+                  chart.patch();
                 })}
               >
                 {easingNames.map((name, index) => (
@@ -68,7 +72,10 @@ const SingleProp = observer(({ prop }: { prop: Props }) => {
                 const idx = list?.findIndex(
                   (state) => state.time === track.startTime
                 );
-                if (idx) list?.splice(idx, 1);
+                if (idx) {
+                  list?.splice(idx, 1);
+                  chart.patch();
+                }
               })}
             >
               <Close />
@@ -85,6 +92,7 @@ const SingleProp = observer(({ prop }: { prop: Props }) => {
                 time: track.startTime,
                 value: 0,
               });
+              chart.patch();
             })}
           >
             <Add />

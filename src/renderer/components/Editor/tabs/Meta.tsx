@@ -158,14 +158,18 @@ export default observer(function Meta() {
             </Tooltip>
           </Grid>
           <Grid item>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={() => project.reload()}
-              disabled={!project.loaded}
-            >
-              Reload from disk
-            </Button>
+            <Tooltip title="Hotkey: alt+r">
+              <span>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => project.reload()}
+                  disabled={!project.loaded}
+                >
+                  Reload from disk
+                </Button>
+              </span>
+            </Tooltip>
           </Grid>
           <Grid item>
             <Button

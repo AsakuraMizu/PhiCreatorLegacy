@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { control, music, project } from '/@/managers';
+import { chart, control, music, project } from '/@/managers';
 
 export default observer(function Hotkeys() {
   useHotkeys('space', (e) => {
@@ -16,6 +16,12 @@ export default observer(function Hotkeys() {
   });
   useHotkeys('ctrl+s', () => {
     project.save();
+  });
+  useHotkeys('ctrl+z', () => {
+    chart.undo();
+  });
+  useHotkeys('ctrl+y', () => {
+    chart.redo();
   });
 
   return <></>;

@@ -21,6 +21,7 @@ import {
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import type { NoteData } from '/@/common';
+import { chart } from '/@/managers';
 import track from './state';
 
 const SingleEdit = observer(() => {
@@ -38,7 +39,10 @@ const SingleEdit = observer(() => {
             value={data.id}
             onChange={action((event) => {
               const value = parseInt(event.target.value);
-              if (Number.isFinite(value)) data.id = value;
+              if (Number.isFinite(value)) {
+                data.id = value;
+                chart.patch();
+              }
             })}
           />
         </Grid>
@@ -49,6 +53,7 @@ const SingleEdit = observer(() => {
               value={data.type}
               onChange={action((event) => {
                 data.type = event.target.value as NoteData['type'];
+                chart.patch();
               })}
             >
               <MenuItem value={1}>Tap</MenuItem>
@@ -66,7 +71,10 @@ const SingleEdit = observer(() => {
             value={data.time}
             onChange={action((event) => {
               const value = parseFloat(event.target.value);
-              if (Number.isFinite(value)) data.time = value;
+              if (Number.isFinite(value)) {
+                data.time = value;
+                chart.patch();
+              }
             })}
           />
         </Grid>
@@ -79,7 +87,10 @@ const SingleEdit = observer(() => {
             disabled={data.type !== 3}
             onChange={action((event) => {
               const value = parseFloat(event.target.value);
-              if (Number.isFinite(value)) data.holdTime = value;
+              if (Number.isFinite(value)) {
+                data.holdTime = value;
+                chart.patch();
+              }
             })}
           />
         </Grid>
@@ -92,7 +103,10 @@ const SingleEdit = observer(() => {
             inputProps={{ step: '0.1', min: '-1', max: '1' }}
             onChange={action((event) => {
               const value = parseFloat(event.target.value);
-              if (Number.isFinite(value)) data.x = value;
+              if (Number.isFinite(value)) {
+                data.x = value;
+                chart.patch();
+              }
             })}
           />
         </Grid>
@@ -105,7 +119,10 @@ const SingleEdit = observer(() => {
             inputProps={{ min: '0', step: '0.1' }}
             onChange={action((event) => {
               const value = parseFloat(event.target.value);
-              if (Number.isFinite(value)) data.width = value;
+              if (Number.isFinite(value)) {
+                data.width = value;
+                chart.patch();
+              }
             })}
           />
         </Grid>
@@ -117,6 +134,7 @@ const SingleEdit = observer(() => {
               value={data.side}
               onChange={action((event) => {
                 data.side = parseInt(event.target.value) as NoteData['side'];
+                chart.patch();
               })}
             >
               <FormControlLabel value={1} label="1" control={<Radio />} />
@@ -133,7 +151,10 @@ const SingleEdit = observer(() => {
             inputProps={{ min: '0', step: '0.1' }}
             onChange={action((event) => {
               const value = parseFloat(event.target.value);
-              if (Number.isFinite(value)) data.speed = value;
+              if (Number.isFinite(value)) {
+                data.speed = value;
+                chart.patch();
+              }
             })}
           />
         </Grid>
@@ -145,6 +166,7 @@ const SingleEdit = observer(() => {
                 checked={data.isFake}
                 onChange={action((event) => {
                   data.isFake = Boolean(event.target.value);
+                  chart.patch();
                 })}
               />
             }

@@ -20,6 +20,7 @@ export default observer(function Edit() {
             onChange={action((event) => {
               const value = parseInt(event.target.value);
               if (Number.isFinite(value)) data.id = value;
+              chart.patch();
             })}
           />
         </Grid>
@@ -32,6 +33,7 @@ export default observer(function Edit() {
             onChange={action((event) => {
               const value = parseFloat(event.target.value);
               if (Number.isFinite(value)) data.time = value;
+              chart.patch();
             })}
           />
         </Grid>
@@ -44,6 +46,7 @@ export default observer(function Edit() {
             onChange={action((event) => {
               const value = parseFloat(event.target.value);
               if (Number.isFinite(value)) data.bpm = value;
+              chart.patch();
             })}
           />
         </Grid>

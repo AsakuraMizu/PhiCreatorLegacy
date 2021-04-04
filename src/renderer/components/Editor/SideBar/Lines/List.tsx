@@ -72,6 +72,7 @@ export default observer(function Left() {
                 },
               });
               editor.line = chart.data.judgeLineList.length - 1;
+              chart.patch();
             }
           })}
         >
@@ -83,6 +84,7 @@ export default observer(function Left() {
             if (chart.data) {
               chart.data.judgeLineList.splice(editor.line, 1);
               editor.line = chart.data.judgeLineList.length - 1;
+              chart.patch();
             }
           })}
         >

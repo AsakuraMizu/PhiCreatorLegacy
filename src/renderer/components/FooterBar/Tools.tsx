@@ -1,14 +1,13 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { IconButton, Box, Grid } from '@material-ui/core';
+import { IconButton, Box, Grid, Tooltip } from '@material-ui/core';
 import {
   Fullscreen,
   FullscreenExit,
   Pause,
   PlayArrow,
-  Save,
 } from '@material-ui/icons';
-import { control, music, project } from '/@/managers';
+import { control, music } from '/@/managers';
 
 export default observer(function Tools() {
   return (
@@ -16,22 +15,23 @@ export default observer(function Tools() {
       <Box ml={3} mr={4}>
         <Grid container spacing={1}>
           <Grid item>
-            <IconButton onClick={() => music.toggle()} disabled={!music.loaded}>
-              {music.playing ? <Pause /> : <PlayArrow />}
-            </IconButton>
+            <Tooltip title="Hotkey: space">
+              <span>
+                <IconButton
+                  onClick={() => music.toggle()}
+                  disabled={!music.loaded}
+                >
+                  {music.playing ? <Pause /> : <PlayArrow />}
+                </IconButton>
+              </span>
+            </Tooltip>
           </Grid>
           <Grid item>
-            <IconButton
-              onClick={() => project.save()}
-              disabled={!project.loaded}
-            >
-              <Save />
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <IconButton onClick={() => control.toggleFull()}>
-              {control.full ? <FullscreenExit /> : <Fullscreen />}
-            </IconButton>
+            <Tooltip title="Hotkey: alt+f">
+              <IconButton onClick={() => control.toggleFull()}>
+                {control.full ? <FullscreenExit /> : <Fullscreen />}
+              </IconButton>
+            </Tooltip>
           </Grid>
         </Grid>
       </Box>

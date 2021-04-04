@@ -1,12 +1,23 @@
-import { makeObservable, observable, runInAction, toJS } from 'mobx';
+import {
+  autorun,
+  makeAutoObservable,
+  observable,
+  runInAction,
+  toJS,
+} from 'mobx';
 import type { ChartData } from '/@/common';
+import { diffClone } from './helper';
+import { cloneDeep, isEqual } from 'lodash';
 
 class ChartManager {
   data?: ChartData = undefined;
 
   constructor() {
-    makeObservable(this, {
+    makeAutoObservable(this, {
       data: observable.deep,
+      source: observable.ref,
+      undoPool: observable.shallow,
+      redoPool: observable.shallow,
     });
   }
 
@@ -20,11 +31,55 @@ class ChartManager {
     });
     runInAction(() => {
       this.data = data;
+      if (!this.source) {
+        this.source = cloneDeep(data);
+      } else {
+        this.patch();
+      }
     });
   }
 
   async save() {
     await api.outputJSON('chart.json', toJS(this.data));
+  }
+
+  source?: ChartData;
+  undoPool: ChartData[] = [];
+  redoPool: ChartData[] = [];
+
+  get canUndo(): boolean {
+    return this.undoPool.length > 0;
+  }
+  get canRedo(): boolean {
+    return this.redoPool.length > 0;
+  }
+
+  patch() {
+    if (this.source && this.data) {
+      if (isEqual(this.source, this.data)) return;
+      this.redoPool = [];
+      const cur = diffClone(this.source, this.data);
+      this.undoPool.push(this.source);
+      this.source = cur;
+    }
+  }
+
+  undo() {
+    if (!this.canUndo || !this.source) return;
+    const data = this.undoPool.pop();
+    if (!data) return;
+    this.redoPool.push(this.source);
+    this.source = data;
+    this.data = cloneDeep(data);
+  }
+
+  redo() {
+    if (!this.canRedo || !this.source) return;
+    const data = this.redoPool.pop();
+    if (!data) return;
+    this.undoPool.push(this.source);
+    this.source = data;
+    this.data = cloneDeep(data);
   }
 }
 

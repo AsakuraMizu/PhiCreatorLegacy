@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash-es';
 import { action } from 'mobx';
 import { makeStyles } from '@material-ui/core';
 import useOnWindowResize from '@rooks/use-on-window-resize';
-import { music } from '/@/managers';
+import { chart, music } from '/@/managers';
 import track from './state';
 import Grid from './Grid';
 import Notes from './Notes';
@@ -93,12 +93,27 @@ export default function Track(): JSX.Element {
         track.virtualNote.id = track.lastId + 1;
         if (track.lineData) {
           track.lineData.noteList.push(cloneDeep(track.virtualNote));
+          chart.patch();
         }
       }
     }
     if (track.pressingNote) {
       if (track.dragging) {
         track.dragging = false;
+        track.selected.forEach((idx) => {
+          if (track.lineData) {
+            const data = track.lineData.noteList[idx];
+            if (track.ctrl) {
+              track.lineData.noteList.push({
+                ...data,
+                id: track.lastId + 1,
+              });
+            }
+            data.x += track.deltaX;
+            data.time += track.deltaTime;
+          }
+        });
+        chart.patch();
       }
       if (!track.left) track.deleteSelected();
       track.pressingNote = false;

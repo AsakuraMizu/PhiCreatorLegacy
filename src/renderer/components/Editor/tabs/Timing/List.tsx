@@ -64,6 +64,7 @@ export default observer(function List() {
                 bpm: 100,
               });
               timing_.selected = chart.data.bpmList.length - 1;
+              chart.patch();
             }
           })}
         >
@@ -75,6 +76,7 @@ export default observer(function List() {
             if (chart.data) {
               chart.data.bpmList.splice(timing_.selected, 1);
               timing_.selected = chart.data.bpmList.length - 1;
+              chart.patch();
             }
           })}
         >

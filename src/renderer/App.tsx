@@ -39,7 +39,7 @@ export default observer(function App() {
   const cn = useStyles();
 
   React.useEffect(() => {
-    project.reload(false, true);
+    project.reload(false, true).then(() => project.mark(false));
     fx.enable();
   }, []);
 

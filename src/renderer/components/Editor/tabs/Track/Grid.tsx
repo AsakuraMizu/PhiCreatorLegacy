@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { makeStyles } from '@material-ui/core';
-import { chart } from '/@/managers';
-import { pceil, pfloor } from '/@/common';
+import { chart, timing } from '/@/managers';
+import { pceil, pfloor, pround } from '/@/common';
 import track from './state';
 import clsx from 'clsx';
 
@@ -11,7 +11,6 @@ const useStyles = makeStyles({
     position: 'absolute',
     width: '100%',
     textAlign: 'right',
-    color: 'white',
     userSelect: 'none',
   },
   line1: {
@@ -127,8 +126,10 @@ const Current = observer(() => {
   return (
     <div
       className={clsx(cn.line, cn.cline)}
-      style={{ bottom: track.shiftHeight }}
-    />
+      style={{ top: track.rect.height - track.shiftHeight }}
+    >
+      {pround(timing.tick, 1)}
+    </div>
   );
 });
 

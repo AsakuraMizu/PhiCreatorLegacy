@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core';
 import useOnWindowResize from '@rooks/use-on-window-resize';
 import { chart, music } from '/@/managers';
 import track from './state';
+import CursorInfo from './CursorInfo';
 import Grid from './Grid';
 import Notes from './Notes';
 import PropGrid from './PropGrid';
@@ -16,6 +17,7 @@ const useStyles = makeStyles(() => ({
     width: '80%',
     height: 'calc(100% - 50px)',
     overflow: 'hidden',
+    color: 'white',
     backgroundColor: 'black',
     userSelect: 'none',
   },
@@ -149,6 +151,7 @@ export default function Track(): JSX.Element {
         onMouseUp={onMouseUp}
         onWheel={onWheel}
       >
+        <CursorInfo />
         <Grid />
         <Notes />
         <PropGrid />

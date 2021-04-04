@@ -7,6 +7,7 @@ const useStyles = makeStyles(() => ({
   point: {
     position: 'absolute',
     width: '100%',
+    borderTop: '2px yellow solid',
   },
   cursor: {
     position: 'absolute',

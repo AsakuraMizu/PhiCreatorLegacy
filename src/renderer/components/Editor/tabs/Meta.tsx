@@ -14,7 +14,7 @@ import {
   CardActions,
 } from '@material-ui/core';
 import { createStyles, Theme } from '@material-ui/core/styles';
-import { meta, project, toast } from '/@/managers';
+import { meta, project } from '/@/managers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

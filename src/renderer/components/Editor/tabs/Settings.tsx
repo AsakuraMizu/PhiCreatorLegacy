@@ -74,7 +74,7 @@ export default observer(function Settings() {
             Last save: {project.lastSave ? project.lastSave.fromNow() : 'never'}
           </Typography>
           <Slider
-            min={0.5}
+            min={0}
             max={10}
             step={0.5}
             valueLabelDisplay="auto"

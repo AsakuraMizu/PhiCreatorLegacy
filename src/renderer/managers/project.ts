@@ -17,6 +17,7 @@ class ProjectManager {
     makeAutoObservable(this);
 
     setInterval(() => {
+      if (settings.autosave === 0) return;
       const now = dayjs();
       if (
         (this.lastSave &&
@@ -46,6 +47,7 @@ class ProjectManager {
   }
 
   async save() {
+    if (!this.loaded) return;
     await meta.save();
     await chart.save();
     toast.send('Project saved.', { variant: 'success' });

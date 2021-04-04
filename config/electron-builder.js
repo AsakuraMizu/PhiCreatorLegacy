@@ -11,4 +11,7 @@ module.exports = {
   win: {
     target: 'portable',
   },
+  linux: {
+    target: 'zip',
+  },
 };

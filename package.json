@@ -1,7 +1,7 @@
 {
   "name": "phi-creator",
   "version": "0.2.0",
-  "description": "Chart previewer and editor for PhiX Project",
+  "description": "Chart previewer and editor for PhiX",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/phi-x/phi-creator.git"
@@ -25,6 +25,7 @@
     "build": "node ./bin/build.js",
     "precompile": "cross-env MODE=production run-s build",
     "compile": "electron-builder build --config ./config/electron-builder.js",
+    "compile:only": "electron-builder build --config ./config/electron-builder.js",
     "prewatch": "run-s buildEnvTypes",
     "watch": "node ./bin/watch.js",
     "lint": "eslint --cache --ext js,ts,tsx .",

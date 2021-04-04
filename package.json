@@ -1,12 +1,12 @@
 {
   "name": "phi-creator",
-  "version": "0.2.0",
-  "description": "Chart previewer and editor for PhiX",
+  "version": "0.2.1",
+  "description": "Chart editor for PhiX",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/phi-x/phi-creator.git"
   },
-  "author": "AsakuraMizu <0xWATERx0@gmail.com>",
+  "author": "PhiX Dev Team",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/phi-x/phi-creator/issues"

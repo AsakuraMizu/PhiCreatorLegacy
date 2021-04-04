@@ -123,6 +123,8 @@ class TrackState {
       remove(list, (_, index) => this.selected.has(index));
     }
     this.selected.clear();
+    this.selecting.clear();
+    this.unselecting.clear();
     chart.patch();
   }
 

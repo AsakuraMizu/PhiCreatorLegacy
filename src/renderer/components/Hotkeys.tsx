@@ -11,6 +11,9 @@ export default observer(function Hotkeys() {
   useHotkeys('alt+r', () => {
     project.reload();
   });
+  useHotkeys('alt+w', () => {
+    control.toggleLive();
+  });
   useHotkeys('alt+f', () => {
     control.toggleFull();
   });

@@ -10,6 +10,7 @@ interface ISettings {
   rate: number;
   dim: number;
   autosave: number;
+  undo: boolean;
 }
 
 class SettingsManager implements ISettings {
@@ -20,6 +21,7 @@ class SettingsManager implements ISettings {
   rate = 1.0;
   dim = 0.3;
   autosave = 2;
+  undo = false;
 
   constructor() {
     makeAutoObservable(this, {
@@ -36,6 +38,7 @@ class SettingsManager implements ISettings {
         'rate',
         'dim',
         'autosave',
+        'undo',
       ].forEach((path) => {
         this.watch(path);
       });

@@ -4,6 +4,7 @@ import { IconButton, Box, Grid, Tooltip } from '@material-ui/core';
 import {
   Fullscreen,
   FullscreenExit,
+  Movie,
   Pause,
   PlayArrow,
 } from '@material-ui/icons';
@@ -24,6 +25,13 @@ export default observer(function Tools() {
                   {music.playing ? <Pause /> : <PlayArrow />}
                 </IconButton>
               </span>
+            </Tooltip>
+          </Grid>
+          <Grid item>
+            <Tooltip title="Hotkey: alt+w">
+              <IconButton onClick={() => control.toggleLive()}>
+                <Movie />
+              </IconButton>
             </Tooltip>
           </Grid>
           <Grid item>

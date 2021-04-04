@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Box, Grid, Slider, Typography } from '@material-ui/core';
+import { Box, Grid, Slider, Switch, Typography } from '@material-ui/core';
 import { project, settings } from '/@/managers';
 
 export default observer(function Settings() {
@@ -81,6 +81,15 @@ export default observer(function Settings() {
             value={settings.autosave}
             onChange={(_, v) => {
               settings.update({ autosave: v as number });
+            }}
+          />
+        </Grid>
+        <Grid item>
+          <Typography gutterBottom>Enable undo/redo (experimental)</Typography>
+          <Switch
+            checked={settings.undo}
+            onChange={(e) => {
+              settings.update({ undo: e.target.checked });
             }}
           />
         </Grid>

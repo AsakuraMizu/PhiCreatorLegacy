@@ -1,7 +1,8 @@
 import { makeAutoObservable, observable, runInAction, toJS } from 'mobx';
-import type { ChartData } from '/@/common';
-import { diffClone } from './helper';
 import { cloneDeep, isEqual } from 'lodash';
+import type { ChartData } from '/@/common';
+import settings from '../settings';
+// import { diffClone } from './helper';
 
 class ChartManager {
   data?: ChartData = undefined;
@@ -56,18 +57,20 @@ class ChartManager {
   redoPool: ChartData[] = [];
 
   get canUndo(): boolean {
-    return this.undoPool.length > 0;
+    return settings.undo && this.undoPool.length > 0;
   }
   get canRedo(): boolean {
-    return this.redoPool.length > 0;
+    return settings.undo && this.redoPool.length > 0;
   }
 
-  patch() {
-    if (this.source && this.data) {
+  async patch() {
+    if (settings.undo && this.source && this.data) {
       if (isEqual(this.source, this.data)) return;
       this.redoPool = [];
-      const cur = diffClone(this.source, this.data);
+      // const cur = diffClone(this.source, this.data);
+      const cur = cloneDeep(this.data);
       this.undoPool.push(this.source);
+      if (this.undoPool.length > 200) this.undoPool.shift();
       this.source = cur;
     }
   }

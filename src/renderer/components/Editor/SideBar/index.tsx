@@ -11,7 +11,7 @@ import {
   Select,
 } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
-import { chart } from '/@/managers';
+import { chart, control } from '/@/managers';
 import editor from '../state';
 import tabs from '../tabs';
 import Viewer from './Viewer';
@@ -57,9 +57,7 @@ export default observer(function SideBar() {
       </Grid>
       <Lines open={open} onClose={() => setOpen(false)} />
       {tabs[editor.tab].tools}
-      <Box marginTop="auto">
-        <Viewer />
-      </Box>
+      <Box marginTop="auto">{control.live && <Viewer />}</Box>
     </Box>
   );
 });

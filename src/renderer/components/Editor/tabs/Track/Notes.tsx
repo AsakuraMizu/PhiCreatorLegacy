@@ -98,25 +98,38 @@ const Note = observer(({ idx }: NoteProps) => {
           data.holdTime
       );
 
-    return (
-      <img
-        className={clsx(cn.note, state.selected && cn.selected)}
-        draggable={false}
-        src={{ 1: Tap, 2: Drag, 3: Hold, 4: Flick }[data.type]}
-        style={{
-          width: track.rect.width / 10,
-          height:
-            data.type === 3
-              ? track.timeToY(data.time) -
-                track.timeToY(data.time + data.holdTime)
-              : 'initial',
-          transform: `translate(calc(${x}px - 50%), calc(${y}px${
-            data.type === 3 ? '' : ' - 50%'
-          })) scaleX(${data.width})`,
-        }}
-        onMouseDown={onMouseDown}
-      />
-    );
+    if (
+      track.timeToY(
+        data.time +
+          (track.dragging && track.selected.has(idx) ? track.deltaTime : 0)
+      ) >= 0 &&
+      track.timeToY(
+        data.time +
+          (track.dragging && track.selected.has(idx)
+            ? track.deltaTime
+            : 0 + data.holdTime)
+      ) <= track.rect.height
+    )
+      return (
+        <img
+          className={clsx(cn.note, state.selected && cn.selected)}
+          draggable={false}
+          src={{ 1: Tap, 2: Drag, 3: Hold, 4: Flick }[data.type]}
+          style={{
+            width: track.rect.width / 10,
+            height:
+              data.type === 3
+                ? track.timeToY(data.time) -
+                  track.timeToY(data.time + data.holdTime)
+                : 'initial',
+            transform: `translate(calc(${x}px - 50%), calc(${y}px${
+              data.type === 3 ? '' : ' - 50%'
+            })) scaleX(${data.width})`,
+          }}
+          onMouseDown={onMouseDown}
+        />
+      );
+    else return <></>;
   } else {
     return <></>;
   }

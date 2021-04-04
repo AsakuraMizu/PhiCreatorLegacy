@@ -22,7 +22,7 @@ import { Redo, Undo, ZoomIn, ZoomOut } from '@material-ui/icons';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { chart } from '/@/managers';
+import { chart, settings } from '/@/managers';
 import track, { ToolType } from './state';
 import NoteEdit from './NoteEdit';
 
@@ -134,12 +134,12 @@ const ZoomInOut = observer(() => {
   return (
     <Grid item container spacing={2} alignItems="center">
       <Grid item>
-        <IconButton onClick={track.zoomin} disabled={track.zoom > 3.9}>
+        <IconButton onClick={() => track.zoomin()} disabled={track.zoom > 3.9}>
           <ZoomIn />
         </IconButton>
       </Grid>
       <Grid item>
-        <IconButton onClick={track.zoomout} disabled={track.zoom < 0.3}>
+        <IconButton onClick={() => track.zoomout()} disabled={track.zoom < 0.3}>
           <ZoomOut />
         </IconButton>
       </Grid>
@@ -179,28 +179,36 @@ const NoteEditButton = observer(() => {
 const UndoRedo = observer(() => {
   // The hotkey is global
 
-  return (
-    <Grid item container spacing={2} alignItems="center">
-      <Grid item>
-        <Tooltip title="Hotkey: ctrl+z">
-          <span>
-            <IconButton onClick={() => chart.undo()} disabled={!chart.canUndo}>
-              <Undo />
-            </IconButton>
-          </span>
-        </Tooltip>
+  if (settings.undo)
+    return (
+      <Grid item container spacing={2} alignItems="center">
+        <Grid item>
+          <Tooltip title="Hotkey: ctrl+z">
+            <span>
+              <IconButton
+                onClick={() => chart.undo()}
+                disabled={!chart.canUndo}
+              >
+                <Undo />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </Grid>
+        <Grid item>
+          <Tooltip title="Hotkey: ctrl+y">
+            <span>
+              <IconButton
+                onClick={() => chart.redo()}
+                disabled={!chart.canRedo}
+              >
+                <Redo />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </Grid>
       </Grid>
-      <Grid item>
-        <Tooltip title="Hotkey: ctrl+y">
-          <span>
-            <IconButton onClick={() => chart.redo()} disabled={!chart.canRedo}>
-              <Redo />
-            </IconButton>
-          </span>
-        </Tooltip>
-      </Grid>
-    </Grid>
-  );
+    );
+  else return <></>;
 });
 
 const useStyles = makeStyles(() => ({

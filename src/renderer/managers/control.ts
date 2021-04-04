@@ -2,6 +2,7 @@ import { action, makeAutoObservable } from 'mobx';
 import music from './music';
 
 class ControlManager {
+  live = true;
   full = false;
 
   handle?: number;
@@ -10,6 +11,10 @@ class ControlManager {
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  toggleLive() {
+    this.live = !this.live;
   }
 
   toggleFull() {

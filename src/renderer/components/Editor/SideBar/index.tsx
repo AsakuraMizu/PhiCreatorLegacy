@@ -32,7 +32,7 @@ export default observer(function SideBar() {
 
   return (
     <Box className={cn.root}>
-      <Grid container alignItems="center">
+      <Grid container alignItems="center" justify="center">
         <Grid item xs={9}>
           <FormControl fullWidth>
             <Select

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
@@ -15,14 +16,15 @@ import {
   RadioGroup,
   Radio,
   Box,
+  Button,
 } from '@material-ui/core';
 import type { NoteData } from '/@/common';
 import { chart } from '/@/managers';
 import track from './state';
+import { Edit } from '@material-ui/icons';
 
 const SingleEdit = observer(() => {
-  const idx = [...track.selected.values()][0];
-  const data = track.lineData?.noteList[idx];
+  const data = track.lineData?.noteList[[...track.selected.values()][0]];
 
   if (data) {
     return (
@@ -175,6 +177,140 @@ const SingleEdit = observer(() => {
   }
 });
 
+const MultiEdit = observer(() => {
+  const [editWidth, setEditWidth] = React.useState(false);
+  const [editSide, setEditSide] = React.useState(false);
+  const [editSpeed, setEditSpeed] = React.useState(false);
+  const [editIsFake, setEditIsFake] = React.useState(false);
+
+  const sample = track.lineData!.noteList[[...track.selected.values()][0]];
+
+  return (
+    <Grid container spacing={3} direction="column">
+      <Grid item>
+        {!editWidth ? (
+          <Button
+            color="primary"
+            startIcon={<Edit />}
+            onClick={() => setEditWidth(true)}
+          >
+            Width
+          </Button>
+        ) : (
+          <TextField
+            fullWidth
+            label="Width"
+            type="number"
+            value={sample.width}
+            inputProps={{ min: '0', step: '0.1' }}
+            onChange={action((event) => {
+              const value = parseFloat(event.target.value);
+              if (Number.isFinite(value)) {
+                if (track.lineData) {
+                  track.selected.forEach((idx) => {
+                    track.lineData!.noteList[idx].width = value;
+                  });
+                  chart.patch();
+                }
+              }
+            })}
+          />
+        )}
+      </Grid>
+      <Grid item>
+        {!editSide ? (
+          <Button
+            color="primary"
+            startIcon={<Edit />}
+            onClick={() => setEditSide(true)}
+          >
+            Side
+          </Button>
+        ) : (
+          <FormControl>
+            <FormLabel>Side</FormLabel>
+            <RadioGroup
+              row
+              value={sample.side}
+              onChange={action((event) => {
+                const side = parseInt(event.target.value) as NoteData['side'];
+                if (track.lineData) {
+                  track.selected.forEach((idx) => {
+                    track.lineData!.noteList[idx].side = side;
+                  });
+                  chart.patch();
+                }
+              })}
+            >
+              <FormControlLabel value={1} label="1" control={<Radio />} />
+              <FormControlLabel value={-1} label="-1" control={<Radio />} />
+            </RadioGroup>
+          </FormControl>
+        )}
+      </Grid>
+      <Grid item>
+        {!editSpeed ? (
+          <Button
+            color="primary"
+            startIcon={<Edit />}
+            onClick={() => setEditSpeed(true)}
+          >
+            Speed (factor)
+          </Button>
+        ) : (
+          <TextField
+            fullWidth
+            label="Speed (factor)"
+            type="number"
+            value={sample.speed}
+            inputProps={{ min: '0', step: '0.1' }}
+            onChange={action((event) => {
+              const value = parseFloat(event.target.value);
+              if (Number.isFinite(value)) {
+                if (track.lineData) {
+                  track.selected.forEach((idx) => {
+                    track.lineData!.noteList[idx].speed = value;
+                  });
+                  chart.patch();
+                }
+              }
+            })}
+          />
+        )}
+      </Grid>
+      <Grid item>
+        {!editIsFake ? (
+          <Button
+            color="primary"
+            startIcon={<Edit />}
+            onClick={() => setEditIsFake(true)}
+          >
+            Is fake
+          </Button>
+        ) : (
+          <FormControlLabel
+            label="Is fake"
+            control={
+              <Switch
+                checked={sample.isFake}
+                onChange={action((event) => {
+                  const isFake = Boolean(event.target.value);
+                  if (track.lineData) {
+                    track.selected.forEach((idx) => {
+                      track.lineData!.noteList[idx].isFake = isFake;
+                    });
+                    chart.patch();
+                  }
+                })}
+              />
+            }
+          />
+        )}
+      </Grid>
+    </Grid>
+  );
+});
+
 export interface NoteEditProps {
   open: boolean;
   onClose: () => void;
@@ -187,7 +323,7 @@ export default observer(function NoteEdit({
   return (
     <Dialog onClose={onClose} open={open} fullWidth>
       <Box margin="15px">
-        {track.selected.size === 1 ? <SingleEdit /> : <></>}
+        {track.selected.size === 1 ? <SingleEdit /> : <MultiEdit />}
       </Box>
     </Dialog>
   );

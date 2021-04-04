@@ -28,7 +28,7 @@ import NoteEdit from './NoteEdit';
 const SelectTool = observer(() => {
   const update = action((tool: ToolType) => {
     track.tool = tool;
-    track.selected.clear();
+    track.clear();
   });
 
   useHotkeys('1', () => update('cursor'));

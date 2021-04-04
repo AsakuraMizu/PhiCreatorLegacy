@@ -3,9 +3,6 @@ import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import {
   Dialog,
-  AppBar,
-  Toolbar,
-  IconButton,
   TextField,
   Grid,
   FormControl,
@@ -19,7 +16,6 @@ import {
   Radio,
   Box,
 } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
 import type { NoteData } from '/@/common';
 import { chart } from '/@/managers';
 import track from './state';
@@ -189,15 +185,8 @@ export default observer(function NoteEdit({
   onClose,
 }: NoteEditProps): JSX.Element {
   return (
-    <Dialog onClose={onClose} open={open} fullScreen>
-      <AppBar position="relative">
-        <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={onClose}>
-            <Close />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Box margin="10px">
+    <Dialog onClose={onClose} open={open} fullWidth>
+      <Box margin="15px">
         {track.selected.size === 1 ? <SingleEdit /> : <></>}
       </Box>
     </Dialog>

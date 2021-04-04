@@ -193,6 +193,11 @@ class TrackState {
   constructor() {
     makeAutoObservable(this);
   }
+
+  clear() {
+    this.selected.clear();
+    this.pressing = this.pressingNote = false;
+  }
 }
 
 const track = new TrackState();

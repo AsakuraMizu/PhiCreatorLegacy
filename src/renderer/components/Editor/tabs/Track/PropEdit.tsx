@@ -3,7 +3,6 @@ import React from 'react';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import {
-  AppBar,
   Box,
   Dialog,
   FormControl,
@@ -13,7 +12,6 @@ import {
   MenuItem,
   Select,
   TextField,
-  Toolbar,
   Typography,
 } from '@material-ui/core';
 import { Add, Close } from '@material-ui/icons';
@@ -26,13 +24,13 @@ const SingleProp = observer(({ prop }: { prop: Props }) => {
   const data = track.propData.get(track.startTime);
 
   return (
-    <Grid item container alignItems="center">
+    <Grid item container alignItems="center" spacing={3}>
       <Grid item xs={3}>
         <Typography>{prop}</Typography>
       </Grid>
       {data?.[prop] ? (
         <>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <TextField
               label="Value"
               type="number"
@@ -47,8 +45,8 @@ const SingleProp = observer(({ prop }: { prop: Props }) => {
               })}
             />
           </Grid>
-          <Grid item xs={4}>
-            <FormControl>
+          <Grid item xs={3}>
+            <FormControl fullWidth>
               <InputLabel>Easing</InputLabel>
               <Select
                 value={data[prop]?.easing ?? 0}
@@ -113,15 +111,8 @@ export default observer(function PropEdit({
   onClose,
 }: PropEditProps): JSX.Element {
   return (
-    <Dialog onClose={onClose} open={open} fullScreen>
-      <AppBar position="relative">
-        <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={onClose}>
-            <Close />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Box margin="10px">
+    <Dialog onClose={onClose} open={open} fullWidth>
+      <Box margin="25px">
         <Grid container direction="column" spacing={3}>
           {props.map((prop) => (
             <SingleProp key={prop} prop={prop} />

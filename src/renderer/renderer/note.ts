@@ -94,7 +94,8 @@ export default class NoteRenderer {
 
     if (
       this.data.time - timing.tick < 1e-5 &&
-      this.data.time - timing.tick > 1
+      timing.tick - (this.data.time + this.data.holdTime) <
+        (chart.data?.timingBase ?? 48)
     ) {
       if (this.restTime < 1e-5) {
         this.judgeLineRenderer.renderer.judger.playOnce(

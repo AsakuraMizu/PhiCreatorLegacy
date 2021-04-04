@@ -11,7 +11,7 @@ export default observer(function Edit() {
   if (data) {
     return (
       <Grid item xs={12} sm container spacing={2} direction="column">
-        <Grid item xs={12} sm={6}>
+        <Grid item>
           <TextField
             fullWidth
             label="ID"
@@ -24,7 +24,7 @@ export default observer(function Edit() {
             })}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item>
           <TextField
             fullWidth
             label="Name"

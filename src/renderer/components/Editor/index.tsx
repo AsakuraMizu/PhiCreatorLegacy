@@ -16,10 +16,10 @@ const useStyles = makeStyles(() => ({
     overflow: 'hidden',
   },
   left: {
-    width: '18%',
+    width: '20%',
   },
   right: {
-    width: '82%',
+    width: '80%',
   },
 }));
 

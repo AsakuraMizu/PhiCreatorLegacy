@@ -13,7 +13,7 @@ import PropEdit from './PropEdit';
 const useStyles = makeStyles(() => ({
   track: {
     position: 'absolute',
-    width: '82%',
+    width: '80%',
     height: 'calc(100% - 50px)',
     overflow: 'hidden',
     backgroundColor: 'black',
@@ -125,6 +125,9 @@ export default function Track(): JSX.Element {
     if (e.ctrlKey) {
       if (e.deltaY < 0) track.zoomin();
       else track.zoomout();
+    } else if (e.altKey) {
+      const idx = track.divisions.indexOf(track.division);
+      track.setDivision(track.divisions[idx - Math.sign(e.deltaY)]);
     } else {
       const dt = e.deltaY / track.beatHeight / music.duration;
       const target = music.progress - dt;

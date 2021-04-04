@@ -15,6 +15,10 @@ import { chart } from '/@/managers';
 import editor from '../../state';
 
 const useStyles = makeStyles({
+  table: {
+    maxHeight: '75vh',
+    overflowY: 'auto',
+  },
   tablerow: {
     cursor: 'pointer',
   },
@@ -25,7 +29,7 @@ export default observer(function Left() {
 
   return (
     <Grid item container xs={12} sm spacing={2} direction="column">
-      <Grid item>
+      <Grid item className={cn.table}>
         <Table>
           <TableHead>
             <TableRow>
@@ -89,6 +93,19 @@ export default observer(function Left() {
           })}
         >
           Remove
+        </Button>
+        <Button
+          onClick={action(() => {
+            if (chart.data) {
+              chart.data.judgeLineList.push({
+                ...chart.data.judgeLineList[editor.line],
+                id: editor.lastId + 1,
+              });
+              chart.patch();
+            }
+          })}
+        >
+          Copy
         </Button>
       </Grid>
     </Grid>

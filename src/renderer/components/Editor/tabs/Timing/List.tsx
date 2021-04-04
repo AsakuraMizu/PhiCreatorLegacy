@@ -13,8 +13,13 @@ import {
 } from '@material-ui/core';
 import { chart, timing } from '/@/managers';
 import timing_ from './state';
+import { pround } from '/@/common';
 
 const useStyles = makeStyles({
+  table: {
+    maxHeight: '70vh',
+    overflowY: 'auto',
+  },
   tablerow: {
     cursor: 'pointer',
   },
@@ -25,7 +30,7 @@ export default observer(function List() {
 
   return (
     <Grid item container xs={12} sm spacing={2} direction="column">
-      <Grid item>
+      <Grid item className={cn.table}>
         <Table>
           <TableHead>
             <TableRow>
@@ -60,7 +65,7 @@ export default observer(function List() {
             if (chart.data) {
               chart.data.bpmList.push({
                 id: timing_.selected + 1,
-                time: timing.tick,
+                time: pround(timing.tick, 1),
                 bpm: 100,
               });
               timing_.selected = chart.data.bpmList.length - 1;

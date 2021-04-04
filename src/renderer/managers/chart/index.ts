@@ -1,10 +1,4 @@
-import {
-  autorun,
-  makeAutoObservable,
-  observable,
-  runInAction,
-  toJS,
-} from 'mobx';
+import { makeAutoObservable, observable, runInAction, toJS } from 'mobx';
 import type { ChartData } from '/@/common';
 import { diffClone } from './helper';
 import { cloneDeep, isEqual } from 'lodash';
@@ -27,7 +21,21 @@ class ChartManager {
       musicOffset: 0,
       timingBase: 48,
       bpmList: [{ id: 0, time: 0, bpm: 100 }],
-      judgeLineList: [],
+      judgeLineList: [
+        {
+          id: 0,
+          noteList: [],
+          props: {
+            controlX: [{ id: 0, time: 0, value: 0 }],
+            controlY: [{ id: 0, time: 0, value: 0 }],
+            angle: [{ id: 0, time: 0, value: 0 }],
+            speed: [{ id: 0, time: 0, value: 1 }],
+            noteAlpha: [{ id: 0, time: 0, value: 1 }],
+            lineAlpha: [{ id: 0, time: 0, value: 1 }],
+            displayRange: [{ id: 0, time: 0, value: -1 }],
+          },
+        },
+      ],
     });
     runInAction(() => {
       this.data = data;

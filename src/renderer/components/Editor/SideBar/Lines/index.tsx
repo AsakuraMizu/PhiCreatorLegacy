@@ -27,7 +27,7 @@ export default observer(function Lines({ open, onClose }: LinesProps) {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Box margin="10px">
+      <Box padding="10px">
         <Grid container spacing={3}>
           <List />
           <Edit />

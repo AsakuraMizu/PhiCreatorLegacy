@@ -95,7 +95,7 @@ const Division = observer(() => {
             className={clsx(cn.line, cn.line1)}
             style={{ top: track.timeToY(time) }}
           >
-            {time / (chart.data?.timingBase ?? 48)}
+            {time / (chart.data?.timingBase ?? 48)}({time})
           </div>
         ))}
       </>

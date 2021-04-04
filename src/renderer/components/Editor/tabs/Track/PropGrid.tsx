@@ -7,7 +7,6 @@ const useStyles = makeStyles(() => ({
   point: {
     position: 'absolute',
     width: '100%',
-    borderTop: '2px yellow dotted',
   },
   cursor: {
     position: 'absolute',
@@ -26,7 +25,9 @@ const Points = observer(() => {
           key={time}
           className={cn.point}
           style={{ top: track.timeToY(time) }}
-        />
+        >
+          <img src="../../../../assets/ww.png" />
+        </div>
       ))}
     </>
   );

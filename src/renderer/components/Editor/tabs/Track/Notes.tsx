@@ -104,7 +104,7 @@ const Note = observer(({ idx }: NoteProps) => {
         draggable={false}
         src={{ 1: Tap, 2: Drag, 3: Hold, 4: Flick }[data.type]}
         style={{
-          width: (track.rect.width / 10) * data.width,
+          width: track.rect.width / 10,
           height:
             data.type === 3
               ? track.timeToY(data.time) -
@@ -112,7 +112,7 @@ const Note = observer(({ idx }: NoteProps) => {
               : 'initial',
           transform: `translate(calc(${x}px - 50%), calc(${y}px${
             data.type === 3 ? '' : ' - 50%'
-          }))`,
+          })) scaleX(${data.width})`,
         }}
         onMouseDown={onMouseDown}
       />

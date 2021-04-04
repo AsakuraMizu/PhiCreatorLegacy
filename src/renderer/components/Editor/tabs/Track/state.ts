@@ -48,7 +48,7 @@ class TrackState {
     return ((this.clientX - this.rect.left) / this.rect.width) * 2 - 1;
   }
   get x(): number {
-    return this.align ? pround(this.exactX, 0.1) : this.exactX;
+    return this.align ? pround(this.exactX, 1 / this.guideline) : this.exactX;
   }
   get exactTime(): number {
     return this.yToTime(this.clientY - this.rect.top);
@@ -133,7 +133,7 @@ class TrackState {
             if (this.lineData) {
               const newX = pround(
                 this.lineData?.noteList[idx].x + this.exactX - this.startExactX,
-                0.1
+                1 / this.guideline
               );
               return newX - this.lineData?.noteList[idx].x;
             }
@@ -167,6 +167,11 @@ class TrackState {
   }
 
   division = 1;
+  divisions = [1, 2, 3, 4, 6, 8, 16];
+  setDivision(division: number) {
+    if (this.divisions.includes(division)) this.division = division;
+  }
+
   guideline = 10;
   align = true;
 

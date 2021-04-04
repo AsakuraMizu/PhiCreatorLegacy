@@ -16,6 +16,7 @@ import {
   Button,
   TextField,
   Tooltip,
+  makeStyles,
 } from '@material-ui/core';
 import { Redo, Undo, ZoomIn, ZoomOut } from '@material-ui/icons';
 import { action } from 'mobx';
@@ -97,15 +98,13 @@ const SelectDivisor = observer(() => {
         <Select
           fullWidth
           value={track.division}
-          onChange={action((e) => (track.division = e.target.value as number))}
+          onChange={(e) => track.setDivision(e.target.value as number)}
         >
-          <MenuItem value={1}>1 / 1</MenuItem>
-          <MenuItem value={2}>1 / 2</MenuItem>
-          <MenuItem value={3}>1 / 3</MenuItem>
-          <MenuItem value={4}>1 / 4</MenuItem>
-          <MenuItem value={6}>1 / 6</MenuItem>
-          <MenuItem value={8}>1 / 8</MenuItem>
-          <MenuItem value={16}>1 / 16</MenuItem>
+          {track.divisions.map((d) => (
+            <MenuItem key={d} value={d}>
+              1 / {d}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Grid>
@@ -163,6 +162,7 @@ const NoteEditButton = observer(() => {
       <Tooltip title="Hotkey: e">
         <span>
           <Button
+            fullWidth
             variant="outlined"
             onClick={() => setOpen(true)}
             disabled={track.selected.size === 0}
@@ -203,9 +203,18 @@ const UndoRedo = observer(() => {
   );
 });
 
+const useStyles = makeStyles(() => ({
+  root: {
+    overflowX: 'hidden',
+    padding: '10px',
+  },
+}));
+
 export default function Tools(): JSX.Element {
+  const cn = useStyles();
+
   return (
-    <Box overflow="hidden" padding="10px">
+    <Box className={cn.root}>
       <Grid container spacing={2} direction="column">
         <SelectTool />
         <NoteEditButton />

@@ -1,7 +1,7 @@
-import { autorun, IReactionDisposer, makeAutoObservable } from 'mobx';
+import { autorun, IReactionDisposer, makeAutoObservable, when } from 'mobx';
 import { Application } from 'pixi.js';
 import { search } from '/@/common';
-import { chart, timing } from '/@/managers';
+import { chart, control, timing } from '/@/managers';
 import JudgeLineRenderer from './judge-line';
 import UiRenderer from './ui';
 import Judger from './judger';
@@ -37,6 +37,11 @@ export default class Renderer {
     this.disposers.push(autorun(() => this.updateLines()));
 
     this.app.ticker.add(() => this.update());
+
+    when(
+      () => !control.live,
+      () => this.destroy()
+    );
   }
 
   resize(): void {

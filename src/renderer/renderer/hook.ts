@@ -17,7 +17,6 @@ export default function useRenderer(
         if (resize) renderer.resize();
       }
     });
-    return () => renderer?.destroy();
   }, []);
 
   useOnWindowResize(() => {

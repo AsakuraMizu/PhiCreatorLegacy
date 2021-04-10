@@ -169,7 +169,7 @@ class TrackState {
   }
 
   division = 1;
-  divisions = [1, 2, 3, 4, 6, 8, 16];
+  divisions = [1, 2, 3, 4, 6, 8, 12, 16];
   setDivision(division: number) {
     if (this.divisions.includes(division)) this.division = division;
   }

@@ -9,6 +9,7 @@ import toast from './toast';
 
 class ProjectManager {
   loaded = false;
+  path = '';
 
   editorOpen = dayjs();
   lastSave?: dayjs.Dayjs;
@@ -41,6 +42,7 @@ class ProjectManager {
     await chart.load();
     await music.load();
     await background.load();
+    this.path = api.getProjectFolder();
     this.mark(true);
     if (!noToast)
       toast.send(`Project ${reload ? 're' : ''}loaded.`, { variant: 'info' });

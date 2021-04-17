@@ -9,3 +9,11 @@ ipcMain.handle(
       properties: ['openDirectory', 'createDirectory'],
     })
 );
+
+ipcMain.handle(
+  'file-selector',
+  async (_, path) =>
+    await dialog.showOpenDialog({
+      defaultPath: path,
+    })
+);

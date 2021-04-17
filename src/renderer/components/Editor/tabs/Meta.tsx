@@ -12,9 +12,12 @@ import {
   Card,
   CardContent,
   CardActions,
+  InputAdornment,
+  IconButton,
 } from '@material-ui/core';
 import { createStyles, Theme } from '@material-ui/core/styles';
 import { meta, project } from '/@/managers';
+import { InsertDriveFile } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,6 +55,15 @@ function WelcomeCard() {
 
 export default observer(function Meta() {
   const cn = useStyles();
+
+  const handleFileSelector = async (): Promise<string> => {
+    const file = await api.fileSelector(project.path);
+    const path = project.path + '/';
+    if (file.startsWith(path)) {
+      return file.replace(path, '');
+    }
+    return '';
+  };
 
   return (
     <Box margin="20px">
@@ -128,6 +140,20 @@ export default observer(function Meta() {
               onChange={action((event) => {
                 meta.music = event.target.value;
               })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      disabled={!project.loaded}
+                      onClick={action(async () => {
+                        meta.music = await handleFileSelector();
+                      })}
+                    >
+                      <InsertDriveFile />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </Grid>
         </Grid>
@@ -141,6 +167,20 @@ export default observer(function Meta() {
               onChange={action((event) => {
                 meta.background = event.target.value;
               })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      disabled={!project.loaded}
+                      onClick={action(async () => {
+                        meta.music = await handleFileSelector();
+                      })}
+                    >
+                      <InsertDriveFile />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </Grid>
         </Grid>
@@ -177,7 +217,7 @@ export default observer(function Meta() {
             <Button
               disabled={!project.loaded}
               variant="outlined"
-              onClick={() => api.openChartFolder()}
+              onClick={() => api.openProjectFolder()}
             >
               Open chart folder
             </Button>

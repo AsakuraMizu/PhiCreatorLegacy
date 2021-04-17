@@ -8,7 +8,7 @@ import {
   ThemeProvider,
 } from '@material-ui/core';
 import { SnackbarProvider } from 'notistack';
-import { control, fx, project } from './managers';
+import { control, project } from './managers';
 import Hotkeys from './components/Hotkeys';
 import Toast from './components/Toast';
 import Editor from './components/Editor';
@@ -40,7 +40,6 @@ export default observer(function App() {
 
   React.useEffect(() => {
     project.reload(false, true).then(() => project.mark(false));
-    fx.enable();
   }, []);
 
   return (

@@ -1,5 +1,5 @@
 import { Container, Sprite } from 'pixi.js';
-import { chart, timing } from '/@/managers';
+import { chart, fx, timing } from '/@/managers';
 import { NoteData, search } from '/@/common';
 import type JudgeLineRenderer from './judge-line';
 import { loadedRes, skin } from './resources';
@@ -94,6 +94,7 @@ export default class NoteRenderer {
 
     if (
       this.data.time - timing.tick < 1e-5 &&
+      this.data.time - timing.tick >= -3 &&
       timing.tick - (this.data.time + this.data.holdTime) <
         (chart.data?.timingBase ?? 48)
     ) {
@@ -104,6 +105,7 @@ export default class NoteRenderer {
             y: this.judgeLineRenderer.renderer.calcY(0),
           })
         );
+        fx.play(this.data.type);
         this.restTime = skin.effect.interval;
       }
       if (this.data.time + this.data.holdTime - timing.tick < 1e-5)

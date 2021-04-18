@@ -4,8 +4,8 @@ import background from './background';
 import chart from './chart';
 import meta from './meta';
 import music from './music';
-import settings from './settings';
 import toast from './toast';
+import store from '../store';
 
 class ProjectManager {
   loaded = false;
@@ -18,13 +18,13 @@ class ProjectManager {
     makeAutoObservable(this);
 
     setInterval(() => {
-      if (settings.autosave === 0) return;
+      if (store.settings.autosave === 0) return;
       const now = dayjs();
       if (
         (this.lastSave &&
-          now.diff(this.lastSave) > settings.autosave * 60000) ||
+          now.diff(this.lastSave) > store.settings.autosave * 60000) ||
         (!this.lastSave &&
-          now.diff(this.editorOpen) > settings.autosave * 60000)
+          now.diff(this.editorOpen) > store.settings.autosave * 60000)
       ) {
         this.save();
       }

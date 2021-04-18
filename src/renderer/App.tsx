@@ -12,9 +12,10 @@ import { control, project } from './managers';
 import Hotkeys from './components/Hotkeys';
 import Toast from './components/Toast';
 import Editor from './components/Editor';
-import FullViewer from './components/FullViewer';
+// import FullViewer from './components/FullViewer';
 import FooterBar from './components/FooterBar';
 import theme from './theme';
+import Preview from './components/Preview';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -39,7 +40,10 @@ export default observer(function App() {
   const cn = useStyles();
 
   React.useEffect(() => {
-    project.reload(false, true).then(() => project.mark(false));
+    api
+      .openProject('/home/waterl/dasein')
+      .then(() => project.reload(false, true))
+      .then(() => project.mark(false));
   }, []);
 
   return (
@@ -51,10 +55,12 @@ export default observer(function App() {
         <Fade in>
           <Box className={cn.root}>
             {control.full ? (
-              <FullViewer />
+              // <FullViewer />
+              <></>
             ) : (
               <>
-                <Editor />
+                {/* <Editor /> */}
+                <Preview full />
                 <Box className={cn.bar}>
                   <FooterBar />
                 </Box>

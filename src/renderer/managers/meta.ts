@@ -1,52 +1,18 @@
-import { merge } from 'lodash-es';
-import { makeAutoObservable } from 'mobx';
-import { RPartial } from '/@/common';
+import { getSnapshot, Instance } from 'mobx-state-tree';
+import store from '../store';
 
-interface IMeta {
-  title: string;
-  difficulty: string;
-  artist: string;
-  illustrator: string;
-  charter: string;
-  music: string;
-  background: string;
-}
+export const fileName = 'meta.json';
 
-class MetaManager implements IMeta {
-  title = '';
-  difficulty = '';
-  artist = '';
-  illustrator = '';
-  charter = '';
-  music = '';
-  background = '';
-
-  constructor() {
-    makeAutoObservable(this);
-  }
-
-  update(meta: RPartial<IMeta>) {
-    merge(this, meta);
-  }
-
-  async load() {
-    const meta: RPartial<IMeta> = await api.readJSON('meta.json', {
-      title: '',
-      difficulty: '',
-      artist: '',
-      illustrator: '',
-      charter: '',
-      music: '',
-      background: '',
-    });
-    this.update(meta);
-  }
-
-  async save() {
-    await api.outputJSON('meta.json', this);
-  }
-}
-
-const meta = new MetaManager();
+const meta = {
+  async load(): Promise<void> {
+    const meta = await api.readJSON<Partial<Instance<typeof store.meta>>>(
+      fileName
+    );
+    if (meta) store.meta.update(meta);
+  },
+  async save(): Promise<void> {
+    await api.outputJSON(fileName, getSnapshot(store.meta));
+  },
+};
 
 export default meta;

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import chart from './chart';
 import music from './music';
+import store from '../store';
 
 interface Timepoint {
   tick: number;
@@ -14,9 +14,9 @@ class TimingManager {
     let curTick = 0;
     let curSec = 0;
     let curBpm = 0;
-    chart.data?.bpmList.forEach((bpm) => {
+    store.chart.bpmList.forEach((bpm) => {
       const deltaSec =
-        (((bpm.time - curTick) / (chart.data?.timingBase ?? 48)) * 60) / curBpm;
+        (((bpm.time - curTick) / store.chart.timingBase) * 60) / curBpm;
       curTick = bpm.time;
       if (!Number.isNaN(deltaSec)) curSec += deltaSec;
       curBpm = bpm.bpm;
@@ -26,8 +26,7 @@ class TimingManager {
   }
 
   get tick() {
-    const sec =
-      music.progress * music.duration - (chart.data?.musicOffset ?? 0);
+    const sec = music.progress * music.duration - store.chart.musicOffset;
     const { timepoints: list } = this;
     let l = -1;
     let r = list.length;
@@ -44,7 +43,7 @@ class TimingManager {
     }
     const tick =
       list[l].tick +
-      ((sec - list[l].sec) / 60) * list[l].bpm * (chart.data?.timingBase ?? 48);
+      ((sec - list[l].sec) / 60) * list[l].bpm * store.chart.timingBase;
     return tick;
   }
 

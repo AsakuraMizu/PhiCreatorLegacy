@@ -18,4 +18,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   ignorePatterns: ['types/env.d.ts', 'node_modules/**', 'dist/**'],
+  rules: {
+    '@typescript-eslint/no-non-null-assertion': 'off',
+  },
 };

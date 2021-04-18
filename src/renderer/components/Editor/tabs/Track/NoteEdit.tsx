@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';

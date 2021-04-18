@@ -11,10 +11,10 @@ import {
   Select,
 } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
-import { chart, control } from '/@/managers';
+// import { chart, control } from '/@/managers';
 import editor from '../state';
 import tabs from '../tabs';
-import Viewer from './Viewer';
+// import Viewer from './Viewer';
 import Lines from './Lines';
 
 const useStyles = makeStyles(() => ({
@@ -57,7 +57,7 @@ export default observer(function SideBar() {
       </Grid>
       <Lines open={open} onClose={() => setOpen(false)} />
       {tabs[editor.tab].tools}
-      <Box marginTop="auto">{control.live && <Viewer />}</Box>
+      {/* <Box marginTop="auto">{control.live && <Viewer />}</Box> */}
     </Box>
   );
 });

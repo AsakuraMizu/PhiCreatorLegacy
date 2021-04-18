@@ -27,12 +27,10 @@ process.on('loaded', async () => {
  * @see https://github.com/electron/electron/issues/21437#issuecomment-573522360
  */
 const api = {
-  readJSON: async <T>(file: string, fallback: T): Promise<T> => {
+  readJSON: async <T>(file: string): Promise<T | undefined> => {
     const path = join(projectFolder, file);
     if (projectFolder && (await pathExists(path))) {
       return await readJSON(path);
-    } else {
-      return fallback;
     }
   },
   outputJSON: async <T>(file: string, data: T): Promise<void> => {

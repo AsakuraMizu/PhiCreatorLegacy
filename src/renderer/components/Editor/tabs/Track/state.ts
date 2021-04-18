@@ -156,7 +156,6 @@ class TrackState {
     props.forEach((name) => {
       this.lineData?.props[name].forEach((state) => {
         if (map.has(state.time)) {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           map.get(state.time)![name] = state;
         } else {
           map.set(state.time, {

@@ -1,83 +1,55 @@
-import { makeAutoObservable, reaction } from 'mobx';
-import { BpmData } from '/@/common';
+import { makeAutoObservable } from 'mobx';
 import chart from './chart';
 import music from './music';
 
+interface Timepoint {
+  tick: number;
+  sec: number;
+  bpm: number;
+}
+
 class TimingManager {
-  tick = 0;
+  get timepoints(): Timepoint[] {
+    const timepoints: Timepoint[] = [];
+    let curTick = 0;
+    let curSec = 0;
+    let curBpm = 0;
+    chart.data?.bpmList.forEach((bpm) => {
+      const deltaSec =
+        (((bpm.time - curTick) / (chart.data?.timingBase ?? 48)) * 60) / curBpm;
+      curTick = bpm.time;
+      if (!Number.isNaN(deltaSec)) curSec += deltaSec;
+      curBpm = bpm.bpm;
+      timepoints.push({ tick: curTick, sec: curSec, bpm: curBpm });
+    });
+    return timepoints;
+  }
+
+  get tick() {
+    const sec =
+      music.progress * music.duration - (chart.data?.musicOffset ?? 0);
+    const { timepoints: list } = this;
+    let l = -1;
+    let r = list.length;
+    while (r - l > 1) {
+      const m = Math.floor((l + r) / 2);
+      if (sec - list[m].sec < 1e-5) {
+        r = m;
+      } else {
+        l = m;
+      }
+    }
+    if (l === -1) {
+      return 0;
+    }
+    const tick =
+      list[l].tick +
+      ((sec - list[l].sec) / 60) * list[l].bpm * (chart.data?.timingBase ?? 48);
+    return tick;
+  }
 
   constructor() {
     makeAutoObservable(this);
-
-    reaction(
-      () => ({
-        bpmList: chart.data?.bpmList ?? [
-          {
-            id: -1,
-            time: 0,
-            bpm: 1,
-          },
-        ],
-        time: music.progress * music.duration - (chart.data?.musicOffset || 0),
-      }),
-      ({ bpmList, time }, prev) => {
-        let { tick } = this;
-        let cur = prev?.time ?? 0;
-        const bpmBefore: BpmData[] = bpmList.filter(
-          (b) => b.time - tick <= 1e-5
-        );
-        if (bpmBefore.length === 0)
-          bpmBefore.push({
-            id: 0,
-            time: 0,
-            bpm: 1,
-          });
-        const bpmAfter: BpmData[] =
-          chart.data?.bpmList.filter((b) => b.time - tick > 1e-5) ?? [];
-        const factor = (chart.data?.timingBase ?? 48) / 60;
-        let delta = 0;
-        let { bpm } = bpmBefore[bpmBefore.length - 1];
-        if (time < cur) {
-          while (bpmBefore.length > 1 && cur >= time) {
-            delta = Math.min(
-              cur - time,
-              (tick - bpmBefore[bpmBefore.length - 1].time) / bpm / factor
-            );
-            cur -= delta;
-            tick -= delta * bpm * factor;
-            if (time < bpmBefore[bpmBefore.length - 1].time) {
-              bpmAfter.unshift(bpmBefore[bpmBefore.length - 1]);
-              bpmBefore.pop();
-              bpm = bpmBefore[bpmBefore.length - 1].bpm;
-            }
-          }
-          tick -= (cur - time) * bpm * factor;
-        } else {
-          while (bpmAfter.length > 0 && cur <= time) {
-            delta = Math.min(
-              time - cur,
-              (bpmAfter[0].time - tick) / bpm / factor
-            );
-            cur += delta;
-            tick += delta * bpm * factor;
-            if (time >= bpmAfter[0].time) {
-              bpm = bpmAfter[0].bpm;
-              bpmBefore.push(bpmAfter[0]);
-              bpmAfter.shift();
-            }
-          }
-          tick += (time - cur) * bpm * factor;
-        }
-        this.update(tick);
-      },
-      {
-        fireImmediately: true,
-      }
-    );
-  }
-
-  private update(tick: number) {
-    this.tick = tick;
   }
 }
 

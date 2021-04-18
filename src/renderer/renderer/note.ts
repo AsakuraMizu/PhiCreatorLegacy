@@ -94,7 +94,7 @@ export default class NoteRenderer {
 
     if (
       this.data.time - timing.tick < 1e-5 &&
-      this.data.time - timing.tick >= -3 &&
+      timing.tick - this.data.time <= 10 &&
       timing.tick - (this.data.time + this.data.holdTime) <
         (chart.data?.timingBase ?? 48)
     ) {

@@ -21,7 +21,7 @@ export default function Viewer(): JSX.Element {
   const [bigger, setBigger] = React.useState(false);
 
   const ref = React.useRef<HTMLCanvasElement>(null);
-  useRenderer(ref);
+  useRenderer(ref, 'live');
 
   return (
     <canvas

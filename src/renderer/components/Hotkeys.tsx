@@ -26,6 +26,9 @@ export default observer(function Hotkeys() {
   useHotkeys('ctrl+y', () => {
     chart.redo();
   });
+  useHotkeys('esc', () => {
+    if (control.full) control.toggleFull();
+  });
 
   return <></>;
 });

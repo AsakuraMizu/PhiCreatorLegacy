@@ -9,7 +9,7 @@ module.exports = {
     app: 'dist/source',
   },
   win: {
-    target: 'portable',
+    target: 'zip',
   },
   linux: {
     target: 'zip',

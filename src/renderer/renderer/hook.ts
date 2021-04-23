@@ -20,14 +20,6 @@ export default function useRenderer(
         if (resize) renderer.resize();
       }
     });
-    when(
-      () =>
-        (!control.live && type === 'live') ||
-        (!control.full && type === 'full'),
-      () => {
-        renderer?.destroy();
-      }
-    );
   }, []);
 
   useOnWindowResize(() => {
@@ -35,6 +27,16 @@ export default function useRenderer(
       renderer?.resize();
     }
   });
+
+  when(
+    () =>
+      (!control.live && type === 'live') ||
+      (control.full && type === 'live') ||
+      (!control.full && type === 'full'),
+    () => {
+      renderer?.destroy();
+    }
+  );
 
   return renderer;
 }

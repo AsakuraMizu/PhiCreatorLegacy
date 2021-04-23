@@ -15,7 +15,7 @@ class BackgroundManager {
   }
 
   async load() {
-    if (!(await api.pathExists(meta.background))) return;
+    if (!(await api.project.pathExists(meta.background))) return;
     const src = await file2url(meta.background);
     this.texture = await Texture.fromURL(src);
     runInAction(() => {

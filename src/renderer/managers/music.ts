@@ -49,7 +49,7 @@ class MusicManager {
   }
 
   async load() {
-    if (!(await api.pathExists(meta.music))) return;
+    if (!(await api.project.pathExists(meta.music))) return;
     this.playing && this.toggle();
     const { progress } = this;
     this.music = new Howl({

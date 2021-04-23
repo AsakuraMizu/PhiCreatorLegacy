@@ -30,7 +30,7 @@ class MetaManager implements IMeta {
   }
 
   async load() {
-    const meta: RPartial<IMeta> = await api.readJSON('meta.json', {
+    const meta: RPartial<IMeta> = await api.project.readJSON('meta.json', {
       title: '',
       difficulty: '',
       artist: '',
@@ -43,7 +43,7 @@ class MetaManager implements IMeta {
   }
 
   async save() {
-    await api.outputJSON('meta.json', this);
+    await api.project.outputJSON('meta.json', this);
   }
 }
 

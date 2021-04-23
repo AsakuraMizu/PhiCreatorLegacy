@@ -17,7 +17,7 @@ class ChartManager {
   }
 
   async load() {
-    const data: ChartData = await api.readJSON('chart.json', {
+    const data: ChartData = await api.project.readJSON('chart.json', {
       schemaVersion: 1,
       musicOffset: 0,
       timingBase: 48,
@@ -49,7 +49,7 @@ class ChartManager {
   }
 
   async save() {
-    await api.outputJSON('chart.json', toJS(this.data));
+    await api.project.outputJSON('chart.json', toJS(this.data));
   }
 
   source?: ChartData;

@@ -39,9 +39,9 @@ function WelcomeCard() {
       <CardActions>
         <Button
           onClick={async () => {
-            const dir = await api.dirSelector();
+            const dir = await api.dialog.dirSelector();
             if (!dir) return;
-            await api.openProject(dir);
+            await api.project.openProject(dir);
             await project.reload(false);
           }}
           size="small"
@@ -57,12 +57,8 @@ export default observer(function Meta() {
   const cn = useStyles();
 
   const handleFileSelector = async (): Promise<string> => {
-    const file = await api.fileSelector(project.path);
-    const path = project.path + '/';
-    if (file.startsWith(path)) {
-      return file.replace(path, '');
-    }
-    return '';
+    const file = await api.dialog.fileSelector(project.path);
+    return api.project.getRelativePath(file);
   };
 
   return (
@@ -145,9 +141,13 @@ export default observer(function Meta() {
                   <InputAdornment position="end">
                     <IconButton
                       disabled={!project.loaded}
-                      onClick={action(async () => {
-                        meta.music = await handleFileSelector();
-                      })}
+                      onClick={() => {
+                        handleFileSelector().then(
+                          action((file) => {
+                            meta.music = file;
+                          })
+                        );
+                      }}
                     >
                       <InsertDriveFile />
                     </IconButton>
@@ -172,9 +172,13 @@ export default observer(function Meta() {
                   <InputAdornment position="end">
                     <IconButton
                       disabled={!project.loaded}
-                      onClick={action(async () => {
-                        meta.music = await handleFileSelector();
-                      })}
+                      onClick={() => {
+                        handleFileSelector().then(
+                          action((file) => {
+                            meta.background = file;
+                          })
+                        );
+                      }}
                     >
                       <InsertDriveFile />
                     </IconButton>
@@ -217,7 +221,7 @@ export default observer(function Meta() {
             <Button
               disabled={!project.loaded}
               variant="outlined"
-              onClick={() => api.openProjectFolder()}
+              onClick={() => api.project.openProjectFolder()}
             >
               Open chart folder
             </Button>

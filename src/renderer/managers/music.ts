@@ -1,9 +1,4 @@
-import {
-  makeAutoObservable,
-  onBecomeObserved,
-  onBecomeUnobserved,
-  reaction,
-} from 'mobx';
+import { makeAutoObservable, reaction } from 'mobx';
 import { Howl } from 'howler';
 import { file2url } from '/@/common';
 import meta from './meta';
@@ -21,12 +16,6 @@ class MusicManager {
     makeAutoObservable(this, {
       music: false,
       load: false,
-    });
-    onBecomeObserved(this, 'progress', () => {
-      this.interval = window.setInterval(() => this.updateProgress(), 10);
-    });
-    onBecomeUnobserved(this, 'progress', () => {
-      clearInterval(this.interval);
     });
     reaction(
       () => settings.rate,
@@ -61,7 +50,10 @@ class MusicManager {
         this.onload();
         this.seek(progress);
       },
+      onplay: () => this.onplay(),
+      onpause: () => this.onpause(),
       onend: () => this.toggle(),
+      onseek: () => this.updateProgress(),
     });
   }
 
@@ -69,6 +61,16 @@ class MusicManager {
     this.duration = this.music?.duration() ?? 1;
     this.playing = false;
     this.loaded = true;
+  }
+
+  onplay() {
+    this.interval = window.setInterval(() => {
+      this.updateProgress();
+    }, 10);
+  }
+
+  onpause() {
+    window.clearInterval(this.interval);
   }
 
   updateProgress() {

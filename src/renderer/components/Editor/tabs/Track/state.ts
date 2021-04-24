@@ -177,7 +177,7 @@ class TrackState {
   guideline = 10;
   align = true;
 
-  shiftHeight = 200;
+  shiftHeight = 150;
 
   zoom = 1;
 

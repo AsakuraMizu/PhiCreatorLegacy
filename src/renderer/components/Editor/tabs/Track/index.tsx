@@ -3,13 +3,14 @@ import { cloneDeep } from 'lodash-es';
 import { action } from 'mobx';
 import { makeStyles } from '@material-ui/core';
 import useOnWindowResize from '@rooks/use-on-window-resize';
-import { chart, music } from '/@/managers';
+import { chart, music, timing } from '/@/managers';
 import track from './state';
 import CursorInfo from './CursorInfo';
 import Grid from './Grid';
 import Notes from './Notes';
 import PropGrid from './PropGrid';
 import PropEdit from './PropEdit';
+import { pround } from '/@/common';
 
 const useStyles = makeStyles(() => ({
   track: {
@@ -131,8 +132,11 @@ export default function Track(): JSX.Element {
       const idx = track.divisions.indexOf(track.division);
       track.setDivision(track.divisions[idx - Math.sign(e.deltaY)]);
     } else {
-      const dt = e.deltaY / track.beatHeight / music.duration;
-      const target = music.progress - dt;
+      const direction = e.deltaY > 0 ? -1 : 1;
+      const dividedTick = (chart.data?.timingBase ?? 48) / track.division;
+      const dt = dividedTick * direction;
+      const tick = pround(timing.tick + dt, dividedTick);
+      const target = timing.tickToTime(tick) / music.duration;
       music.seek(target);
     }
   };

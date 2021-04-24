@@ -9,9 +9,9 @@ module.exports = {
     app: 'dist/source',
   },
   win: {
-    target: 'zip',
+    target: '7z',
   },
   linux: {
-    target: 'zip',
+    target: '7z',
   },
 };

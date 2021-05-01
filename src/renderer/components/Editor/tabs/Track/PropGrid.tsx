@@ -2,6 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { makeStyles } from '@material-ui/core';
 import track from './state';
+import indicator from '/@/assets/indicator.svg';
 
 const useStyles = makeStyles(() => ({
   point: {
@@ -27,7 +28,7 @@ const Points = observer(() => {
           className={cn.point}
           style={{ top: track.timeToY(time) }}
         >
-          <img src="../../../../assets/ww.png" />
+          <img src={indicator} />
         </div>
       ))}
     </>

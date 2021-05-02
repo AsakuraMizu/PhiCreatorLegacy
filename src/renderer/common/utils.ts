@@ -1,3 +1,7 @@
+export function blurActive(): void {
+  (document.activeElement as HTMLElement)?.blur?.();
+}
+
 export function fixer(x: number): number {
   return Math.round(x * 1e8) / 1e8;
 }

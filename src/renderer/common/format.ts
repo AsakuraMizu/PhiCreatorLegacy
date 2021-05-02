@@ -32,6 +32,16 @@ export type Props =
   | 'lineAlpha'
   | 'displayRange';
 
+export const props: Props[] = [
+  'controlX',
+  'controlY',
+  'angle',
+  'speed',
+  'noteAlpha',
+  'lineAlpha',
+  'displayRange',
+];
+
 export interface JudgeLineData {
   id: number;
   name?: string;

@@ -1,10 +1,9 @@
 import React from 'react';
-import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { makeStyles, Box, Tab, Tabs, Fade } from '@material-ui/core';
 import SideBar from './SideBar';
-import editor from './state';
-import tabs from './tabs';
+import tabs, { TabKeys } from './tabs';
+import store from '/@/store';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,18 +32,18 @@ export default observer(function Editor() {
       </Box>
       <Box className={cn.right}>
         <Tabs
-          value={editor.tab}
+          value={store.editor.tab}
           scrollButtons="auto"
-          onChange={action((_, tab) => {
-            editor.tab = tab;
-          })}
+          onChange={(_, tab) => {
+            store.editor.switchTab(tab);
+          }}
         >
           {Object.entries(tabs).map(([key, tab]) => (
             <Tab key={key} label={tab.name} />
           ))}
         </Tabs>
-        <Fade in key={editor.tab}>
-          <Box>{tabs[editor.tab].main}</Box>
+        <Fade in key={store.editor.tab}>
+          <Box>{tabs[store.editor.tab as TabKeys].main}</Box>
         </Fade>
       </Box>
     </Box>

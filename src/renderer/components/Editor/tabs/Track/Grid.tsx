@@ -1,10 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { makeStyles } from '@material-ui/core';
-import { chart, timing } from '/@/managers';
-import { pceil, pfloor, pround } from '/@/common';
-import track from './state';
+import { Instance } from 'mobx-state-tree';
 import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core';
+import { timing } from '/@/managers';
+import { pceil, pfloor, pround } from '/@/common';
+import store from '/@/store';
+import SingleBpm from '/@/store/chart/bpm';
+
+const { track } = store.editor;
 
 const useStyles = makeStyles({
   line: {
@@ -41,7 +45,7 @@ const useStyles = makeStyles({
 
 function calcTimes(divisor: number) {
   const times: number[] = [];
-  const delta = (chart.data?.timingBase ?? 48) / divisor;
+  const delta = store.chart.timingBase / divisor;
   for (
     let i = pceil(track.yToTime(track.rect.height), delta);
     i <= pfloor(track.yToTime(0), delta);
@@ -94,7 +98,7 @@ const Division = observer(() => {
             className={clsx(cn.line, cn.line1)}
             style={{ top: track.timeToY(time) }}
           >
-            {time / (chart.data?.timingBase ?? 48)}({time})
+            {time / store.chart.timingBase}({time})
           </div>
         ))}
       </>
@@ -102,23 +106,25 @@ const Division = observer(() => {
   );
 });
 
-const Timepoint = observer(() => {
+const BpmLine = observer(({ data }: { data: Instance<typeof SingleBpm> }) => {
   const cn = useStyles();
-
   return (
-    <>
-      {chart.data?.bpmList.map((b) => (
-        <div
-          key={b.id}
-          className={clsx(cn.line, cn.tpline)}
-          style={{ top: track.timeToY(b.time) }}
-        >
-          bpm:{b.bpm}
-        </div>
-      ))}
-    </>
+    <div
+      className={clsx(cn.line, cn.tpline)}
+      style={{ top: track.timeToY(data.time) }}
+    >
+      bpm:{data.bpm}
+    </div>
   );
 });
+
+const Timepoint = observer(() => (
+  <>
+    {store.chart.bpmList.map((bpm) => (
+      <BpmLine key={bpm.id} data={bpm} />
+    ))}
+  </>
+));
 
 const Current = observer(() => {
   const cn = useStyles();

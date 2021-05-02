@@ -1,9 +1,11 @@
-import { types } from 'mobx-state-tree';
-import incId from '../incId';
+import { getSnapshot, types } from 'mobx-state-tree';
+import AutoId from '../autoId';
+
+const SingleNoteId = new AutoId();
 
 const SingleNote = types
   .model('SingleNote', {
-    $id: types.optional(types.identifierNumber, incId()),
+    id: types.optional(types.identifierNumber, () => SingleNoteId.next()),
     type: types.union(
       types.literal(1),
       types.literal(2),
@@ -18,6 +20,10 @@ const SingleNote = types
     side: types.union(types.literal(-1), types.literal(1)),
     isFake: types.boolean,
   })
+  .extend((self) => {
+    SingleNoteId.update(self.id);
+    return {};
+  })
   .actions((self) => ({
     update(data: {
       type?: 1 | 2 | 3 | 4;
@@ -30,6 +36,13 @@ const SingleNote = types
       isFake?: boolean;
     }) {
       Object.assign(self, data);
+    },
+  }))
+  .views((self) => ({
+    clone() {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, ...rest } = getSnapshot(self);
+      return rest;
     },
   }));
 

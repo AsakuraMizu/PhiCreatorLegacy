@@ -1,10 +1,9 @@
 import React from 'react';
-import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { Box, Grid, makeStyles, TextField } from '@material-ui/core';
-import { chart } from '/@/managers';
 import List from './List';
 import Edit from './Edit';
+import store from '/@/store';
 
 const useStyles = makeStyles({
   root: {
@@ -20,14 +19,12 @@ const MusicOffset = observer(() => {
         fullWidth
         label="Music Offset (ms)"
         type="number"
-        value={chart.data?.musicOffset}
+        value={store.chart.musicOffset}
         inputProps={{ step: '0.1' }}
-        onChange={action((event) => {
-          if (chart.data) {
-            const value = parseFloat(event.target.value);
-            if (Number.isFinite(value)) chart.data.musicOffset = value;
-          }
-        })}
+        onChange={(event) => {
+          const musicOffset = parseFloat(event.target.value);
+          if (Number.isFinite(musicOffset)) store.chart.update({ musicOffset });
+        }}
       />
     </Grid>
   );

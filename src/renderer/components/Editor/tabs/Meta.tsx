@@ -1,5 +1,4 @@
 import React from 'react';
-import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import {
   Box,
@@ -15,9 +14,10 @@ import {
   InputAdornment,
   IconButton,
 } from '@material-ui/core';
-import { createStyles, Theme } from '@material-ui/core/styles';
-import { meta, project } from '/@/managers';
 import { InsertDriveFile } from '@material-ui/icons';
+import { createStyles, Theme } from '@material-ui/core/styles';
+import { project } from '/@/managers';
+import store from '/@/store';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,10 +77,10 @@ export default observer(function Meta() {
               fullWidth
               disabled={!project.loaded}
               label="Title"
-              value={meta.title}
-              onChange={action((event) => {
-                meta.title = event.target.value;
-              })}
+              value={store.meta.title}
+              onChange={(event) => {
+                store.meta.update({ title: event.target.value });
+              }}
             />
           </Grid>
           <Grid item xs>
@@ -88,10 +88,10 @@ export default observer(function Meta() {
               fullWidth
               disabled={!project.loaded}
               label="Difficulty"
-              value={meta.difficulty}
-              onChange={action((event) => {
-                meta.difficulty = event.target.value;
-              })}
+              value={store.meta.difficulty}
+              onChange={(event) => {
+                store.meta.update({ difficulty: event.target.value });
+              }}
             />
           </Grid>
         </Grid>
@@ -101,10 +101,10 @@ export default observer(function Meta() {
               fullWidth
               disabled={!project.loaded}
               label="Artist"
-              value={meta.artist}
-              onChange={action((event) => {
-                meta.artist = event.target.value;
-              })}
+              value={store.meta.artist}
+              onChange={(event) => {
+                store.meta.update({ artist: event.target.value });
+              }}
             />
           </Grid>
           <Grid item xs>
@@ -112,10 +112,10 @@ export default observer(function Meta() {
               fullWidth
               disabled={!project.loaded}
               label="Illustrator"
-              value={meta.illustrator}
-              onChange={action((event) => {
-                meta.illustrator = event.target.value;
-              })}
+              value={store.meta.illustrator}
+              onChange={(event) => {
+                store.meta.update({ illustrator: event.target.value });
+              }}
             />
           </Grid>
         </Grid>
@@ -125,10 +125,10 @@ export default observer(function Meta() {
               fullWidth
               disabled={!project.loaded}
               label="Charter"
-              value={meta.charter}
-              onChange={action((event) => {
-                meta.charter = event.target.value;
-              })}
+              value={store.meta.charter}
+              onChange={(event) => {
+                store.meta.update({ charter: event.target.value });
+              }}
             />
           </Grid>
           <Grid item xs>
@@ -136,18 +136,20 @@ export default observer(function Meta() {
               fullWidth
               disabled={!project.loaded}
               label="Music (file)"
-              value={meta.music}
-              onChange={action((event) => {
-                meta.music = event.target.value;
-              })}
+              value={store.meta.music}
+              onChange={(event) => {
+                store.meta.update({ music: event.target.value });
+              }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       disabled={!project.loaded}
-                      onClick={action(async () => {
-                        meta.music = await handleFileSelector();
-                      })}
+                      onClick={async () => {
+                        store.meta.update({
+                          music: await handleFileSelector(),
+                        });
+                      }}
                     >
                       <InsertDriveFile />
                     </IconButton>
@@ -163,18 +165,20 @@ export default observer(function Meta() {
               fullWidth
               disabled={!project.loaded}
               label="Background (file)"
-              value={meta.background}
-              onChange={action((event) => {
-                meta.background = event.target.value;
-              })}
+              value={store.meta.background}
+              onChange={(event) => {
+                store.meta.update({ background: event.target.value });
+              }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       disabled={!project.loaded}
-                      onClick={action(async () => {
-                        meta.music = await handleFileSelector();
-                      })}
+                      onClick={async () => {
+                        store.meta.update({
+                          background: await handleFileSelector(),
+                        });
+                      }}
                     >
                       <InsertDriveFile />
                     </IconButton>

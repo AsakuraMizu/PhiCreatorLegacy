@@ -1,6 +1,6 @@
 import React from 'react';
-import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import { Instance } from 'mobx-state-tree';
 import {
   Button,
   Grid,
@@ -11,8 +11,8 @@ import {
   TableRow,
   makeStyles,
 } from '@material-ui/core';
-import { chart } from '/@/managers';
-import editor from '../../state';
+import store from '/@/store';
+import SingleJudgeLine from '/@/store/chart/judgeline';
 
 const useStyles = makeStyles({
   table: {
@@ -23,6 +23,69 @@ const useStyles = makeStyles({
     cursor: 'pointer',
   },
 });
+
+const LineRow = observer(function ({
+  data,
+}: {
+  data: Instance<typeof SingleJudgeLine>;
+}) {
+  const cn = useStyles();
+
+  return (
+    <TableRow
+      className={cn.tablerow}
+      selected={store.editor.line && data === store.editor.line}
+      hover
+      onClick={() => {
+        store.editor.setCurrentLine(data);
+      }}
+    >
+      <TableCell>{data.id}</TableCell>
+      <TableCell>{data.name}</TableCell>
+      <TableCell>{data.noteList.length}</TableCell>
+    </TableRow>
+  );
+});
+
+const AddBtn = () => (
+  <Button
+    color="primary"
+    onClick={() => {
+      store.editor.setCurrentLine(store.chart.addJudgeLine({}));
+    }}
+  >
+    Add
+  </Button>
+);
+
+const RemoveBtn = observer(() => (
+  <Button
+    color="secondary"
+    disabled={store.editor.line === undefined}
+    onClick={() => {
+      if (store.editor.line) {
+        store.chart.removeJudgeLine(store.editor.line);
+      }
+    }}
+  >
+    Remove
+  </Button>
+));
+
+const CopyBtn = observer(() => (
+  <Button
+    disabled={store.editor.line === undefined}
+    onClick={() => {
+      if (store.editor.line) {
+        store.editor.setCurrentLine(
+          store.chart.addJudgeLine(store.editor.line.clone())
+        );
+      }
+    }}
+  >
+    Copy
+  </Button>
+));
 
 export default observer(function Left() {
   const cn = useStyles();
@@ -39,74 +102,16 @@ export default observer(function Left() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {chart.data?.judgeLineList.map((l, i) => (
-              <TableRow
-                key={l.id}
-                className={cn.tablerow}
-                selected={i === editor.line}
-                hover
-                onClick={action(() => {
-                  editor.line = i;
-                })}
-              >
-                <TableCell>{l.id}</TableCell>
-                <TableCell>{l.name}</TableCell>
-                <TableCell>{l.noteList.length}</TableCell>
-              </TableRow>
+            {store.chart.judgeLineList.map((l) => (
+              <LineRow key={l.id} data={l} />
             ))}
           </TableBody>
         </Table>
       </Grid>
       <Grid item>
-        <Button
-          color="primary"
-          onClick={action(() => {
-            if (chart.data) {
-              chart.data.judgeLineList.push({
-                id: editor.lastId + 1,
-                noteList: [],
-                props: {
-                  controlX: [{ id: 0, time: 0, value: 0 }],
-                  controlY: [{ id: 0, time: 0, value: 0 }],
-                  angle: [{ id: 0, time: 0, value: 0 }],
-                  speed: [{ id: 0, time: 0, value: 1 }],
-                  noteAlpha: [{ id: 0, time: 0, value: 1 }],
-                  lineAlpha: [{ id: 0, time: 0, value: 1 }],
-                  displayRange: [{ id: 0, time: 0, value: -1 }],
-                },
-              });
-              editor.line = chart.data.judgeLineList.length - 1;
-              chart.patch();
-            }
-          })}
-        >
-          Add
-        </Button>
-        <Button
-          color="secondary"
-          onClick={action(() => {
-            if (chart.data) {
-              chart.data.judgeLineList.splice(editor.line, 1);
-              editor.line = chart.data.judgeLineList.length - 1;
-              chart.patch();
-            }
-          })}
-        >
-          Remove
-        </Button>
-        <Button
-          onClick={action(() => {
-            if (chart.data) {
-              chart.data.judgeLineList.push({
-                ...chart.data.judgeLineList[editor.line],
-                id: editor.lastId + 1,
-              });
-              chart.patch();
-            }
-          })}
-        >
-          Copy
-        </Button>
+        <AddBtn />
+        <RemoveBtn />
+        <CopyBtn />
       </Grid>
     </Grid>
   );

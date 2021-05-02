@@ -1,17 +1,20 @@
-import { getSnapshot } from 'mobx-state-tree';
+import { applySnapshot, getSnapshot } from 'mobx-state-tree';
 import store from '../store';
-import { ChartData } from '../store/chart/format';
+import { ChartData } from '../common';
 
-export const fileName = 'chart.json';
+class ChartManager {
+  static fileName = 'chart.json';
 
-const chart = {
   async load(): Promise<void> {
-    const chart = await api.readJSON<ChartData>(fileName);
-    if (chart) store.reloadChart(chart);
-  },
+    const chart = await api.readJSON<ChartData>(ChartManager.fileName);
+    if (chart) applySnapshot(store.chart, chart);
+  }
+
   async save(): Promise<void> {
-    await api.outputJSON(fileName, getSnapshot(store.chart));
-  },
-};
+    await api.outputJSON(ChartManager.fileName, getSnapshot(store.chart));
+  }
+}
+
+const chart = new ChartManager();
 
 export default chart;

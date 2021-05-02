@@ -1,6 +1,5 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { action } from 'mobx';
 import {
   Box,
   FormControl,
@@ -11,11 +10,10 @@ import {
   Select,
 } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
-// import { chart, control } from '/@/managers';
-import editor from '../state';
-import tabs from '../tabs';
+import tabs, { TabKeys } from '../tabs';
 // import Viewer from './Viewer';
 import Lines from './Lines';
+import store from '/@/store';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -36,13 +34,13 @@ export default observer(function SideBar() {
         <Grid item xs={9}>
           <FormControl fullWidth>
             <Select
-              value={editor.line}
-              onChange={action((event) => {
-                editor.line = event.target.value as number;
-              })}
+              value={store.editor.line?.id ?? ''}
+              onChange={(event) => {
+                store.editor.setCurrentLine(event.target.value as number);
+              }}
             >
-              {chart.data?.judgeLineList.map((l, index) => (
-                <MenuItem key={index} value={index}>
+              {store.chart.judgeLineList.map((l) => (
+                <MenuItem key={l.id} value={l.id}>
                   {l.name ?? ''}#{l.id}
                 </MenuItem>
               ))}
@@ -56,8 +54,8 @@ export default observer(function SideBar() {
         </Grid>
       </Grid>
       <Lines open={open} onClose={() => setOpen(false)} />
-      {tabs[editor.tab].tools}
-      {/* <Box marginTop="auto">{control.live && <Viewer />}</Box> */}
+      {tabs[store.editor.tab as TabKeys].tools}
+      <Box marginTop="auto">{/* {control.live && <Viewer />} */}</Box>
     </Box>
   );
 });

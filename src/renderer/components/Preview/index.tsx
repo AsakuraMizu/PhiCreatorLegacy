@@ -24,6 +24,7 @@ function Resizer() {
       height = (width * clientHeight) / clientWidth;
       app.renderer.resolution = clientWidth / width;
     }
+    console.log(width, height);
     app.renderer.resize(width, height);
     store.preview.updateSize(width, height);
   };

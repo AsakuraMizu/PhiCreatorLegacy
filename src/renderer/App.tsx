@@ -39,12 +39,12 @@ const useStyles = makeStyles(() => ({
 export default observer(function App() {
   const cn = useStyles();
 
-  React.useEffect(() => {
-    api
-      .openProject('/home/waterl/dasein')
-      .then(() => project.reload(false, true))
-      .then(() => project.mark(false));
-  }, []);
+  // React.useEffect(() => {
+  //   api
+  //     .openProject('/home/waterl/dasein')
+  //     .then(() => project.reload(false, true))
+  //     .then(() => project.mark(false));
+  // }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -59,8 +59,8 @@ export default observer(function App() {
               <></>
             ) : (
               <>
-                {/* <Editor /> */}
-                <Preview full />
+                <Editor />
+                {/* <Preview full /> */}
                 <Box className={cn.bar}>
                   <FooterBar />
                 </Box>

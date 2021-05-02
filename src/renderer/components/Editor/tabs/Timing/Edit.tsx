@@ -1,58 +1,70 @@
 import React from 'react';
-import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { Grid, TextField } from '@material-ui/core';
-import { chart } from '/@/managers';
-import timing_ from './state';
+import { Button, Grid, TextField } from '@material-ui/core';
+import store from '/@/store';
 
-export default observer(function Edit() {
-  const data = chart.data?.bpmList[timing_.selected];
+const IDField = observer(() => (
+  <TextField
+    fullWidth
+    label="ID"
+    type="number"
+    disabled
+    value={store.editor.timing.selectedBpm?.id ?? -1}
+  />
+));
 
-  if (data) {
-    return (
-      <Grid item xs={12} sm container spacing={2} direction="column">
-        <Grid item>
-          <TextField
-            fullWidth
-            label="ID"
-            type="number"
-            value={data?.id}
-            onChange={action((event) => {
-              const value = parseInt(event.target.value);
-              if (Number.isFinite(value)) data.id = value;
-              chart.patch();
-            })}
-          />
-        </Grid>
-        <Grid item>
-          <TextField
-            fullWidth
-            label="Time"
-            type="number"
-            value={data?.time}
-            onChange={action((event) => {
-              const value = parseFloat(event.target.value);
-              if (Number.isFinite(value)) data.time = value;
-              chart.patch();
-            })}
-          />
-        </Grid>
-        <Grid item>
-          <TextField
-            fullWidth
-            label="bpm"
-            type="number"
-            value={data?.bpm}
-            onChange={action((event) => {
-              const value = parseFloat(event.target.value);
-              if (Number.isFinite(value)) data.bpm = value;
-              chart.patch();
-            })}
-          />
-        </Grid>
+const TimeField = observer(() => (
+  <TextField
+    fullWidth
+    label="Time"
+    type="number"
+    value={store.editor.timing.time}
+    onChange={(event) => {
+      const time = parseFloat(event.target.value);
+      if (Number.isFinite(time)) store.editor.timing.updateCurrent({ time });
+    }}
+  />
+));
+
+const BpmField = observer(() => (
+  <TextField
+    fullWidth
+    label="Bpm"
+    type="number"
+    value={store.editor.timing.bpm}
+    onChange={(event) => {
+      const bpm = parseFloat(event.target.value);
+      if (Number.isFinite(bpm)) store.editor.timing.updateCurrent({ bpm });
+    }}
+  />
+));
+
+const ApplyBtn = observer(() => (
+  <Button
+    variant="outlined"
+    color="primary"
+    disabled={store.editor.timing.selectedBpm === undefined}
+    onClick={() => store.editor.timing.applyCurrent()}
+  >
+    Apply
+  </Button>
+));
+
+export default function Edit(): JSX.Element {
+  return (
+    <Grid item xs={12} sm container spacing={2} direction="column">
+      <Grid item>
+        <IDField />
       </Grid>
-    );
-  } else {
-    return <></>;
-  }
-});
+      <Grid item>
+        <TimeField />
+      </Grid>
+      <Grid item>
+        <BpmField />
+      </Grid>
+      <Grid item>
+        <ApplyBtn />
+      </Grid>
+    </Grid>
+  );
+}

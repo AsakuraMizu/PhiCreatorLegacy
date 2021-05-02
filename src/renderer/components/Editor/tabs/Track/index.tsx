@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
-import { cloneDeep } from 'lodash-es';
-import { action } from 'mobx';
 import { makeStyles } from '@material-ui/core';
+import { useHotkeys } from 'react-hotkeys-hook';
 import useOnWindowResize from '@rooks/use-on-window-resize';
-import { chart, music } from '/@/managers';
-import track from './state';
+import { music } from '/@/managers';
+import store from '/@/store';
 import CursorInfo from './CursorInfo';
 import Grid from './Grid';
 import Notes from './Notes';
 import PropGrid from './PropGrid';
 import PropEdit from './PropEdit';
+import Frame from './Frame';
 
 const useStyles = makeStyles(() => ({
   track: {
@@ -23,145 +23,143 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const { track } = store.editor;
+
+const onMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+  track.update({
+    left: event.button === 0,
+    ctrl: event.ctrlKey,
+  });
+  if (track.pressingMode !== 'none') return;
+  if (track.tool === 'cursor') {
+    track.startPressing('select');
+    track.clearSelected();
+  } else if (track.tool == 'note') {
+    track.startPressing('newNote');
+    track.virtualNote.update({
+      type: track.left ? 1 : 2,
+      time: track.time,
+      holdTime: 0,
+      x: track.x,
+      width: 1,
+    });
+  } else if (track.tool === 'prop') {
+    track.startPressing();
+    track.update({ editingProp: true });
+  }
+};
+
+const onMouseMove = ({
+  clientX,
+  clientY,
+}: React.MouseEvent<HTMLDivElement>) => {
+  track.update({
+    clientX,
+    clientY,
+  });
+  if (track.pressing) {
+    if (track.pressingMode === 'noteStart') {
+      if (track.dist2 > 500) track.update({ pressingMode: 'drag' });
+    } else if (track.pressingMode === 'newNote') {
+      if (track.dist2 > 400) {
+        const holdTime = Math.abs(track.time - track.startTime);
+        track.virtualNote.update({
+          type: track.left ? (holdTime > 0 ? 3 : 1) : 4,
+          holdTime: track.left ? holdTime : 0,
+        });
+      } else {
+        track.virtualNote.update({ type: track.left ? 1 : 2, holdTime: 0 });
+      }
+    }
+  }
+};
+
+const onMouseUp = () => {
+  if (track.pressing) {
+    if (track.pressingMode === 'select') {
+      track.applySelection();
+      if (!track.left) track.deleteSelected();
+    } else if (track.pressingMode === 'newNote') {
+      if (store.editor.line) {
+        store.editor.line.addNote(track.virtualNote.clone());
+      }
+    } else if (track.pressingMode === 'noteStart') {
+      if (!track.left) track.deleteSelected();
+    } else if (track.pressingMode === 'drag') {
+      const { history } = store.chart;
+      history.startGroup(() => 0);
+      track.selected.forEach((note) => {
+        if (store.editor.line) {
+          if (track.ctrl) store.editor.line.addNote(note.clone());
+        }
+        note.update({
+          x: note.x + track.deltaX,
+          time: note.time + track.deltaTime,
+        });
+      });
+      history.stopGroup();
+    } else if (track.pressingMode === 'stretch') {
+      const note = track.selected[0];
+      const holdTime = note.holdTime + track.deltaTime;
+      if (holdTime > 0) note.update({ holdTime });
+    }
+    track.stopPressing();
+  }
+};
+
+const onWheel = (e: React.WheelEvent) => {
+  e.stopPropagation();
+  if (e.ctrlKey) {
+    if (e.deltaY < 0) track.zoomin();
+    else track.zoomout();
+  } else if (e.altKey) {
+    const idx = track.divisions.indexOf(track.division);
+    track.setDivision(track.divisions[idx - Math.sign(e.deltaY)]);
+  } else {
+    const dt = e.deltaY / track.beatHeight / music.duration;
+    const target = music.progress - dt;
+    music.seek(target);
+  }
+};
+
 export default function Track(): JSX.Element {
   const cn = useStyles();
   const ref = React.useRef<HTMLDivElement>(null);
 
-  const updateRect = action(() => {
+  const updateRect = () => {
     if (ref.current) {
-      track.rect = ref.current.getBoundingClientRect();
+      track.update({ rect: ref.current.getBoundingClientRect() });
     }
-  });
+  };
 
   useEffect(updateRect);
   useOnWindowResize(updateRect);
 
-  const [open, setOpen] = React.useState(false);
-
-  const onMouseDown = action((event: React.MouseEvent<HTMLDivElement>) => {
-    track.start();
-    if (event.button === 0) {
-      track.left = true;
-    } else {
-      track.left = false;
-    }
-    track.ctrl = event.ctrlKey;
-    if (track.tool === 'cursor') {
-      if (!track.ctrl) {
-        track.selected.clear();
-      }
-    } else if (track.tool == 'note') {
-      track.virtualNote.type = track.left ? 1 : 2;
-      track.virtualNote.time = track.time;
-      track.virtualNote.holdTime = 0;
-      track.virtualNote.x = track.x;
-      track.virtualNote.width = 1;
-    } else if (track.tool === 'prop') {
-      setOpen(true);
-    }
-    track.pressing = true;
-  });
-
-  const onMouseMove = action((event: React.MouseEvent<HTMLDivElement>) => {
-    track.update(event.clientX, event.clientY);
-    if (track.pressingNote) {
-      if (track.dist2 > 500) {
-        track.dragging = true;
-      }
-    }
-    if (track.pressing && track.tool === 'note') {
-      if (track.dist2 > 400) {
-        track.virtualNote.type = track.left ? 3 : 4;
-        if (track.left) {
-          track.virtualNote.holdTime = Math.abs(track.time - track.startTime);
-        }
-      } else {
-        track.virtualNote.type = track.left ? 1 : 2;
-        track.virtualNote.holdTime = 0;
-      }
-    }
-  });
-
-  const onMouseUp = action(() => {
-    if (track.pressing) {
-      track.pressing = false;
-      if (track.tool === 'cursor') {
-        track.selecting.forEach((idx) => track.selected.add(idx));
-        track.selecting.clear();
-        track.unselecting.forEach((idx) => track.selected.add(idx));
-        track.unselecting.clear();
-        if (!track.left) track.deleteSelected();
-      } else if (track.tool === 'note') {
-        track.virtualNote.id = track.lastId + 1;
-        if (track.lineData) {
-          track.lineData.noteList.push(cloneDeep(track.virtualNote));
-          chart.patch();
-        }
-      }
-    }
-    if (track.pressingNote) {
-      if (track.dragging) {
-        track.dragging = false;
-        track.selected.forEach((idx) => {
-          if (track.lineData) {
-            const data = track.lineData.noteList[idx];
-            if (track.ctrl) {
-              track.lineData.noteList.push({
-                ...data,
-                id: track.lastId + 1,
-              });
-            }
-            data.x += track.deltaX;
-            data.time += track.deltaTime;
-          }
-        });
-        chart.patch();
-      }
-      if (!track.left) track.deleteSelected();
-      track.pressingNote = false;
-    }
-  });
-
-  const onWheel = (e: React.WheelEvent) => {
-    e.stopPropagation();
-    if (e.ctrlKey) {
-      if (e.deltaY < 0) track.zoomin();
-      else track.zoomout();
-    } else if (e.altKey) {
-      const idx = track.divisions.indexOf(track.division);
-      track.setDivision(track.divisions[idx - Math.sign(e.deltaY)]);
-    } else {
-      const dt = e.deltaY / track.beatHeight / music.duration;
-      const target = music.progress - dt;
-      music.seek(target);
-    }
-  };
+  useHotkeys('ctrl+c', () => track.copy());
+  useHotkeys('ctrl+v', () => track.paste());
+  useHotkeys('ctrl+m', () => track.mirror());
 
   return (
     <>
       <div
+        ref={ref}
         className={cn.track}
         onContextMenu={(e) => {
           e.stopPropagation();
           e.preventDefault();
         }}
-        ref={ref}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onWheel={onWheel}
       >
         <CursorInfo />
+        <Frame />
         <Grid />
         <Notes />
         <PropGrid />
       </div>
-      <PropEdit
-        open={open}
-        onClose={action(() => {
-          setOpen(false);
-        })}
-      />
+      <PropEdit />
     </>
   );
 }

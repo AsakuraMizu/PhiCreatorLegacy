@@ -19,18 +19,19 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Redo, Undo, ZoomIn, ZoomOut } from '@material-ui/icons';
-import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { chart, settings } from '/@/managers';
-import track, { ToolType } from './state';
+import store from '/@/store';
+import { blurActive } from '/@/common';
 import NoteEdit from './NoteEdit';
 
+const { track } = store.editor;
+
 const SelectTool = observer(() => {
-  const update = action((tool: ToolType) => {
-    track.tool = tool;
-    track.clear();
-  });
+  const update = (tool: 'cursor' | 'note' | 'prop') => {
+    blurActive();
+    track.switchTool(tool);
+  };
 
   useHotkeys('1', () => update('cursor'));
   useHotkeys('2', () => update('note'));
@@ -43,7 +44,10 @@ const SelectTool = observer(() => {
           <Grid item>Tool</Grid>
         </Grid>
       </Box>
-      <RadioGroup value={track.tool} onChange={(e, v) => update(v as ToolType)}>
+      <RadioGroup
+        value={track.tool}
+        onChange={(e, v) => update(v as 'cursor' | 'note' | 'prop')}
+      >
         <FormControlLabel
           value="cursor"
           control={<Radio />}
@@ -68,12 +72,9 @@ const SelectTool = observer(() => {
 });
 
 const Align = observer(() => {
-  useHotkeys(
-    'a',
-    action(() => {
-      track.align = !track.align;
-    })
-  );
+  useHotkeys('a', () => {
+    track.update({ align: !track.align });
+  });
 
   return (
     <FormControlLabel
@@ -81,9 +82,10 @@ const Align = observer(() => {
       control={
         <Switch
           checked={track.align}
-          onChange={action((_, checked) => {
-            track.align = checked;
-          })}
+          onChange={(_, checked) => {
+            blurActive();
+            track.update({ align: checked });
+          }}
         />
       }
     />
@@ -119,12 +121,10 @@ const GuidelineNum = observer(() => {
         label="Number of Guidelines"
         value={track.guideline}
         type="number"
-        onChange={action((e) => {
-          const value = e.target.value;
-          if (Number.isInteger(Number(value))) {
-            track.guideline = Number(value);
-          }
-        })}
+        onChange={(e) => {
+          const guideline = parseInt(e.target.value);
+          if (Number.isFinite(guideline)) track.update({ guideline });
+        }}
       />
     </Grid>
   );
@@ -154,7 +154,7 @@ const NoteEditButton = observer(() => {
   const [open, setOpen] = React.useState(false);
 
   useHotkeys('e', () => {
-    if (track.selected.size !== 0) setOpen(true);
+    if (track.selected.length !== 0) setOpen(true);
   });
 
   return (
@@ -165,9 +165,9 @@ const NoteEditButton = observer(() => {
             fullWidth
             variant="outlined"
             onClick={() => setOpen(true)}
-            disabled={track.selected.size === 0}
+            disabled={track.selected.length === 0}
           >
-            Edit
+            Edit {track.selected.length > 1 && '(multiple)'}
           </Button>
         </span>
       </Tooltip>
@@ -177,38 +177,34 @@ const NoteEditButton = observer(() => {
 });
 
 const UndoRedo = observer(() => {
-  // The hotkey is global
-
-  if (settings.undo)
-    return (
-      <Grid item container spacing={2} alignItems="center">
-        <Grid item>
-          <Tooltip title="Hotkey: ctrl+z">
-            <span>
-              <IconButton
-                onClick={() => chart.undo()}
-                disabled={!chart.canUndo}
-              >
-                <Undo />
-              </IconButton>
-            </span>
-          </Tooltip>
-        </Grid>
-        <Grid item>
-          <Tooltip title="Hotkey: ctrl+y">
-            <span>
-              <IconButton
-                onClick={() => chart.redo()}
-                disabled={!chart.canRedo}
-              >
-                <Redo />
-              </IconButton>
-            </span>
-          </Tooltip>
-        </Grid>
+  return (
+    <Grid item container spacing={2} alignItems="center">
+      <Grid item>
+        <Tooltip title="Hotkey: ctrl+z">
+          <span>
+            <IconButton
+              onClick={() => store.chart.history.undo()}
+              disabled={!store.chart.history.canUndo}
+            >
+              <Undo />
+            </IconButton>
+          </span>
+        </Tooltip>
       </Grid>
-    );
-  else return <></>;
+      <Grid item>
+        <Tooltip title="Hotkey: ctrl+y">
+          <span>
+            <IconButton
+              onClick={() => store.chart.history.redo()}
+              disabled={!store.chart.history.canRedo}
+            >
+              <Redo />
+            </IconButton>
+          </span>
+        </Tooltip>
+      </Grid>
+    </Grid>
+  );
 });
 
 const useStyles = makeStyles(() => ({

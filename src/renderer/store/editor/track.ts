@@ -251,6 +251,12 @@ const Track = types
       history.stopGroup();
       self.clear();
     },
+    selectAll() {
+      this.clearSelected(true);
+      const { line } = getStoreEnv(self).getEditor();
+      if (!line) return;
+      line.noteList.forEach((note) => self.selected.push(note));
+    },
     setDivision(division: number) {
       if (self.divisions.includes(division)) self.division = division;
     },

@@ -27,6 +27,9 @@ export default observer(function Hotkeys() {
   useHotkeys('ctrl+y', () => {
     store.chart.history.canRedo && store.chart.history.redo();
   });
+  useHotkeys('esc', () => {
+    if (control.full) control.toggleFull();
+  });
 
   return <></>;
 });

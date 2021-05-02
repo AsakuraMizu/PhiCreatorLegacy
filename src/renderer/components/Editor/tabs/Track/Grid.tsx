@@ -24,10 +24,13 @@ const useStyles = makeStyles({
     borderTop: '1.2px gray solid',
   },
   line3: {
-    borderTop: '1.2px lightblue solid',
+    borderTop: '1.2px teal solid',
   },
   line4: {
-    borderTop: '1.2px orange solid',
+    borderTop: '1.2px burlywood solid',
+  },
+  line8: {
+    borderTop: '1.2px purple solid',
   },
   cline: {
     borderTop: '1.2px red solid',
@@ -61,6 +64,46 @@ const Division = observer(() => {
 
   return (
     <>
+      <>
+        {track.division % 16 == 0 &&
+          calcTimes(16).map((time, index) => (
+            <div
+              key={index}
+              className={clsx(cn.line, cn.line8)}
+              style={{ top: track.timeToY(time) }}
+            />
+          ))}
+      </>
+      <>
+        {track.division % 12 == 0 &&
+          calcTimes(12).map((time, index) => (
+            <div
+              key={index}
+              className={clsx(cn.line, cn.line3)}
+              style={{ top: track.timeToY(time) }}
+            />
+          ))}
+      </>
+      <>
+        {track.division % 8 == 0 &&
+          calcTimes(8).map((time, index) => (
+            <div
+              key={index}
+              className={clsx(cn.line, cn.line8)}
+              style={{ top: track.timeToY(time) }}
+            />
+          ))}
+      </>
+      <>
+        {track.division % 6 == 0 &&
+          calcTimes(6).map((time, index) => (
+            <div
+              key={index}
+              className={clsx(cn.line, cn.line3)}
+              style={{ top: track.timeToY(time) }}
+            />
+          ))}
+      </>
       <>
         {track.division % 4 == 0 &&
           calcTimes(4).map((time, index) => (
@@ -130,12 +173,15 @@ const Current = observer(() => {
   const cn = useStyles();
 
   return (
-    <div
-      className={clsx(cn.line, cn.cline)}
-      style={{ top: track.rect.height - track.shiftHeight }}
-    >
-      {pround(timing.tick, 1)}
-    </div>
+    <>
+      <div className={clsx(cn.line)} style={{ bottom: track.shiftHeight }}>
+        {pround(timing.tick, 1)}
+      </div>
+      <div
+        className={clsx(cn.line, cn.cline)}
+        style={{ top: track.rect.height - track.shiftHeight }}
+      ></div>
+    </>
   );
 });
 

@@ -42,7 +42,7 @@ class ProjectManager {
     await chart.load();
     await music.load();
     await background.load();
-    this.path = api.getProjectFolder();
+    this.path = api.project.getProjectFolder();
     this.mark(true);
     if (!noToast)
       toast.send(`Project ${reload ? 're' : ''}loaded.`, { variant: 'info' });

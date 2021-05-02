@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
-import { useHotkeys } from 'react-hotkeys-hook';
 import useOnWindowResize from '@rooks/use-on-window-resize';
-import { music } from '/@/managers';
+import { pround } from '/@/common';
+import { music, timing } from '/@/managers';
 import store from '/@/store';
 import CursorInfo from './CursorInfo';
 import Grid from './Grid';
@@ -45,7 +45,7 @@ const onMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     });
   } else if (track.tool === 'prop') {
     track.startPressing();
-    track.update({ editingProp: true });
+    if (store.editor.line) track.update({ editingProp: true });
   }
 };
 
@@ -116,8 +116,11 @@ const onWheel = (e: React.WheelEvent) => {
     const idx = track.divisions.indexOf(track.division);
     track.setDivision(track.divisions[idx - Math.sign(e.deltaY)]);
   } else {
-    const dt = e.deltaY / track.beatHeight / music.duration;
-    const target = music.progress - dt;
+    const direction = e.deltaY > 0 ? -1 : 1;
+    const dividedTick = store.chart.timingBase / track.division;
+    const dt = dividedTick * direction;
+    const tick = pround(timing.tick + dt, dividedTick);
+    const target = timing.tickToTime(tick) / music.duration;
     music.seek(target);
   }
 };
@@ -134,10 +137,6 @@ export default function Track(): JSX.Element {
 
   useEffect(updateRect);
   useOnWindowResize(updateRect);
-
-  useHotkeys('ctrl+c', () => track.copy());
-  useHotkeys('ctrl+v', () => track.paste());
-  useHotkeys('ctrl+m', () => track.mirror());
 
   return (
     <>

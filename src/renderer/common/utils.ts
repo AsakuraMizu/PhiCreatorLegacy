@@ -42,5 +42,5 @@ export async function toBase64(blob: Blob): Promise<string> {
 }
 
 export async function file2url(path: string): Promise<string> {
-  return await toBase64(new Blob([await api.readFile(path)]));
+  return await toBase64(new Blob([await api.project.readFile(path)]));
 }

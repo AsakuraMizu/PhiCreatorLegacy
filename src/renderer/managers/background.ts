@@ -11,7 +11,7 @@ class BackgroundManager {
   }
 
   async load() {
-    if (!(await api.pathExists(store.meta.background))) return;
+    if (!(await api.project.pathExists(store.meta.background))) return;
     const src = await file2url(store.meta.background);
     this.update(src);
   }

@@ -47,8 +47,32 @@ class TimingManager {
     return tick;
   }
 
+  tickToTime(tick: number = this.tick) {
+    let time = 0;
+    let lastTimepoint = this.timepoints[0];
+    for (let part = 1; part < this.timepoints.length; part++) {
+      const timepoint = this.timepoints[part];
+      if (tick > timepoint.tick) {
+        time +=
+          ((timepoint.tick - lastTimepoint.tick) /
+            store.chart.timingBase /
+            lastTimepoint.bpm) *
+          60;
+        lastTimepoint = timepoint;
+      }
+    }
+    time +=
+      ((tick - lastTimepoint.tick) /
+        store.chart.timingBase /
+        lastTimepoint.bpm) *
+      60;
+    return time;
+  }
+
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      tickToTime: false,
+    });
   }
 }
 

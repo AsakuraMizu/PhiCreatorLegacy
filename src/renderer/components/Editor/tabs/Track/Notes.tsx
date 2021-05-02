@@ -1,20 +1,33 @@
 import React from 'react';
-import { action, reaction } from 'mobx';
+import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
+import { Instance } from 'mobx-state-tree';
 import { makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
-import track from './state';
+import store from '/@/store';
+import SingleNote from '/@/store/chart/note';
 
 import Tap from '/@/assets/skin/Tap.png';
 import Drag from '/@/assets/skin/Drag.png';
 import Hold from '/@/assets/skin/Hold.png';
 import Flick from '/@/assets/skin/Flick.png';
 
+const { track } = store.editor;
+
 const useStyles = makeStyles({
   note: {
     transformOrigin: 'center',
     position: 'absolute',
     userSelect: 'none',
+  },
+  holdControl: {
+    position: 'absolute',
+    width: '12px',
+    height: '12px',
+    backgroundColor: 'white',
+    border: '2px solid',
+    borderColor: 'red',
+    cursor: 'grab',
   },
   selected: {
     outline: '1.5px yellow solid',
@@ -24,153 +37,149 @@ const useStyles = makeStyles({
   },
 });
 
-interface NoteProps {
-  idx: number;
-}
-
-const Note = observer(({ idx }: NoteProps) => {
+const Note = observer(({ data }: { data: Instance<typeof SingleNote> }) => {
   const cn = useStyles();
 
-  const data = track.lineData?.noteList[idx];
-
-  if (data) {
-    const state = useLocalObservable(() => ({
-      get inselection() {
-        return (
-          data &&
-          data.x >= Math.min(track.startExactX, track.exactX) &&
-          data.x <= Math.max(track.startExactX, track.exactX) &&
-          data.time >= Math.min(track.startExactTime, track.exactTime) &&
-          data.time + data.holdTime <=
-            Math.max(track.startExactTime, track.exactTime) &&
-          track.pressing &&
-          track.tool === 'cursor'
-        );
-      },
-      get selected() {
-        return this.inselection !== track.selected.has(idx);
-      },
-    }));
-    React.useEffect(
-      () =>
-        reaction(
-          () => state.inselection,
-          () => {
-            if (track.pressing) {
-              (track.selected.has(idx) ? track.unselecting : track.selecting)[
-                state.selected ? 'add' : 'delete'
-              ](idx);
+  const state = useLocalObservable(() => ({
+    get inselection() {
+      return (
+        data.x >= Math.min(track.startExactX, track.exactX) &&
+        data.x <= Math.max(track.startExactX, track.exactX) &&
+        data.time >= Math.min(track.startExactTime, track.exactTime) &&
+        data.time + data.holdTime <=
+          Math.max(track.startExactTime, track.exactTime) &&
+        track.pressing &&
+        track.pressingMode === 'select'
+      );
+    },
+    get selected() {
+      return this.inselection !== track.selected.includes(data);
+    },
+  }));
+  React.useEffect(
+    () =>
+      reaction(
+        () => state.inselection,
+        () => {
+          if (track.pressing && track.pressingMode === 'select') {
+            if (track.selected.includes(data)) {
+              if (state.selected) {
+                track.addUnselecting(data);
+              } else {
+                track.delUnselecting(data);
+              }
+            } else {
+              if (state.selected) {
+                track.addSelecting(data);
+              } else {
+                track.delSelecting(data);
+              }
             }
           }
-        ),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [idx]
-    );
-
-    const onMouseDown = action((event: React.MouseEvent<HTMLImageElement>) => {
-      if (
-        (track.tool === 'note' && !event.ctrlKey) ||
-        track.tool === 'cursor'
-      ) {
-        event.stopPropagation();
-        track.tool = 'cursor';
-        if (event.button === 0) {
-          track.left = true;
-        } else {
-          track.left = false;
         }
-        track.ctrl = event.ctrlKey;
-        track.start();
-        if (!state.selected) track.selectOne(idx);
-        track.pressingNote = true;
-      }
-    });
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data]
+  );
 
-    const x =
-        ((data.x +
-          (track.dragging && track.selected.has(idx) ? track.deltaX : 0) +
-          1) /
-          2) *
-        track.rect.width,
-      y = track.timeToY(
-        data.time +
-          (track.dragging && track.selected.has(idx) ? track.deltaTime : 0) +
-          data.holdTime
-      );
+  const onMouseDown = (event: React.MouseEvent<HTMLImageElement>) => {
+    if ((track.tool === 'note' && !event.ctrlKey) || track.tool === 'cursor') {
+      track.switchTool('cursor');
+      track.startPressing('noteStart');
+      if (!state.selected) track.selectOne(data);
+    }
+  };
 
-    if (
-      track.timeToY(
-        data.time +
-          (track.dragging && track.selected.has(idx) ? track.deltaTime : 0)
-      ) >= 0 &&
-      track.timeToY(
-        data.time +
-          (track.dragging && track.selected.has(idx)
-            ? track.deltaTime
-            : 0 + data.holdTime)
-      ) <= track.rect.height
-    )
-      return (
-        <img
-          className={clsx(cn.note, state.selected && cn.selected)}
-          draggable={false}
-          src={{ 1: Tap, 2: Drag, 3: Hold, 4: Flick }[data.type]}
-          style={{
-            width: track.rect.width / 10,
-            height:
-              data.type === 3
-                ? track.timeToY(data.time) -
-                  track.timeToY(data.time + data.holdTime)
-                : 'initial',
-            transform: `translate(calc(${x}px - 50%), calc(${y}px${
-              data.type === 3 ? '' : ' - 50%'
-            })) scaleX(${data.width})`,
-          }}
-          onMouseDown={onMouseDown}
-        />
-      );
-    else return <></>;
-  } else {
-    return <></>;
-  }
-});
+  const onHoldControl = () => {
+    track.startPressing('stretch');
+    track.clearSelected(true);
+    track.selectOne(data);
+  };
 
-const VNote = observer(() => {
-  const cn = useStyles();
-  if (track.tool === 'note' && track.pressing) {
-    const data = track.virtualNote;
-    const x = ((data.x + 1) / 2) * track.rect.width,
-      y = track.timeToY(data.time + data.holdTime);
-    return (
+  const newX =
+      data.x +
+      (track.pressingMode === 'drag' && track.selected.includes(data)
+        ? track.deltaX
+        : 0),
+    newTime =
+      data.time +
+      (track.pressingMode === 'drag' && track.selected.includes(data)
+        ? track.deltaTime
+        : 0),
+    newHoldTime =
+      data.holdTime +
+      (track.pressingMode === 'stretch' && track.selected.includes(data)
+        ? track.deltaTime
+        : 0);
+
+  const x = track.xToScreenX(newX),
+    y = track.timeToY(newTime + newHoldTime);
+
+  return (
+    <>
       <img
-        className={clsx(cn.note, cn.virtual)}
+        className={clsx(cn.note, state.selected && cn.selected)}
         draggable={false}
         src={{ 1: Tap, 2: Drag, 3: Hold, 4: Flick }[data.type]}
         style={{
-          width: (track.rect.width / 10) * data.width,
+          width: track.rect.width / 10,
           height:
             data.type === 3
               ? track.timeToY(data.time) -
-                track.timeToY(data.time + data.holdTime)
+                track.timeToY(data.time + newHoldTime)
               : 'initial',
           transform: `translate(calc(${x}px - 50%), calc(${y}px${
             data.type === 3 ? '' : ' - 50%'
-          }))`,
+          })) scaleX(${data.width})`,
         }}
+        onMouseDown={onMouseDown}
+        hidden={track.timeToY(newTime) < 0 || y > track.rect.height}
       />
-    );
-  } else {
-    return <></>;
-  }
+      {data.type === 3 && track.tool === 'cursor' && (
+        <div
+          className={cn.holdControl}
+          style={{
+            transform: `translate(calc(${x}px - 50%), calc(${y}px - 50%))`,
+          }}
+          onMouseDown={onHoldControl}
+        />
+      )}
+    </>
+  );
+});
+
+const VNote = observer(({ data }: { data: Instance<typeof SingleNote> }) => {
+  const cn = useStyles();
+  const x = track.xToScreenX(data.x),
+    y = track.timeToY(data.time + data.holdTime);
+  return (
+    <img
+      className={clsx(cn.note, cn.virtual)}
+      draggable={false}
+      src={{ 1: Tap, 2: Drag, 3: Hold, 4: Flick }[data.type]}
+      style={{
+        width: (track.rect.width / 10) * data.width,
+        height:
+          data.type === 3
+            ? track.timeToY(data.time) -
+              track.timeToY(data.time + data.holdTime)
+            : 'initial',
+        transform: `translate(calc(${x}px - 50%), calc(${y}px${
+          data.type === 3 ? '' : ' - 50%'
+        }))`,
+      }}
+      hidden={!track.pressing || track.pressingMode !== 'newNote'}
+    />
+  );
 });
 
 export default observer(function Notes() {
   return (
     <>
-      {track.lineData?.noteList.map((n, idx) => (
-        <Note key={idx} idx={idx} />
+      {store.editor.line?.noteList.map((note) => (
+        <Note key={note.id} data={note} />
       ))}
-      <VNote />
+      <VNote data={track.virtualNote} />
     </>
   );
 });

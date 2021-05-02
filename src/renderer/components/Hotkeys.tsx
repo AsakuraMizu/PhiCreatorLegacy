@@ -1,18 +1,16 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { chart, control, music, project } from '/@/managers';
+import { control, music, project } from '/@/managers';
+import store from '../store';
 
 export default observer(function Hotkeys() {
   useHotkeys('space', (e) => {
     e.preventDefault();
-    music.toggle();
+    if (music.loaded) music.toggle();
   });
   useHotkeys('alt+r', () => {
     project.reload();
-  });
-  useHotkeys('alt+w', () => {
-    control.toggleLive();
   });
   useHotkeys('alt+f', () => {
     control.toggleFull();
@@ -21,10 +19,13 @@ export default observer(function Hotkeys() {
     project.save();
   });
   useHotkeys('ctrl+z', () => {
-    chart.undo();
+    store.chart.history.canUndo && store.chart.history.undo();
   });
   useHotkeys('ctrl+y', () => {
-    chart.redo();
+    store.chart.history.canRedo && store.chart.history.redo();
+  });
+  useHotkeys('esc', () => {
+    if (control.full) control.toggleFull();
   });
   useHotkeys('esc', () => {
     if (control.full) control.toggleFull();

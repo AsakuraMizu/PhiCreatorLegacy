@@ -1,7 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Box, Grid, Slider, Switch, Typography } from '@material-ui/core';
-import { project, settings } from '/@/managers';
+import { Box, Grid, Slider, Typography } from '@material-ui/core';
+import { project } from '/@/managers';
+import store from '/@/store';
 
 export default observer(function Settings() {
   return (
@@ -15,10 +16,10 @@ export default observer(function Settings() {
             step={0.01}
             valueLabelDisplay="auto"
             valueLabelFormat={(x) => `${Math.round(x * 100)}%`}
-            value={settings.volume.music}
+            value={store.settings.musicVolume}
             onChange={(_, v) => {
-              settings.update({
-                volume: { music: v as number },
+              store.settings.update({
+                musicVolume: v as number,
               });
             }}
           />
@@ -31,10 +32,10 @@ export default observer(function Settings() {
             step={0.01}
             valueLabelDisplay="auto"
             valueLabelFormat={(x) => `${Math.round(x * 100)}%`}
-            value={settings.volume.fx}
+            value={store.settings.fxVolume}
             onChange={(_, v) => {
-              settings.update({
-                volume: { fx: v as number },
+              store.settings.update({
+                fxVolume: v as number,
               });
             }}
           />
@@ -47,9 +48,9 @@ export default observer(function Settings() {
             step={0.1}
             valueLabelDisplay="auto"
             valueLabelFormat={(x) => x.toFixed(1)}
-            value={settings.rate}
+            value={store.settings.rate}
             onChange={(_, v) => {
-              settings.update({ rate: v as number });
+              store.settings.update({ rate: v as number });
             }}
           />
         </Grid>
@@ -61,9 +62,9 @@ export default observer(function Settings() {
             step={0.01}
             valueLabelDisplay="auto"
             valueLabelFormat={(x) => `${Math.round(x * 100)}%`}
-            value={settings.dim}
+            value={store.settings.dim}
             onChange={(_, v) => {
-              settings.update({ dim: v as number });
+              store.settings.update({ dim: v as number });
             }}
           />
         </Grid>
@@ -78,18 +79,9 @@ export default observer(function Settings() {
             max={10}
             step={0.5}
             valueLabelDisplay="auto"
-            value={settings.autosave}
+            value={store.settings.autosave}
             onChange={(_, v) => {
-              settings.update({ autosave: v as number });
-            }}
-          />
-        </Grid>
-        <Grid item>
-          <Typography gutterBottom>Enable undo/redo (experimental)</Typography>
-          <Switch
-            checked={settings.undo}
-            onChange={(e) => {
-              settings.update({ undo: e.target.checked });
+              store.settings.update({ autosave: v as number });
             }}
           />
         </Grid>

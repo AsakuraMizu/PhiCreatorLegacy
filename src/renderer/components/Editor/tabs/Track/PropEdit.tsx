@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
-import { action } from 'mobx';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import {
   Box,
+  Button,
   Dialog,
   FormControl,
   Grid,
@@ -15,108 +14,161 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Add, Close } from '@material-ui/icons';
-import { maxBy } from 'lodash-es';
-import { easingNames, Props } from '/@/common';
-import { chart } from '/@/managers';
-import track, { props } from './state';
+import { easingNames } from '/@/common';
+import { Props, props } from '/@/common';
+import store from '/@/store';
 
-const SingleProp = observer(({ prop }: { prop: Props }) => {
-  const data = track.propData.get(track.startTime);
-
-  return (
-    <Grid item container alignItems="center" spacing={3}>
-      <Grid item xs={3}>
-        <Typography>{prop}</Typography>
-      </Grid>
-      {data?.[prop] ? (
-        <>
-          <Grid item xs={3}>
-            <TextField
-              label="Value"
-              type="number"
-              value={data[prop]?.value}
-              inputProps={{ step: '0.1' }}
-              onChange={action((event) => {
-                const value = parseFloat(event.target.value);
-                if (Number.isFinite(value)) {
-                  data[prop]!.value = value;
-                  chart.patch();
-                }
-              })}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <FormControl fullWidth>
-              <InputLabel>Easing</InputLabel>
-              <Select
-                value={data[prop]?.easing ?? 0}
-                onChange={action((event) => {
-                  data[prop]!.easing = event.target.value as number;
-                  chart.patch();
-                })}
-              >
-                {easingNames.map((name, index) => (
-                  <MenuItem key={index} value={index}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <IconButton
-              onClick={action(() => {
-                const list = track.lineData?.props[prop];
-                const idx = list?.findIndex(
-                  (state) => state.time === track.startTime
-                );
-                if (idx) {
-                  list?.splice(idx, 1);
-                  chart.patch();
-                }
-              })}
-            >
-              <Close />
-            </IconButton>
-          </Grid>
-        </>
-      ) : (
-        <Grid item>
-          <IconButton
-            onClick={action(() => {
-              const id = maxBy(track.lineData?.props[prop], 'id')?.id ?? -1;
-              track.lineData?.props[prop].push({
-                id: id + 1,
-                time: track.startTime,
-                value: 0,
-              });
-              chart.patch();
-            })}
-          >
-            <Add />
-          </IconButton>
-        </Grid>
-      )}
-    </Grid>
-  );
-});
-
-export interface PropEditProps {
-  open: boolean;
-  onClose: () => void;
+interface SinglePropLocalStateData {
+  edit: boolean;
+  value: number;
+  easing: number;
 }
 
-export default observer(function PropEdit({
-  open,
-  onClose,
-}: PropEditProps): JSX.Element {
+interface SinglePropLocalState extends SinglePropLocalStateData {
+  update(data: Partial<SinglePropLocalStateData>): void;
+}
+
+interface FieldProp {
+  state: SinglePropLocalState;
+}
+
+const SinglePropValueField = observer(({ state }: FieldProp) => (
+  <TextField
+    label="Value"
+    type="number"
+    value={state.value}
+    inputProps={{ step: '0.1' }}
+    onChange={(event) => {
+      const value = parseFloat(event.target.value);
+      if (Number.isFinite(value)) state.update({ value });
+    }}
+  />
+));
+
+const SinglePropEasingField = observer(({ state }: FieldProp) => (
+  <FormControl fullWidth>
+    <InputLabel>Easing</InputLabel>
+    <Select
+      value={state.easing}
+      onChange={(event) => {
+        const easing = event.target.value as number;
+        state.update({ easing });
+      }}
+    >
+      {easingNames.map((name, index) => (
+        <MenuItem key={index} value={index}>
+          {name}
+        </MenuItem>
+      ))}
+    </Select>
+  </FormControl>
+));
+
+const SingleProp = observer(
+  ({
+    prop,
+    addApply,
+  }: {
+    prop: Props;
+    addApply: (func: () => void) => void;
+  }) => {
+    const data = store.editor.line!.props[prop];
+    const { startTime } = store.editor.track;
+    const state: SinglePropLocalState = useLocalObservable(() =>
+      data.map.has(startTime)
+        ? {
+            edit: true,
+            value: data.map.get(startTime)!.value,
+            easing: data.map.get(startTime)!.easing,
+            update(data) {
+              Object.assign(this, data);
+            },
+          }
+        : {
+            edit: false,
+            value: 0,
+            easing: 0,
+            update(data) {
+              Object.assign(this, data);
+            },
+          }
+    );
+    React.useEffect(
+      () =>
+        addApply(() => {
+          if (data.map.has(startTime)) {
+            if (state.edit) {
+              data.map
+                .get(startTime)!
+                .update({ value: state.value, easing: state.easing });
+            } else {
+              data.remove(startTime);
+            }
+          } else if (state.edit) {
+            data.add({
+              time: startTime,
+              value: state.value,
+              easing: state.easing,
+            });
+          }
+        }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      []
+    );
+
+    return (
+      <Grid item container alignItems="center" spacing={3}>
+        <Grid item xs={3}>
+          <Typography>{prop}</Typography>
+        </Grid>
+        {state.edit ? (
+          <>
+            <Grid item xs={3}>
+              <SinglePropValueField state={state} />
+            </Grid>
+            <Grid item xs={3}>
+              <SinglePropEasingField state={state} />
+            </Grid>
+            <Grid item>
+              <IconButton
+                onClick={() =>
+                  state.update({ edit: false, value: 0, easing: 0 })
+                }
+              >
+                <Close />
+              </IconButton>
+            </Grid>
+          </>
+        ) : (
+          <Grid item>
+            <IconButton onClick={() => state.update({ edit: true })}>
+              <Add />
+            </IconButton>
+          </Grid>
+        )}
+      </Grid>
+    );
+  }
+);
+
+export default observer(function PropEdit() {
+  const funcs: (() => void)[] = [];
+  const addApply = (func: () => void) => funcs.push(func);
+  const close = () => store.editor.track.update({ editingProp: false });
+  const apply = () => funcs.forEach((func) => func());
+
   return (
-    <Dialog onClose={onClose} open={open} fullWidth>
+    <Dialog onClose={close} open={store.editor.track.editingProp} fullWidth>
       <Box margin="25px">
         <Grid container direction="column" spacing={3}>
           {props.map((prop) => (
-            <SingleProp key={prop} prop={prop} />
+            <SingleProp key={prop} prop={prop} addApply={addApply} />
           ))}
+          <Grid item>
+            <Button variant="outlined" color="primary" onClick={apply}>
+              Apply
+            </Button>
+          </Grid>
         </Grid>
       </Box>
     </Dialog>

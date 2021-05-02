@@ -1,8 +1,11 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { makeStyles } from '@material-ui/core';
-import track from './state';
+import store from '/@/store';
+
 import indicator from '/@/assets/indicator.svg';
+
+const { track } = store.editor;
 
 const useStyles = makeStyles(() => ({
   point: {
@@ -22,7 +25,7 @@ const Points = observer(() => {
 
   return (
     <>
-      {Array.from(track.propData).map(([time]) => (
+      {store.editor.allTimes.map((time) => (
         <div
           key={time}
           className={cn.point}

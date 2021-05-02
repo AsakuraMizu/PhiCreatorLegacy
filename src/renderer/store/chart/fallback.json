@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "musicOffset": 0,
+  "timingBase": 48,
+  "bpmList": [{ "id": 0, "time": 0, "bpm": 100 }],
+  "judgeLineList": [
+    {
+      "id": 0,
+      "name": "",
+      "noteList": [],
+      "props": {
+        "controlX": [{ "id": 0, "time": 0, "value": 0, "easing": 0 }],
+        "controlY": [{ "id": 0, "time": 0, "value": 0, "easing": 0 }],
+        "angle": [{ "id": 0, "time": 0, "value": 0, "easing": 0 }],
+        "speed": [{ "id": 0, "time": 0, "value": 1, "easing": 0 }],
+        "noteAlpha": [{ "id": 0, "time": 0, "value": 1, "easing": 0 }],
+        "lineAlpha": [{ "id": 0, "time": 0, "value": 1, "easing": 0 }],
+        "displayRange": [{ "id": 0, "time": 0, "value": -1, "easing": 0 }]
+      }
+    }
+  ]
+}

@@ -8,13 +8,13 @@ import {
   ThemeProvider,
 } from '@material-ui/core';
 import { SnackbarProvider } from 'notistack';
-import { control, project } from './managers';
+import { control } from './managers';
 import Hotkeys from './components/Hotkeys';
 import Toast from './components/Toast';
 import Editor from './components/Editor';
-import FullViewer from './components/FullViewer';
 import FooterBar from './components/FooterBar';
 import theme from './theme';
+import Preview from './components/Preview';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -38,10 +38,6 @@ const useStyles = makeStyles(() => ({
 export default observer(function App() {
   const cn = useStyles();
 
-  React.useEffect(() => {
-    project.reload(false, true).then(() => project.mark(false));
-  }, []);
-
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider>
@@ -51,7 +47,7 @@ export default observer(function App() {
         <Fade in>
           <Box className={cn.root}>
             {control.full ? (
-              <FullViewer />
+              <Preview full />
             ) : (
               <>
                 <Editor />

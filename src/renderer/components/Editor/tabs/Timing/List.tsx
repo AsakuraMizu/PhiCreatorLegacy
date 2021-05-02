@@ -1,6 +1,6 @@
 import React from 'react';
-import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import { Instance } from 'mobx-state-tree';
 import {
   Button,
   Grid,
@@ -11,9 +11,10 @@ import {
   TableRow,
   makeStyles,
 } from '@material-ui/core';
-import { chart, timing } from '/@/managers';
-import timing_ from './state';
+import { timing } from '/@/managers';
 import { pround } from '/@/common';
+import store from '/@/store';
+import SingleBpm from '/@/store/chart/bpm';
 
 const useStyles = makeStyles({
   table: {
@@ -24,6 +25,60 @@ const useStyles = makeStyles({
     cursor: 'pointer',
   },
 });
+
+const BpmRow = observer(function ({
+  data,
+}: {
+  data: Instance<typeof SingleBpm>;
+}) {
+  const cn = useStyles();
+
+  return (
+    <TableRow
+      className={cn.tablerow}
+      selected={
+        store.editor.timing.selectedBpm &&
+        data === store.editor.timing.selectedBpm
+      }
+      hover
+      onClick={() => {
+        store.editor.timing.setSelectedBpm(data);
+      }}
+    >
+      <TableCell>{data.id}</TableCell>
+      <TableCell>{data.time}</TableCell>
+      <TableCell>{data.bpm}</TableCell>
+    </TableRow>
+  );
+});
+
+const AddBtn = () => (
+  <Button
+    color="primary"
+    onClick={() => {
+      store.chart.addBpm({
+        time: pround(timing.tick, 1),
+        bpm: 175,
+      });
+    }}
+  >
+    Add
+  </Button>
+);
+
+const RemoveBtn = observer(() => (
+  <Button
+    color="secondary"
+    disabled={store.editor.timing.selectedBpm === undefined}
+    onClick={() => {
+      if (store.editor.timing.selectedBpm) {
+        store.chart.removeBpm(store.editor.timing.selectedBpm);
+      }
+    }}
+  >
+    Remove
+  </Button>
+));
 
 export default observer(function List() {
   const cn = useStyles();
@@ -40,53 +95,15 @@ export default observer(function List() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {chart.data?.bpmList.map((b, i) => (
-              <TableRow
-                key={b.id}
-                className={cn.tablerow}
-                selected={i === timing_.selected}
-                hover
-                onClick={action(() => {
-                  timing_.selected = i;
-                })}
-              >
-                <TableCell>{b.id}</TableCell>
-                <TableCell>{b.time}</TableCell>
-                <TableCell>{b.bpm}</TableCell>
-              </TableRow>
+            {store.chart.bpmList.map((b) => (
+              <BpmRow key={b.id} data={b} />
             ))}
           </TableBody>
         </Table>
       </Grid>
       <Grid item>
-        <Button
-          color="primary"
-          onClick={action(() => {
-            if (chart.data) {
-              chart.data.bpmList.push({
-                id: timing_.selected + 1,
-                time: pround(timing.tick, 1),
-                bpm: 100,
-              });
-              timing_.selected = chart.data.bpmList.length - 1;
-              chart.patch();
-            }
-          })}
-        >
-          Add
-        </Button>
-        <Button
-          color="secondary"
-          onClick={action(() => {
-            if (chart.data) {
-              chart.data.bpmList.splice(timing_.selected, 1);
-              timing_.selected = chart.data.bpmList.length - 1;
-              chart.patch();
-            }
-          })}
-        >
-          Remove
-        </Button>
+        <AddBtn />
+        <RemoveBtn />
       </Grid>
     </Grid>
   );

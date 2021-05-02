@@ -1,43 +1,39 @@
 import React from 'react';
-import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { Grid, TextField } from '@material-ui/core';
-import { chart } from '/@/managers';
-import editor from '../../state';
+import store from '/@/store';
 
-export default observer(function Edit() {
-  const data = chart.data?.judgeLineList[editor.line];
+const IDField = observer(() => (
+  <TextField
+    fullWidth
+    label="ID"
+    type="number"
+    disabled
+    value={store.editor.line?.id ?? -1}
+  />
+));
 
-  if (data) {
-    return (
-      <Grid item xs={12} sm container spacing={2} direction="column">
-        <Grid item>
-          <TextField
-            fullWidth
-            label="ID"
-            type="number"
-            value={data?.id}
-            onChange={action((event) => {
-              const value = parseInt(event.target.value);
-              if (Number.isFinite(value)) data.id = value;
-              chart.patch();
-            })}
-          />
-        </Grid>
-        <Grid item>
-          <TextField
-            fullWidth
-            label="Name"
-            value={data?.name ?? ''}
-            onChange={action((event) => {
-              data.name = event.target.value;
-              chart.patch();
-            })}
-          />
-        </Grid>
+const NameField = observer(() => (
+  <TextField
+    fullWidth
+    label="Name"
+    disabled={store.editor.line === undefined}
+    value={store.editor.line?.name ?? ''}
+    onChange={(event) => {
+      store.editor.line?.update({ name: event.target.value });
+    }}
+  />
+));
+
+export default function Edit(): JSX.Element {
+  return (
+    <Grid item xs={12} sm container spacing={2} direction="column">
+      <Grid item>
+        <IDField />
       </Grid>
-    );
-  } else {
-    return <></>;
-  }
-});
+      <Grid item>
+        <NameField />
+      </Grid>
+    </Grid>
+  );
+}

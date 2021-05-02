@@ -1,8 +1,7 @@
 import { makeAutoObservable, reaction } from 'mobx';
 import { Howl } from 'howler';
 import { file2url } from '/@/common';
-import meta from './meta';
-import settings from './settings';
+import store from '../store';
 
 class MusicManager {
   music?: Howl;
@@ -18,7 +17,7 @@ class MusicManager {
       load: false,
     });
     reaction(
-      () => settings.rate,
+      () => store.settings.rate,
       (rate) => {
         this.music?.rate(rate);
       },
@@ -27,7 +26,7 @@ class MusicManager {
       }
     );
     reaction(
-      () => settings.volume.music,
+      () => store.settings.musicVolume,
       (volume) => {
         this.music?.volume(volume);
       },
@@ -38,14 +37,14 @@ class MusicManager {
   }
 
   async load() {
-    if (!(await api.project.pathExists(meta.music))) return;
+    if (!(await api.project.pathExists(store.meta.music))) return;
     this.playing && this.toggle();
     const { progress } = this;
     this.music = new Howl({
-      src: await file2url(meta.music),
-      format: [api.extname(meta.music).split('.')[1]],
-      rate: settings.rate,
-      volume: settings.volume.music,
+      src: await file2url(store.meta.music),
+      format: [api.extname(store.meta.music).split('.')[1]],
+      rate: store.settings.rate,
+      volume: store.settings.musicVolume,
       onload: () => {
         this.onload();
         this.seek(progress);

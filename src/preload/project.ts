@@ -17,12 +17,10 @@ process.on('loaded', async () => {
 let projectFolder = '';
 
 export default {
-  readJSON: async <T>(file: string, fallback: T): Promise<T> => {
+  readJSON: async <T>(file: string): Promise<T | undefined> => {
     const path = join(projectFolder, file);
     if (projectFolder && (await pathExists(path))) {
       return await readJSON(path);
-    } else {
-      return fallback;
     }
   },
   outputJSON: async <T>(file: string, data: T): Promise<void> => {

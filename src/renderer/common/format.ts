@@ -20,7 +20,7 @@ export interface State {
   id: number;
   time: number;
   value: number;
-  easing?: number;
+  easing: number;
 }
 
 export type Props =
@@ -32,6 +32,16 @@ export type Props =
   | 'lineAlpha'
   | 'displayRange';
 
+export const props: Props[] = [
+  'controlX',
+  'controlY',
+  'angle',
+  'speed',
+  'noteAlpha',
+  'lineAlpha',
+  'displayRange',
+];
+
 export interface JudgeLineData {
   id: number;
   name?: string;
@@ -42,7 +52,7 @@ export interface JudgeLineData {
 export interface ChartData {
   schemaVersion: number;
   musicOffset: number;
-  timingBase?: number;
+  timingBase: number;
   bpmList: BpmData[];
   judgeLineList: JudgeLineData[];
 }

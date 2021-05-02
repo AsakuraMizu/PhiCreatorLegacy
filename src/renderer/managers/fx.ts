@@ -1,10 +1,9 @@
 import { reaction } from 'mobx';
 import { Howl } from 'howler';
-import { NoteData } from '../common';
+import store from '../store';
 import Tap from '/@/assets/skin/tap.wav';
 import Drag from '/@/assets/skin/drag.wav';
 import Flick from '/@/assets/skin/flick.wav';
-import settings from './settings';
 
 class FxManager {
   tap: Howl;
@@ -19,7 +18,7 @@ class FxManager {
     const all = [this.tap, this.drag, this.flick];
 
     reaction(
-      () => settings.rate,
+      () => store.settings.rate,
       (rate) => {
         all.forEach((h) => h.rate(rate));
       },
@@ -28,7 +27,7 @@ class FxManager {
       }
     );
     reaction(
-      () => settings.volume.fx,
+      () => store.settings.fxVolume,
       (volume) => {
         all.forEach((h) => h.volume(volume));
       },
@@ -38,7 +37,7 @@ class FxManager {
     );
   }
 
-  play(type: NoteData['type']) {
+  play(type: 1 | 2 | 3 | 4) {
     const h = {
       1: this.tap,
       2: this.drag,

@@ -12,28 +12,28 @@ interface TabInfo {
   prop?: ReactNode;
 }
 
-export enum Tabs {
+export enum TabKeys {
   meta,
   timing,
   track,
   settings,
 }
 
-const tabs: Record<Tabs, TabInfo> = {
-  [Tabs.meta]: {
+const tabs: Record<TabKeys, TabInfo> = {
+  [TabKeys.meta]: {
     name: 'Meta',
     main: <Meta />,
   },
-  [Tabs.timing]: {
+  [TabKeys.timing]: {
     name: 'Timing',
     main: <Timing />,
   },
-  [Tabs.track]: {
+  [TabKeys.track]: {
     name: 'Track',
     main: <Track />,
     tools: <TrackTools />,
   },
-  [Tabs.settings]: {
+  [TabKeys.settings]: {
     name: 'Settings',
     main: <Settings />,
   },

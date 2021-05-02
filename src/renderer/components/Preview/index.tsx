@@ -69,7 +69,7 @@ export default function Preview({ full }: PreviewProps): JSX.Element {
     >
       {full && <Resizer />}
       <Background />
-      <JudgerCtx.Provider value={judger.current}>
+      <JudgerCtx.Provider value={judger}>
         <JudgeLines />
       </JudgerCtx.Provider>
       {full && <Ui />}

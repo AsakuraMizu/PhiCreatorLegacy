@@ -10,26 +10,31 @@ import Particle from '/@/assets/skin/Particle.png';
 export class JudgerContainer extends PIXI.Container {
   textures: PIXI.Texture[] = [];
 
+  emitter: Emitter;
+
   constructor() {
     super();
 
+    const init = () => {
+      const btx = PIXI.Loader.shared.resources[Effect].texture!.baseTexture;
+      btx.setResolution(1 / skin.effect.ratio);
+      const size = skin.effect.size * skin.effect.ratio;
+      const col = Math.floor(btx.width / size);
+      const row = Math.floor(btx.height / size);
+      for (let index = 0; index < col * row; index += 1) {
+        const ir = Math.floor(index / col);
+        const ic = index % col;
+        const tx = new PIXI.Texture(btx);
+        tx._frame = new PIXI.Rectangle(ic * size, ir * size, size, size);
+        tx.orig = tx._frame;
+        tx.updateUvs();
+        this.textures.push(tx);
+      }
+    };
     if (!(Effect in PIXI.Loader.shared.resources))
-      PIXI.Loader.shared.add(Effect).load(() => {
-        const btx = PIXI.Loader.shared.resources[Effect].texture!.baseTexture;
-        btx.setResolution(1 / skin.effect.ratio);
-        const size = skin.effect.size * skin.effect.ratio;
-        const col = Math.floor(btx.width / size);
-        const row = Math.floor(btx.height / size);
-        for (let index = 0; index < col * row; index += 1) {
-          const ir = Math.floor(index / col);
-          const ic = index % col;
-          const tx = new PIXI.Texture(btx);
-          tx._frame = new PIXI.Rectangle(ic * size, ir * size, size, size);
-          tx.orig = tx._frame;
-          tx.updateUvs();
-          this.textures.push(tx);
-        }
-      });
+      PIXI.Loader.shared.add(Effect).load(init);
+    else init();
+    this.emitter = new Emitter(this, Particle, skin.effect.particle);
   }
 
   playOnce({ x, y }: { x: number; y: number }): void {
@@ -42,25 +47,19 @@ export class JudgerContainer extends PIXI.Container {
     sprite.position.set(x, y);
     this.addChild(sprite);
 
-    const emitter = new Emitter(this, Particle, skin.effect.particle);
-    emitter.updateSpawnPos(x, y);
-    emitter.emit = true;
-    emitter.update(0.01);
-    emitter.emit = false;
+    this.emitter.updateSpawnPos(x, y);
+    this.emitter.playOnce();
 
     const { shared: ticker } = PIXI.Ticker;
 
     const next = () => {
       time += ticker.elapsedMS;
-      emitter.update(ticker.elapsedMS / 1e3);
       if (time >= skin.effect.duration) {
         time -= skin.effect.duration;
         index += 1;
         if (index in this.textures) {
           sprite.texture = this.textures[index];
         } else {
-          sprite.destroy();
-          emitter.destroy();
           this.removeChild(sprite);
           ticker.remove(next);
         }
@@ -68,6 +67,19 @@ export class JudgerContainer extends PIXI.Container {
     };
 
     ticker.add(next);
+  }
+
+  destroy(options?: PIXI.IDestroyOptions | boolean): void {
+    try {
+      this.emitter.destroy();
+    } catch (e) {
+      /**
+       * FIXME:
+       * This is a temporary solution.
+       * Find better way to clean up that do not use try-catch.
+       */
+    }
+    super.destroy(options);
   }
 }
 
@@ -79,4 +91,6 @@ export const JudgerWrapper: React.FC<
   },
 });
 
-export const JudgerCtx = React.createContext<JudgerContainer | null>(null);
+export const JudgerCtx = React.createContext<React.RefObject<JudgerContainer> | null>(
+  null
+);

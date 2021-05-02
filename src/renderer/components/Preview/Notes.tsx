@@ -27,13 +27,13 @@ interface NoteProp {
 
 const TapNote = observer(({ data, hl }: NoteProp) => {
   const judgeLine = React.useContext(JudgeLineCtx)!;
-  const judger = React.useContext(JudgerCtx);
+  const judger = React.useContext(JudgerCtx)!;
   const helper = new NoteHelper(judgeLine, data);
   const note = React.useRef<PixiRef<typeof Sprite>>(null);
 
   useTick(() => {
     if (note.current) {
-      helper.update(note.current, judger);
+      helper.update(note.current, judger.current);
     }
   });
 
@@ -50,13 +50,13 @@ const TapNote = observer(({ data, hl }: NoteProp) => {
 
 const DragNote = observer(({ data, hl }: NoteProp) => {
   const judgeLine = React.useContext(JudgeLineCtx)!;
-  const judger = React.useContext(JudgerCtx);
+  const judger = React.useContext(JudgerCtx)!;
   const helper = new NoteHelper(judgeLine, data);
   const note = React.useRef<PixiRef<typeof Sprite>>(null);
 
   useTick(() => {
     if (note.current) {
-      helper.update(note.current, judger);
+      helper.update(note.current, judger.current);
     }
   });
 
@@ -73,13 +73,13 @@ const DragNote = observer(({ data, hl }: NoteProp) => {
 
 const FlickNote = observer(({ data, hl }: NoteProp) => {
   const judgeLine = React.useContext(JudgeLineCtx)!;
-  const judger = React.useContext(JudgerCtx);
+  const judger = React.useContext(JudgerCtx)!;
   const helper = new NoteHelper(judgeLine, data);
   const note = React.useRef<PixiRef<typeof Sprite>>(null);
 
   useTick(() => {
     if (note.current) {
-      helper.update(note.current, judger);
+      helper.update(note.current, judger.current);
     }
   });
 
@@ -96,7 +96,7 @@ const FlickNote = observer(({ data, hl }: NoteProp) => {
 
 const HoldNote = observer(({ data }: NoteProp) => {
   const judgeLine = React.useContext(JudgeLineCtx)!;
-  const judger = React.useContext(JudgerCtx);
+  const judger = React.useContext(JudgerCtx)!;
   const helper = new NoteHelper(judgeLine, data);
   const note = React.useRef<PixiRef<typeof Container>>(null);
   const hold = React.useRef<PixiRef<typeof Sprite>>(null);
@@ -110,7 +110,7 @@ const HoldNote = observer(({ data }: NoteProp) => {
         hold.current,
         holdHead.current,
         holdEnd.current,
-        judger
+        judger.current
       );
   });
 

@@ -1,40 +1,58 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { PixiRef, Sprite } from '@inlet/react-pixi';
+import * as PIXI from 'pixi.js';
+import {
+  PixiComponent,
+  applyDefaultProps,
+  _ReactPixi,
+} from '@inlet/react-pixi';
 import { background } from '/@/managers';
 import store from '/@/store';
-import { reaction } from 'mobx';
+
+class BackgroundSprite extends PIXI.Sprite {
+  constructor() {
+    super();
+  }
+
+  update(src: string) {
+    this.texture = PIXI.Texture.from(src);
+    this.texture.update();
+    this.texture.onBaseTextureUpdated = () => {
+      const scale = Math.min(
+        store.preview.width / this.texture.width,
+        store.preview.height / this.texture.height
+      );
+      this.scale.set(scale, scale);
+    };
+  }
+}
+
+const BackgroundWrapper: React.FC<
+  _ReactPixi.Container<BackgroundSprite, { src: string }>
+> = PixiComponent('BackgroundWrapper', {
+  create() {
+    return new BackgroundSprite();
+  },
+  applyProps(instance, oldProps, newProps) {
+    const { src: oldSrc, ...oldRest } = oldProps;
+    const { src: newSrc, ...newRest } = newProps;
+
+    applyDefaultProps(instance, oldRest, newRest);
+
+    if (newSrc !== oldSrc && newSrc) {
+      instance.update(newSrc);
+    }
+  },
+});
 
 export default observer(function Background() {
-  const ref = React.useRef<PixiRef<typeof Sprite>>(null);
-  const [scale, setScale] = React.useState(1);
-
-  const update = () => {
-    if (ref.current && ref.current.texture.width !== 0) {
-      console.log(ref.current.texture.width, ref.current.texture.height);
-      const scale = Math.min(
-        store.preview.width / ref.current.texture.width,
-        store.preview.height / ref.current.texture.height
-      );
-      setScale(scale);
-    }
-  };
-
-  React.useEffect(() => reaction(() => background.src, update));
-
   return (
-    <>
-      {background.loaded && (
-        <Sprite
-          ref={ref}
-          image={background.src}
-          alpha={store.settings.dim}
-          x={store.preview.width / 2}
-          y={store.preview.height / 2}
-          anchor={0.5}
-          scale={[scale, scale]}
-        />
-      )}
-    </>
+    <BackgroundWrapper
+      src={background.src}
+      alpha={store.settings.dim}
+      x={store.preview.width / 2}
+      y={store.preview.height / 2}
+      anchor={0.5}
+    />
   );
 });

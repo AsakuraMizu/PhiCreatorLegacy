@@ -24,6 +24,9 @@ const SingleNote = types
     SingleNoteId.update(self.id);
     return {};
   })
+  .volatile(() => ({
+    hl: false,
+  }))
   .actions((self) => ({
     update(data: {
       type?: 1 | 2 | 3 | 4;
@@ -36,6 +39,9 @@ const SingleNote = types
       isFake?: boolean;
     }) {
       Object.assign(self, data);
+    },
+    mark(hl: boolean) {
+      self.hl = hl;
     },
   }))
   .views((self) => ({

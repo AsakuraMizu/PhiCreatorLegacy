@@ -1,8 +1,8 @@
 import { action, makeAutoObservable } from 'mobx';
+import store from '../store';
 import music from './music';
 
 class ControlManager {
-  live = true;
   full = false;
 
   handle?: number;
@@ -11,10 +11,6 @@ class ControlManager {
 
   constructor() {
     makeAutoObservable(this);
-  }
-
-  toggleLive() {
-    this.live = !this.live;
   }
 
   toggleFull() {
@@ -37,6 +33,7 @@ class ControlManager {
         }),
         20
       );
+      store.preview.init();
     } else {
       music.seek(this.lastProgress);
     }

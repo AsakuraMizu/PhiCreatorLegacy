@@ -7,13 +7,10 @@ import store from '../store';
 export default observer(function Hotkeys() {
   useHotkeys('space', (e) => {
     e.preventDefault();
-    music.toggle();
+    if (music.loaded) music.toggle();
   });
   useHotkeys('alt+r', () => {
     project.reload();
-  });
-  useHotkeys('alt+w', () => {
-    control.toggleLive();
   });
   useHotkeys('alt+f', () => {
     control.toggleFull();

@@ -10,10 +10,10 @@ import {
   Select,
 } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
-import tabs, { TabKeys } from '../tabs';
-// import Viewer from './Viewer';
-import Lines from './Lines';
 import store from '/@/store';
+import tabs, { TabKeys } from '../tabs';
+import Lines from './Lines';
+import Preview from '../../Preview';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -55,7 +55,9 @@ export default observer(function SideBar() {
       </Grid>
       <Lines open={open} onClose={() => setOpen(false)} />
       {tabs[store.editor.tab as TabKeys].tools}
-      <Box marginTop="auto">{/* {control.live && <Viewer />} */}</Box>
+      <Box marginTop="auto">
+        <Preview />
+      </Box>
     </Box>
   );
 });

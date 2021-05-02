@@ -1,12 +1,26 @@
 import React from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core';
 import useOnWindowResize from '@rooks/use-on-window-resize';
 import { Stage, useApp } from '@inlet/react-pixi';
 import store from '/@/store';
 import Background from './Background';
+import JudgeLines from './JudgeLines';
+import Ui from './Ui';
+import { JudgerWrapper, JudgerCtx, JudgerContainer } from './Judger';
 
 const useStyles = makeStyles({
-  canvas: {
+  small: {
+    width: '100% !important',
+    height: 'initial !important',
+    transformOrigin: 'bottom left',
+    position: 'relative',
+    zIndex: 1,
+  },
+  bigger: {
+    transform: 'scale(2.5)',
+  },
+  full: {
     width: '100% !important',
     height: '100% !important',
   },
@@ -24,7 +38,6 @@ function Resizer() {
       height = (width * clientHeight) / clientWidth;
       app.renderer.resolution = clientWidth / width;
     }
-    console.log(width, height);
     app.renderer.resize(width, height);
     store.preview.updateSize(width, height);
   };
@@ -42,11 +55,25 @@ interface PreviewProps {
 
 export default function Preview({ full }: PreviewProps): JSX.Element {
   const cn = useStyles();
+  const judger = React.useRef<JudgerContainer>(null);
+
+  const [bigger, setBigger] = React.useState(false);
 
   return (
-    <Stage className={cn.canvas} width={1200} height={900}>
+    <Stage
+      className={clsx(full ? cn.full : cn.small, !full && bigger && cn.bigger)}
+      onMouseDown={() => setBigger(true)}
+      onMouseUp={() => setBigger(false)}
+      width={1200}
+      height={900}
+    >
       {full && <Resizer />}
       <Background />
+      <JudgerCtx.Provider value={judger.current}>
+        <JudgeLines />
+      </JudgerCtx.Provider>
+      {full && <Ui />}
+      <JudgerWrapper ref={judger} />
     </Stage>
   );
 }

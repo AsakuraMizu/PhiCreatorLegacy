@@ -8,13 +8,11 @@ import {
   ThemeProvider,
 } from '@material-ui/core';
 import { SnackbarProvider } from 'notistack';
-import { control } from './managers';
 import Hotkeys from './components/Hotkeys';
 import Toast from './components/Toast';
 import Editor from './components/Editor';
 import FooterBar from './components/FooterBar';
 import theme from './theme';
-import Preview from './components/Preview';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -46,16 +44,10 @@ export default observer(function App() {
         <Toast />
         <Fade in>
           <Box className={cn.root}>
-            {control.full ? (
-              <Preview full />
-            ) : (
-              <>
-                <Editor />
-                <Box className={cn.bar}>
-                  <FooterBar />
-                </Box>
-              </>
-            )}
+            <Editor />
+            <Box className={cn.bar}>
+              <FooterBar />
+            </Box>
           </Box>
         </Fade>
       </SnackbarProvider>

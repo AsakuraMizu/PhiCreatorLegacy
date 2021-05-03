@@ -8,6 +8,7 @@ import Background from './Background';
 import JudgeLines from './JudgeLines';
 import Ui from './Ui';
 import { JudgerWrapper, JudgerCtx, JudgerContainer } from './Judger';
+import { preload } from './resources';
 
 const useStyles = makeStyles({
   small: {
@@ -21,8 +22,14 @@ const useStyles = makeStyles({
     transform: 'scale(2.5)',
   },
   full: {
+    position: 'fixed',
     width: '100% !important',
     height: '100% !important',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
   },
 });
 
@@ -58,22 +65,32 @@ export default function Preview({ full }: PreviewProps): JSX.Element {
   const judger = React.useRef<JudgerContainer>(null);
 
   const [bigger, setBigger] = React.useState(false);
+  const [loaded, setLoaded] = React.useState(false);
 
-  return (
-    <Stage
-      className={clsx(full ? cn.full : cn.small, !full && bigger && cn.bigger)}
-      onMouseDown={() => setBigger(true)}
-      onMouseUp={() => setBigger(false)}
-      width={1200}
-      height={900}
-    >
-      {full && <Resizer />}
-      <Background />
-      <JudgerCtx.Provider value={judger}>
-        <JudgeLines />
-      </JudgerCtx.Provider>
-      {full && <Ui />}
-      <JudgerWrapper ref={judger} />
-    </Stage>
-  );
+  React.useEffect(() => {
+    preload().then(() => setLoaded(true));
+  }, []);
+
+  if (loaded)
+    return (
+      <Stage
+        className={clsx(
+          full ? cn.full : cn.small,
+          !full && bigger && cn.bigger
+        )}
+        onMouseDown={() => setBigger(true)}
+        onMouseUp={() => setBigger(false)}
+        width={1200}
+        height={900}
+      >
+        {full && <Resizer />}
+        <Background />
+        <JudgerCtx.Provider value={judger}>
+          <JudgeLines />
+        </JudgerCtx.Provider>
+        {full && <Ui />}
+        <JudgerWrapper ref={judger} />
+      </Stage>
+    );
+  else return <></>;
 }

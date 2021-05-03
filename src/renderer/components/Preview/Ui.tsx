@@ -5,24 +5,21 @@ import { Container, PixiRef, Sprite, Text } from '@inlet/react-pixi';
 import { control, music } from '/@/managers';
 import store from '/@/store';
 
-import skin from '/@/assets/skin/skin.json';
-import _Prefix from '/@/assets/skin/Prefix.png';
-import _Pause from '/@/assets/skin/Pause.png';
-import _Progress from '/@/assets/skin/Progress.png';
+import { skin, loaded } from './resources';
 
 const { ui } = skin;
 const { fontFamily, fill, fontSize } = skin.ui;
 
 const Prefix = observer(() => (
   <Sprite
-    image={_Prefix}
+    texture={loaded.Prefix}
     x={15}
     y={store.preview.height - 18}
     anchor={[0, 1]}
   />
 ));
 
-const Pause = observer(() => <Sprite image={_Pause} x={15} y={20} />);
+const Pause = observer(() => <Sprite texture={loaded.Pause} x={15} y={20} />);
 
 const Progress = observer(() => {
   const ref = React.useRef<PixiRef<typeof Sprite>>(null);
@@ -40,7 +37,7 @@ const Progress = observer(() => {
   return (
     <Sprite
       ref={ref}
-      image={_Progress}
+      texture={loaded.Progress}
       x={store.preview.width * music.progress}
       anchor={[1, 0]}
     />

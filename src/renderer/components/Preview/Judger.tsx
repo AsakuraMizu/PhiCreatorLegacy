@@ -3,9 +3,7 @@ import * as PIXI from 'pixi.js';
 import { Emitter } from 'pixi-particles';
 import { PixiComponent, _ReactPixi } from '@inlet/react-pixi';
 
-import skin from '/@/assets/skin/skin.json';
-import Effect from '/@/assets/skin/Effect.png';
-import Particle from '/@/assets/skin/Particle.png';
+import { skin, loaded } from './resources';
 
 export class JudgerContainer extends PIXI.Container {
   textures: PIXI.Texture[] = [];
@@ -15,26 +13,21 @@ export class JudgerContainer extends PIXI.Container {
   constructor() {
     super();
 
-    const init = () => {
-      const btx = PIXI.Loader.shared.resources[Effect].texture!.baseTexture;
-      btx.setResolution(1 / skin.effect.ratio);
-      const size = skin.effect.size * skin.effect.ratio;
-      const col = Math.floor(btx.width / size);
-      const row = Math.floor(btx.height / size);
-      for (let index = 0; index < col * row; index += 1) {
-        const ir = Math.floor(index / col);
-        const ic = index % col;
-        const tx = new PIXI.Texture(btx);
-        tx._frame = new PIXI.Rectangle(ic * size, ir * size, size, size);
-        tx.orig = tx._frame;
-        tx.updateUvs();
-        this.textures.push(tx);
-      }
-    };
-    if (!(Effect in PIXI.Loader.shared.resources))
-      PIXI.Loader.shared.add(Effect).load(init);
-    else init();
-    this.emitter = new Emitter(this, Particle, skin.effect.particle);
+    const btx = loaded.Effect.baseTexture;
+    btx.setResolution(1 / skin.effect.ratio);
+    const size = skin.effect.size * skin.effect.ratio;
+    const col = Math.floor(btx.width / size);
+    const row = Math.floor(btx.height / size);
+    for (let index = 0; index < col * row; index += 1) {
+      const ir = Math.floor(index / col);
+      const ic = index % col;
+      const tx = new PIXI.Texture(btx);
+      tx._frame = new PIXI.Rectangle(ic * size, ir * size, size, size);
+      tx.orig = tx._frame;
+      tx.updateUvs();
+      this.textures.push(tx);
+    }
+    this.emitter = new Emitter(this, loaded.Particle, skin.effect.particle);
   }
 
   playOnce({ x, y }: { x: number; y: number }): void {

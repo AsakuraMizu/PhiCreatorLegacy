@@ -9,16 +9,7 @@ import { JudgeLineCtx } from './JudgeLineHelper';
 import { NoteHelper } from './NoteHelper';
 import { JudgerCtx } from './Judger';
 
-import skin from '/@/assets/skin/skin.json';
-import Tap from '/@/assets/skin/Tap.png';
-import TapHL from '/@/assets/skin/TapHL.png';
-import Drag from '/@/assets/skin/Drag.png';
-import DragHL from '/@/assets/skin/DragHL.png';
-import Flick from '/@/assets/skin/Flick.png';
-import FlickHL from '/@/assets/skin/FlickHL.png';
-import Hold from '/@/assets/skin/Hold.png';
-import HoldHead from '/@/assets/skin/HoldHead.png';
-import HoldEnd from '/@/assets/skin/HoldEnd.png';
+import { skin, loaded } from './resources';
 
 interface NoteProp {
   data: Instance<typeof SingleNote>;
@@ -40,7 +31,7 @@ const TapNote = observer(({ data, hl }: NoteProp) => {
   return (
     <Sprite
       ref={note}
-      image={hl ? TapHL : Tap}
+      texture={hl ? loaded.TapHL : loaded.Tap}
       anchor={0.5}
       x={store.preview.x(data.x)}
       scale={[skin.noteRatio * data.width, skin.noteRatio * data.side]}
@@ -63,7 +54,7 @@ const DragNote = observer(({ data, hl }: NoteProp) => {
   return (
     <Sprite
       ref={note}
-      image={hl ? DragHL : Drag}
+      texture={hl ? loaded.DragHL : loaded.Drag}
       anchor={0.5}
       x={store.preview.x(data.x)}
       scale={[skin.noteRatio * data.width, skin.noteRatio * data.side]}
@@ -86,7 +77,7 @@ const FlickNote = observer(({ data, hl }: NoteProp) => {
   return (
     <Sprite
       ref={note}
-      image={hl ? FlickHL : Flick}
+      texture={hl ? loaded.FlickHL : loaded.Flick}
       anchor={0.5}
       x={store.preview.x(data.x)}
       scale={[skin.noteRatio * data.width, skin.noteRatio * data.side]}
@@ -120,9 +111,9 @@ const HoldNote = observer(({ data }: NoteProp) => {
       x={store.preview.x(data.x)}
       scale={[skin.noteRatio * data.width, skin.noteRatio * data.side]}
     >
-      <Sprite ref={holdEnd} image={HoldEnd} />
-      <Sprite ref={hold} image={Hold} />
-      <Sprite ref={holdHead} image={HoldHead} />
+      <Sprite ref={holdEnd} texture={loaded.HoldEnd} />
+      <Sprite ref={hold} texture={loaded.Hold} />
+      <Sprite ref={holdHead} texture={loaded.HoldHead} />
     </Container>
   );
 });

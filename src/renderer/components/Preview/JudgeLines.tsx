@@ -8,7 +8,7 @@ import SingleJudgeLine from '/@/store/chart/judgeline';
 import { JudgeLineCtx, JudgeLineHelper } from './JudgeLineHelper';
 import Notes from './Notes';
 
-import skin from '/@/assets/skin/skin.json';
+import { skin } from './resources';
 
 const JudgeLine = observer(
   ({ data }: { data: Instance<typeof SingleJudgeLine> }) => {

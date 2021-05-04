@@ -15,7 +15,6 @@ export class NoteHelper {
     public data: Instance<typeof SingleNote>
   ) {
     makeAutoObservable(this);
-    console.log(1);
   }
 
   counted = false;

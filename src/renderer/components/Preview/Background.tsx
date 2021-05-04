@@ -1,10 +1,12 @@
 import React from 'react';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import * as PIXI from 'pixi.js';
 import {
   PixiComponent,
   applyDefaultProps,
   _ReactPixi,
+  PixiRef,
 } from '@inlet/react-pixi';
 import { background } from '/@/managers';
 import store from '/@/store';
@@ -14,16 +16,18 @@ class BackgroundSprite extends PIXI.Sprite {
     super();
   }
 
-  update(src: string) {
+  reload(src: string) {
     this.texture = PIXI.Texture.from(src);
     this.texture.update();
-    this.texture.onBaseTextureUpdated = () => {
-      const scale = Math.min(
-        store.preview.width / this.texture.width,
-        store.preview.height / this.texture.height
-      );
-      this.scale.set(scale, scale);
-    };
+    this.texture.onBaseTextureUpdated = () => this.update();
+  }
+
+  update() {
+    const scale = Math.min(
+      store.preview.width / this.texture.width,
+      store.preview.height / this.texture.height
+    );
+    this.scale.set(scale, scale);
   }
 }
 
@@ -40,14 +44,30 @@ const BackgroundWrapper: React.FC<
     applyDefaultProps(instance, oldRest, newRest);
 
     if (newSrc !== oldSrc && newSrc) {
-      instance.update(newSrc);
+      instance.reload(newSrc);
     }
   },
 });
 
 export default observer(function Background() {
+  const ref = React.useRef<PixiRef<typeof BackgroundWrapper>>(null);
+
+  React.useEffect(
+    () =>
+      reaction(
+        () => [store.preview.width, store.preview.height],
+        () => {
+          if (ref.current) {
+            ref.current.update();
+          }
+        }
+      ),
+    []
+  );
+
   return (
     <BackgroundWrapper
+      ref={ref}
       src={background.src}
       alpha={store.settings.dim}
       x={store.preview.width / 2}

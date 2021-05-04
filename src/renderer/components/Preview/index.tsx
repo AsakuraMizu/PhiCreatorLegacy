@@ -33,25 +33,31 @@ const useStyles = makeStyles({
   },
 });
 
-function Resizer() {
+function Resizer({ full }: { full?: boolean }) {
   const app = useApp();
 
   const resize = () => {
-    const { clientWidth, clientHeight } = app.view;
-    let width = clientWidth,
-      height = clientHeight;
-    if (clientWidth < 1200 && clientHeight < 900) {
-      width = 1200;
-      height = (width * clientHeight) / clientWidth;
-      app.renderer.resolution = clientWidth / width;
+    if (full) {
+      const { clientWidth, clientHeight } = app.view;
+      let width = clientWidth,
+        height = clientHeight;
+      if (clientWidth < 1200 && clientHeight < 900) {
+        width = 1200;
+        height = (width * clientHeight) / clientWidth;
+        app.renderer.resolution = clientWidth / width;
+      }
+      app.renderer.resize(width, height);
+      store.preview.updateSize(width, height);
+    } else {
+      app.renderer.resolution = 1;
+      app.renderer.resize(1200, 900);
+      store.preview.updateSize(1200, 900);
     }
-    app.renderer.resize(width, height);
-    store.preview.updateSize(width, height);
   };
 
   useOnWindowResize(resize);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(resize, []);
+  React.useEffect(resize, [full]);
 
   return <></>;
 }
@@ -83,7 +89,7 @@ export default function Preview({ full }: PreviewProps): JSX.Element {
         width={1200}
         height={900}
       >
-        {full && <Resizer />}
+        <Resizer full={full} />
         <Background />
         <JudgerCtx.Provider value={judger}>
           <JudgeLines />

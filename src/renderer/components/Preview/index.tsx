@@ -1,8 +1,10 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core';
 import useOnWindowResize from '@rooks/use-on-window-resize';
 import { Stage, useApp } from '@inlet/react-pixi';
+import { control } from '/@/managers';
 import store from '/@/store';
 import Background from './Background';
 import JudgeLines from './JudgeLines';
@@ -62,11 +64,7 @@ function Resizer({ full }: { full?: boolean }) {
   return <></>;
 }
 
-interface PreviewProps {
-  full?: boolean;
-}
-
-export default function Preview({ full }: PreviewProps): JSX.Element {
+export default observer(function Preview() {
   const cn = useStyles();
   const judger = React.useRef<JudgerContainer>(null);
 
@@ -81,22 +79,22 @@ export default function Preview({ full }: PreviewProps): JSX.Element {
     return (
       <Stage
         className={clsx(
-          full ? cn.full : cn.small,
-          !full && bigger && cn.bigger
+          control.full ? cn.full : cn.small,
+          !control.full && bigger && cn.bigger
         )}
         onMouseDown={() => setBigger(true)}
         onMouseUp={() => setBigger(false)}
-        width={1200}
-        height={900}
+        width={store.preview.width}
+        height={store.preview.height}
       >
-        <Resizer full={full} />
+        <Resizer full={control.full} />
         <Background />
         <JudgerCtx.Provider value={judger}>
           <JudgeLines />
         </JudgerCtx.Provider>
-        {full && <Ui />}
+        {control.full && <Ui />}
         <JudgerWrapper ref={judger} />
       </Stage>
     );
   else return <></>;
-}
+});

@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Add, Close } from '@material-ui/icons';
-import { easingNames } from '/@/common';
+import { easingNames, propsDefaultValue } from '/@/common';
 import { Props, props } from '/@/common';
 import store from '/@/store';
 
@@ -67,9 +67,11 @@ const SinglePropEasingField = observer(({ state }: FieldProp) => (
 const SingleProp = observer(
   ({
     prop,
+    defaultValue,
     addApply,
   }: {
     prop: Props;
+    defaultValue: number;
     addApply: (func: () => void) => void;
   }) => {
     const data = store.editor.line!.props[prop];
@@ -86,7 +88,7 @@ const SingleProp = observer(
           }
         : {
             edit: false,
-            value: 0,
+            value: defaultValue,
             easing: 0,
             update(data) {
               Object.assign(this, data);
@@ -132,7 +134,7 @@ const SingleProp = observer(
             <Grid item>
               <IconButton
                 onClick={() =>
-                  state.update({ edit: false, value: 0, easing: 0 })
+                  state.update({ edit: false, value: defaultValue, easing: 0 })
                 }
               >
                 <Close />
@@ -162,7 +164,12 @@ export default observer(function PropEdit() {
       <Box margin="25px">
         <Grid container direction="column" spacing={3}>
           {props.map((prop) => (
-            <SingleProp key={prop} prop={prop} addApply={addApply} />
+            <SingleProp
+              key={prop}
+              prop={prop}
+              defaultValue={propsDefaultValue[prop]}
+              addApply={addApply}
+            />
           ))}
           <Grid item>
             <Button variant="outlined" color="primary" onClick={apply}>

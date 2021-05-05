@@ -7,15 +7,30 @@ import {
 import AutoId from '../autoId';
 import SingleNote from './note';
 import PropList from './prop';
+import { propsDefaultValue } from '/@/common';
 
 const SingleJudgeLineProps = types.model({
-  controlX: types.optional(PropList, [{ time: 0, value: 0, easing: 0 }]),
-  controlY: types.optional(PropList, [{ time: 0, value: 0, easing: 0 }]),
-  angle: types.optional(PropList, [{ time: 0, value: 0, easing: 0 }]),
-  speed: types.optional(PropList, [{ time: 0, value: 1, easing: 0 }]),
-  noteAlpha: types.optional(PropList, [{ time: 0, value: 1, easing: 0 }]),
-  lineAlpha: types.optional(PropList, [{ time: 0, value: 1, easing: 0 }]),
-  displayRange: types.optional(PropList, [{ time: 0, value: -1, easing: 0 }]),
+  controlX: types.optional(PropList, [
+    { time: 0, value: propsDefaultValue.controlX, easing: 0 },
+  ]),
+  controlY: types.optional(PropList, [
+    { time: 0, value: propsDefaultValue.controlY, easing: 0 },
+  ]),
+  angle: types.optional(PropList, [
+    { time: 0, value: propsDefaultValue.angle, easing: 0 },
+  ]),
+  speed: types.optional(PropList, [
+    { time: 0, value: propsDefaultValue.speed, easing: 0 },
+  ]),
+  noteAlpha: types.optional(PropList, [
+    { time: 0, value: propsDefaultValue.noteAlpha, easing: 0 },
+  ]),
+  lineAlpha: types.optional(PropList, [
+    { time: 0, value: propsDefaultValue.lineAlpha, easing: 0 },
+  ]),
+  displayRange: types.optional(PropList, [
+    { time: 0, value: propsDefaultValue.displayRange, easing: 0 },
+  ]),
 });
 
 const SingleJudgeLineId = new AutoId();

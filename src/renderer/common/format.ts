@@ -42,6 +42,16 @@ export const props: Props[] = [
   'displayRange',
 ];
 
+export const propsDefaultValue: Record<Props, number> = {
+  controlX: 0,
+  controlY: 0,
+  angle: 0,
+  speed: 1,
+  noteAlpha: 1,
+  lineAlpha: 1,
+  displayRange: 3,
+};
+
 export interface JudgeLineData {
   id: number;
   name?: string;

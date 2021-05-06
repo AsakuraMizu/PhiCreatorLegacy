@@ -18,8 +18,9 @@ class BackgroundSprite extends PIXI.Sprite {
 
   reload(src: string) {
     this.texture = PIXI.Texture.from(src);
-    this.texture.update();
     this.texture.onBaseTextureUpdated = () => this.update();
+    this.texture.on('update', () => this.update());
+    this.texture.baseTexture.update();
   }
 
   update() {

@@ -162,7 +162,10 @@ const Copy = () => {
 };
 
 const SelectAll = () => {
-  useHotkeys('ctrl+a', () => track.selectAll());
+  useHotkeys('ctrl+a', (event) => {
+    event.preventDefault();
+    track.selectAll();
+  });
 
   return (
     <Tooltip title="Hotkey: ctrl+a">
@@ -174,10 +177,10 @@ const SelectAll = () => {
 };
 
 const Mirror = () => {
-  useHotkeys('ctrl+m', () => track.mirror());
+  useHotkeys('m', () => track.mirror());
 
   return (
-    <Tooltip title="Hotkey: ctrl+m">
+    <Tooltip title="Hotkey: m">
       <IconButton onClick={() => track.mirror()}>
         <MirrorIcon />
       </IconButton>
@@ -263,6 +266,12 @@ export default function Tools(): JSX.Element {
           <Grid item>
             <Mirror />
           </Grid>
+          <Grid item>
+            <Undo />
+          </Grid>
+          <Grid item>
+            <Redo />
+          </Grid>
         </Grid>
         <Grid item container spacing={2} alignItems="center">
           <Grid item>
@@ -273,14 +282,6 @@ export default function Tools(): JSX.Element {
           </Grid>
           <Grid item>
             <Zoom />
-          </Grid>
-        </Grid>
-        <Grid item container spacing={2} alignItems="center">
-          <Grid item>
-            <Undo />
-          </Grid>
-          <Grid item>
-            <Redo />
           </Grid>
         </Grid>
       </Grid>

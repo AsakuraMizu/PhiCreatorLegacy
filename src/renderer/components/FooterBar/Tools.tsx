@@ -4,11 +4,11 @@ import { IconButton, Box, Grid, Tooltip } from '@material-ui/core';
 import {
   Fullscreen,
   FullscreenExit,
-  Movie,
   Pause,
   PlayArrow,
 } from '@material-ui/icons';
-import { control, music } from '/@/managers';
+import { music } from '/@/managers';
+import store from '/@/store';
 
 export default observer(function Tools() {
   return (
@@ -28,16 +28,9 @@ export default observer(function Tools() {
             </Tooltip>
           </Grid>
           <Grid item>
-            <Tooltip title="Hotkey: alt+w">
-              <IconButton onClick={() => control.toggleLive()}>
-                <Movie />
-              </IconButton>
-            </Tooltip>
-          </Grid>
-          <Grid item>
             <Tooltip title="Hotkey: alt+f">
-              <IconButton onClick={() => control.toggleFull()}>
-                {control.full ? <FullscreenExit /> : <Fullscreen />}
+              <IconButton onClick={() => store.preview.toggleFull()}>
+                {store.preview.full ? <FullscreenExit /> : <Fullscreen />}
               </IconButton>
             </Tooltip>
           </Grid>

@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { Instance } from 'mobx-state-tree';
 import * as PIXI from 'pixi.js';
-import { control, fx, music, timing } from '/@/managers';
+import { fx, music, timing } from '/@/managers';
 import store from '/@/store';
 import SingleNote from '/@/store/chart/note';
 import { JudgeLineHelper } from './JudgeLineHelper';
@@ -86,7 +86,7 @@ export class NoteHelper {
     if (
       timing.tick > this.data.time + this.data.holdTime &&
       this.counted === false &&
-      control.full
+      store.preview.full
     ) {
       store.preview.incCombo();
       this.counted = true;
@@ -94,7 +94,7 @@ export class NoteHelper {
     if (
       timing.tick < this.data.time + this.data.holdTime &&
       this.counted === true &&
-      control.full
+      store.preview.full
     ) {
       store.preview.decCombo();
       this.counted = false;

@@ -10,7 +10,6 @@ import {
   Select,
 } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
-import { control } from '/@/managers';
 import store from '/@/store';
 import tabs, { TabKeys } from '../tabs';
 import Lines from './Lines';
@@ -57,7 +56,7 @@ export default observer(function SideBar() {
       <Lines open={open} onClose={() => setOpen(false)} />
       {tabs[store.editor.tab as TabKeys].tools}
       <Box marginTop="auto">
-        <Preview full={control.full} />
+        <Preview />
       </Box>
     </Box>
   );

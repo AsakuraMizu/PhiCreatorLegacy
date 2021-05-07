@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { control, music, project } from '/@/managers';
+import { music, project } from '/@/managers';
 import store from '../store';
 
 export default observer(function Hotkeys() {
@@ -13,7 +13,7 @@ export default observer(function Hotkeys() {
     project.reload();
   });
   useHotkeys('alt+f', () => {
-    control.toggleFull();
+    store.preview.toggleFull();
   });
   useHotkeys('ctrl+s', () => {
     project.save();
@@ -25,7 +25,7 @@ export default observer(function Hotkeys() {
     store.chart.history.canRedo && store.chart.history.redo();
   });
   useHotkeys('esc', () => {
-    if (control.full) control.toggleFull();
+    if (store.preview.full) store.preview.toggleFull();
   });
 
   return <></>;

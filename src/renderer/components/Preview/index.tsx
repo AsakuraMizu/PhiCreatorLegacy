@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core';
 import useOnWindowResize from '@rooks/use-on-window-resize';
 import { Stage, useApp } from '@inlet/react-pixi';
-import { control } from '/@/managers';
 import store from '/@/store';
 import Background from './Background';
 import JudgeLines from './JudgeLines';
@@ -79,20 +78,20 @@ export default observer(function Preview() {
     return (
       <Stage
         className={clsx(
-          control.full ? cn.full : cn.small,
-          !control.full && bigger && cn.bigger
+          store.preview.full ? cn.full : cn.small,
+          !store.preview.full && bigger && cn.bigger
         )}
         onMouseDown={() => setBigger(true)}
         onMouseUp={() => setBigger(false)}
         width={store.preview.width}
         height={store.preview.height}
       >
-        <Resizer full={control.full} />
+        <Resizer full={store.preview.full} />
         <Background />
         <JudgerCtx.Provider value={judger}>
           <JudgeLines />
         </JudgerCtx.Provider>
-        {control.full && <Ui />}
+        {store.preview.full && <Ui />}
         <JudgerWrapper ref={judger} />
       </Stage>
     );

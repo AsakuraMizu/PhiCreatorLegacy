@@ -2,7 +2,7 @@ import React from 'react';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { Container, PixiRef, Sprite, Text } from '@inlet/react-pixi';
-import { control, music } from '/@/managers';
+import { music } from '/@/managers';
 import store from '/@/store';
 
 import { skin, loaded } from './resources';
@@ -145,7 +145,7 @@ const Charter = observer(() => (
 ));
 
 const Intro = observer(() => (
-  <Container alpha={control.delay >= 500 ? 1 : control.delay / 500}>
+  <Container alpha={store.preview.delay >= 500 ? 1 : store.preview.delay / 500}>
     <Songname />
     <Artist />
     <Illustrator />

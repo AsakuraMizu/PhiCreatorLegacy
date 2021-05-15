@@ -1,6 +1,5 @@
 import React from 'react';
-import { reaction } from 'mobx';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { Instance } from 'mobx-state-tree';
 import { makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
@@ -40,53 +39,46 @@ const useStyles = makeStyles({
 const Note = observer(({ data }: { data: Instance<typeof SingleNote> }) => {
   const cn = useStyles();
 
-  const state = useLocalObservable(() => ({
-    get inselection() {
-      return (
-        data.x >= Math.min(track.startExactX, track.exactX) &&
-        data.x <= Math.max(track.startExactX, track.exactX) &&
-        data.time >= Math.min(track.startExactTime, track.exactTime) &&
-        data.time + data.holdTime <=
-          Math.max(track.startExactTime, track.exactTime) &&
-        track.pressing &&
-        track.pressingMode === 'select'
-      );
-    },
-    get selected() {
-      return this.inselection !== track.selected.includes(data);
-    },
-  }));
-  React.useEffect(
-    () =>
-      reaction(
-        () => state.inselection,
-        () => {
-          if (track.pressing && track.pressingMode === 'select') {
-            if (track.selected.includes(data)) {
-              if (state.selected) {
-                track.addUnselecting(data);
-              } else {
-                track.delUnselecting(data);
-              }
-            } else {
-              if (state.selected) {
-                track.addSelecting(data);
-              } else {
-                track.delSelecting(data);
-              }
-            }
-          }
+  const inselection =
+    track.tool === 'cursor' &&
+    track.pressing &&
+    track.pressingMode === 'select' &&
+    data.x >= Math.min(track.startExactX, track.exactX) &&
+    data.x <= Math.max(track.startExactX, track.exactX) &&
+    data.time >= Math.min(track.startExactTime, track.exactTime) &&
+    data.time + data.holdTime <=
+      Math.max(track.startExactTime, track.exactTime);
+  const selected =
+    track.tool === 'cursor' && inselection !== track.selected.includes(data);
+
+  React.useEffect(() => {
+    if (
+      track.tool === 'cursor' &&
+      track.pressing &&
+      track.pressingMode === 'select'
+    ) {
+      if (track.selected.includes(data)) {
+        if (selected) {
+          track.addUnselecting(data);
+        } else {
+          track.delUnselecting(data);
         }
-      ),
+      } else {
+        if (selected) {
+          track.addSelecting(data);
+        } else {
+          track.delSelecting(data);
+        }
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data]
-  );
+  }, [inselection]);
 
   const onMouseDown = (event: React.MouseEvent<HTMLImageElement>) => {
     if ((track.tool === 'note' && !event.ctrlKey) || track.tool === 'cursor') {
       track.switchTool('cursor');
       track.startPressing('noteStart');
-      if (!state.selected) track.selectOne(data);
+      if (!selected) track.selectOne(data);
     }
   };
 
@@ -118,7 +110,7 @@ const Note = observer(({ data }: { data: Instance<typeof SingleNote> }) => {
   return (
     <>
       <img
-        className={clsx(cn.note, state.selected && cn.selected)}
+        className={clsx(cn.note, selected && cn.selected)}
         draggable={false}
         src={{ 1: Tap, 2: Drag, 3: Hold, 4: Flick }[data.type]}
         style={{

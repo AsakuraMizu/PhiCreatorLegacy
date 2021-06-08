@@ -7381,7 +7381,6 @@ __metadata:
     prettier: ^2.3.1
     prettier-plugin-svelte: ^2.3.0
     pug: ^3.0.2
-    simple-git-hooks: ^2.4.1
     spectron: ^15.0.0
     svelte: ^3.38.2
     svelte-check: ^2.1.0
@@ -8396,15 +8395,6 @@ __metadata:
   version: 3.0.3
   resolution: "signal-exit@npm:3.0.3"
   checksum: f8f3fec95c8d1f9ad7e3cce07e1195f84e7a85cdcb4e825e8a2b76aa5406a039083d2bc9662b3cf40e6948262f41277047d20e6fbd58c77edced0b18fab647d8
-  languageName: node
-  linkType: hard
-
-"simple-git-hooks@npm:^2.4.1":
-  version: 2.4.1
-  resolution: "simple-git-hooks@npm:2.4.1"
-  bin:
-    simple-git-hooks: cli.js
-  checksum: cd68bfa3d8d3ac15d6f3f37bab765b59ddcd8fc8fea3289dbfdb05d462ec7be1bcfab29cd875d8cd3d7c666c936a885347134ee1a94e6aadbdda1c2f2aa79261
   languageName: node
   linkType: hard
 

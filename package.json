@@ -75,7 +75,6 @@
     "prettier": "^2.3.1",
     "prettier-plugin-svelte": "^2.3.0",
     "pug": "^3.0.2",
-    "simple-git-hooks": "^2.4.1",
     "spectron": "^15.0.0",
     "svelte": "^3.38.2",
     "svelte-check": "^2.1.0",

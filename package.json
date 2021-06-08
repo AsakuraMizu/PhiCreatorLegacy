@@ -1,0 +1,91 @@
+{
+  "name": "phi-creator",
+  "version": "0.5.0",
+  "description": "Chart editor for PhiX",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phi-x/phi-creator.git"
+  },
+  "author": "PhiX Dev Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/phi-x/phi-creator/issues"
+  },
+  "keywords": [
+    "phiformat",
+    "phigros",
+    "phix"
+  ],
+  "homepage": "https://github.com/phi-x/phi-creator#readme",
+  "engines": {
+    "node": ">=v14.16",
+    "npm": ">=7.7"
+  },
+  "main": "packages/main/dist/index.cjs",
+  "scripts": {
+    "buildEnvTypes": "node scripts/buildEnvTypes.js",
+    "build": "node scripts/build.js",
+    "build:prod": "cross-env MODE=production run-s build",
+    "build:test": "cross-env MODE=test run-s build",
+    "compile:only": "electron-builder build --config electron-builder.config.js",
+    "compile": "run-s build:prod \"compile:only {@}\" --",
+    "test:only": "jest",
+    "test": "run-s build:test \"test:only {@}\" --",
+    "watch": "cross-env MODE=development node scripts/watch.js",
+    "lint": "eslint . --ext js,ts",
+    "prettier": "prettier **/*.{js,ts,svelte,yml,json,cjs,mjs,html}",
+    "pretypecheck": "run-s buildEnvTypes",
+    "typecheck:main": "tsc --noEmit -p packages/main/tsconfig.json",
+    "typecheck:preload": "tsc --noEmit -p packages/preload/tsconfig.json",
+    "typecheck:renderer": "svelte-check --tsconfig packages/preload/tsconfig.json",
+    "typecheck": "run-p \"typecheck:*\""
+  },
+  "browserslist": [
+    "Chrome 91"
+  ],
+  "simple-git-hooks": {
+    "pre-commit": "yarn lint-staged && yarn typecheck"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --cache --fix"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.10",
+    "@testing-library/jest-dom": "^5.13.0",
+    "@testing-library/svelte": "^3.0.3",
+    "@testing-library/webdriverio": "^2.1.1",
+    "@tsconfig/svelte": "^2.0.1",
+    "@types/electron-devtools-installer": "^2.2.0",
+    "@types/jest": "^26.0.23",
+    "@types/testing-library__jest-dom": "^5.9.5",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "cross-env": "^7.0.3",
+    "electron": "^13.1.1",
+    "electron-builder": "^22.11.5",
+    "electron-devtools-installer": "^3.2.0",
+    "esbuild-jest": "^0.5.0",
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-svelte3": "^3.2.0",
+    "jest": "^27.0.4",
+    "lint-staged": "^11.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.1",
+    "prettier-plugin-svelte": "^2.3.0",
+    "pug": "^3.0.2",
+    "simple-git-hooks": "^2.4.1",
+    "spectron": "^15.0.0",
+    "svelte": "^3.38.2",
+    "svelte-check": "^2.1.0",
+    "svelte-jester": "^1.7.0",
+    "svelte-preprocess": "^4.7.3",
+    "tslib": "^2.2.0",
+    "typescript": "^4.3.2",
+    "vite": "^2.3.6"
+  },
+  "dependencies": {
+    "electron-updater": "^4.3.9"
+  }
+}

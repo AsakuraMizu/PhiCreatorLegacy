@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "/@/*": ["./src/*"]
+    }
+  },
+  "files": ["types/api.d.ts", "src/index.ts"],
+  "include": ["../../types/**/*.d.ts"]
+}

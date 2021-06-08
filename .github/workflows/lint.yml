@@ -1,0 +1,45 @@
+name: Linters
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.js'
+      - '**.ts'
+      - '**.svelte'
+      - 'yarn.lock'
+      - '.github/workflows/lint.yml'
+  pull_request:
+    paths:
+      - '**.js'
+      - '**.ts'
+      - '**.svelte'
+      - 'yarn.lock'
+      - '.github/workflows/lint.yml'
+
+defaults:
+  run:
+    shell: 'bash'
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 15 # Need for npm >=7.7
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.yarn
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # TODO: Install not all dependencies, but only those required for this workflow
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - run: yarn lint

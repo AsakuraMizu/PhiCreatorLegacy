@@ -19,9 +19,7 @@ const env = import.meta.env;
 
 /**
  * Not work!
- * Switched to Svelte DevTools Standalone
  */
-// Install "Svelte DevTools"
 // if (env.MODE === 'development') {
 //   app
 //     .whenReady()
@@ -55,7 +53,8 @@ const createWindow = async () => {
    * @see https://github.com/electron/electron/issues/25012
    */
   mainWindow.on('ready-to-show', () => {
-    mainWindow?.show();
+    // mainWindow?.show();
+    mainWindow?.maximize();
 
     if (env.MODE === 'development') {
       mainWindow?.webContents.openDevTools();
@@ -115,3 +114,5 @@ if (env.PROD) {
     .then(({ autoUpdater }) => autoUpdater.checkForUpdatesAndNotify())
     .catch((e) => console.error('Failed check updates:', e));
 }
+
+import './ipcHandler';

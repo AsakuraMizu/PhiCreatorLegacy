@@ -3,7 +3,7 @@
  */
 
 import { Application } from 'spectron';
-import { setupBrowser } from '@testing-library/webdriverio';
+// import { setupBrowser } from '@testing-library/webdriverio';
 
 const app = new Application({
   path: require('electron') as unknown as string,
@@ -30,26 +30,5 @@ describe('electron app', () => {
 
   it('should not open devtools', async () => {
     expect(await app.webContents.isDevToolsOpened()).toBe(false);
-  });
-
-  it('should display heading', async () => {
-    const { getByRole } = setupBrowser(app.client);
-
-    const heading = await getByRole('heading', {
-      name: 'Hello Electron!',
-    });
-    expect(heading).toBeDefined();
-  });
-
-  it('counter should exist and work', async () => {
-    const { getByRole } = setupBrowser(app.client);
-
-    const button = await getByRole('button', {
-      name: 'Clicks: 0',
-    });
-    expect(button).toBeDefined();
-
-    await button.click();
-    expect(await button.getText()).toBe('Clicks: 1');
   });
 });

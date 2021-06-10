@@ -56,6 +56,8 @@
     "@testing-library/webdriverio": "^2.1.1",
     "@tsconfig/svelte": "^2.0.1",
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/electron-json-storage": "^4.5.0",
+    "@types/howler": "^2.2.2",
     "@types/jest": "^26.0.23",
     "@types/testing-library__jest-dom": "^5.9.5",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
@@ -85,6 +87,11 @@
     "vite": "^2.3.6"
   },
   "dependencies": {
-    "electron-updater": "^4.3.9"
+    "dayjs": "^1.10.5",
+    "effector": "^21.8.11",
+    "electron-json-storage": "^4.5.0",
+    "electron-updater": "^4.3.9",
+    "fast-json-patch": "^3.0.0-1",
+    "howler": "^2.2.1"
   }
 }

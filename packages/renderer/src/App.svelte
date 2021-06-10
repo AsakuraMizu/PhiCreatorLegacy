@@ -1,53 +1,33 @@
-<script lang="ts">
-  import logo from './assets/svelte.png';
-  import Counter from './lib/Counter.svelte';
-  import Versions from './lib/Versions.svelte';
+<script>
+  import { chart, apply, canUndo, undo, canRedo, redo } from './stores/chart';
+  import { load } from './stores/project';
+
+  const start = async () => {
+    if (await window.api.project.startProject()) load({});
+  };
+
+  const test = () =>
+    apply(
+      Array.from({ length: 100 }).map((_, i) => ({
+        op: 'replace',
+        path: `/judgeLineList/0/noteList/${i}/type`,
+        value: 4,
+      }))
+    );
+
+  chart.watch((chart) => console.log(chart));
 </script>
 
 <template lang="pug">
-  main
-    img(src="{logo}" alt="Svelte Logo")
-    h1 Hello Electron!
-    Counter
-    p Learn Svelte at: #[a(href="https://svelte.dev/") svelte.dev]
-    p Source code: #[a(href="https://github.ccom/AsakuraMizu/electron-vite-svelte-template") AsakuraMizu/electron-vite-svelte-template]
-    Versions
+  p
+    button(on:click="{start}") Start
+    button(on:click="{undo}" disabled="{!$canUndo}") Undo
+    button(on:click="{redo}" disabled="{!$canRedo}") Redo
+    button(on:click="{test}") Apply test patch
+  ul
+    +each("$chart.judgeLineList as line")
+      li {line.id}
+        ul
+          +each("line.noteList as note")
+            li id:{note.id} type:{note.type} time:{note.time}
 </template>
-
-<style>
-  :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-  main {
-    text-align: center;
-    padding: 1em;
-    margin: 0 auto;
-  }
-  img {
-    height: 16rem;
-    width: 16rem;
-  }
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4rem;
-    font-weight: 100;
-    line-height: 1.1;
-    margin: 2rem auto;
-    max-width: 14rem;
-  }
-  p {
-    max-width: 14rem;
-    margin: 1rem auto;
-    line-height: 1.35;
-  }
-  @media (min-width: 480px) {
-    h1 {
-      max-width: none;
-    }
-    p {
-      max-width: none;
-    }
-  }
-</style>

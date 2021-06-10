@@ -23,6 +23,9 @@
   },
   "main": "packages/main/dist/index.cjs",
   "scripts": {
+    "vite-workaround": "node scripts/vite-workaround.js",
+    "smui-theme-light": "smui-theme compile packages/renderer/smui.css -i packages/renderer/src/theme",
+    "smui-theme-dark": "smui-theme compile packages/renderer/smui-dark.css -i packages/renderer/src/theme/dark",
     "buildEnvTypes": "node scripts/buildEnvTypes.js",
     "build": "node scripts/build.js",
     "build:prod": "cross-env MODE=production run-s build",
@@ -67,6 +70,7 @@
     "electron-builder": "^22.11.5",
     "electron-devtools-installer": "^3.2.0",
     "esbuild-jest": "^0.5.0",
+    "esbuild-register": "^2.5.0",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
@@ -77,6 +81,7 @@
     "prettier": "^2.3.1",
     "prettier-plugin-svelte": "^2.3.0",
     "pug": "^3.0.2",
+    "smui-theme": "^4.2.0",
     "spectron": "^15.0.0",
     "svelte": "^3.38.2",
     "svelte-check": "^2.1.0",
@@ -87,11 +92,15 @@
     "vite": "^2.3.6"
   },
   "dependencies": {
+    "@iconify-icons/mdi": "^1.1.15",
+    "@iconify/svelte": "^1.0.4",
     "dayjs": "^1.10.5",
     "effector": "^21.8.11",
     "electron-json-storage": "^4.5.0",
     "electron-updater": "^4.3.9",
     "fast-json-patch": "^3.0.0-1",
-    "howler": "^2.2.1"
+    "howler": "^2.2.1",
+    "normalize.css": "^8.0.1",
+    "svelte-material-ui": "^4.2.0"
   }
 }

@@ -1,16 +1,15 @@
 <script>
-  import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
-  import IconButton from '@smui/icon-button';
+  import { AppBar, Button } from 'svelte-materialify';
   import IconifyIcon from '@iconify/svelte';
   import menu from '@iconify-icons/mdi/menu';
 </script>
 
 <template lang="pug">
-  TopAppBar(dense variant="fixed")
-    Row
-      Section
-        IconButton
-          IconifyIcon(icon="{menu}")
-        Title PhiCreator
-      Section(align="end" toolbar) test
+  AppBar()
+    div(slot="icon")
+      Button(depressed)
+        IconifyIcon(icon="{menu}")
+    span(slot="title") PhiCreator
+    div(style="flex-grow:1")
+    Button test
 </template>

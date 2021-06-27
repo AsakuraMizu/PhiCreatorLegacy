@@ -23,7 +23,6 @@
   },
   "main": "packages/main/dist/index.cjs",
   "scripts": {
-    "vite-workaround": "node scripts/vite-workaround.js",
     "smui-theme-light": "smui-theme compile packages/renderer/smui.css -i packages/renderer/src/theme",
     "smui-theme-dark": "smui-theme compile packages/renderer/smui-dark.css -i packages/renderer/src/theme/dark",
     "buildEnvTypes": "node scripts/buildEnvTypes.js",
@@ -81,7 +80,7 @@
     "prettier": "^2.3.1",
     "prettier-plugin-svelte": "^2.3.0",
     "pug": "^3.0.2",
-    "smui-theme": "^4.2.0",
+    "sass": "^1.35.1",
     "spectron": "^15.0.0",
     "svelte": "^3.38.2",
     "svelte-check": "^2.1.0",
@@ -101,6 +100,6 @@
     "fast-json-patch": "^3.0.0-1",
     "howler": "^2.2.1",
     "normalize.css": "^8.0.1",
-    "svelte-material-ui": "^4.2.0"
+    "svelte-materialify": "^0.3.11"
   }
 }

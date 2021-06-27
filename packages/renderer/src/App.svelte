@@ -1,5 +1,9 @@
 <script>
+  import { MaterialApp } from 'svelte-materialify';
+
   import TopAppBar from './components/TopAppBar.svelte';
 </script>
 
-<TopAppBar />
+<MaterialApp theme=light>
+  <TopAppBar />
+</MaterialApp>

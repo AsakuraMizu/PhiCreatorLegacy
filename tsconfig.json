@@ -9,7 +9,7 @@
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "types": ["vite/client", "node", "jest"],
+    "types": ["vite/client", "node"],
     "typeRoots": ["node_modules/@types"],
     "lib": ["ESNext"]
   }

@@ -17,22 +17,19 @@ app.disableHardwareAcceleration();
  */
 const env = import.meta.env;
 
-/**
- * Not work!
- */
-// if (env.MODE === 'development') {
-//   app
-//     .whenReady()
-//     .then(() => import('electron-devtools-installer'))
-//     .then(({ default: installExtension }) =>
-//       installExtension('ckolcbmkjpjmangdbmnkpjigpkddpogn', {
-//         loadExtensionOptions: {
-//           allowFileAccess: true,
-//         },
-//       })
-//     )
-//     .catch((e) => console.error('Failed install extension:', e));
-// }
+if (env.MODE === 'development') {
+  app
+    .whenReady()
+    .then(() => import('electron-devtools-installer'))
+    .then(({ default: installExtension, REACT_DEVELOPER_TOOLS }) =>
+      installExtension(REACT_DEVELOPER_TOOLS, {
+        loadExtensionOptions: {
+          allowFileAccess: true,
+        },
+      })
+    )
+    .catch((e) => console.error('Failed install extension:', e));
+}
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -41,8 +38,8 @@ const createWindow = async () => {
     show: false, // Use 'ready-to-show' event to show window
     webPreferences: {
       preload: join(__dirname, '../../preload/dist/index.cjs'),
-      contextIsolation: env.MODE !== 'test', // Spectron tests can't work with contextIsolation: true
-      enableRemoteModule: env.MODE === 'test', // Spectron tests can't work with enableRemoteModule: false
+      contextIsolation: true,
+      enableRemoteModule: false
     },
   });
 

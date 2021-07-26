@@ -4,7 +4,7 @@ import { chrome } from '../../electron-vendors.config.json';
 import { join } from 'path';
 import { builtinModules } from 'module';
 import { defineConfig } from 'vite';
-import svelte from '@sveltejs/vite-plugin-svelte';
+import reactRefresh from '@vitejs/plugin-react-refresh';
 import { loadAndSetEnv } from '../../scripts/loadAndSetEnv.mjs';
 
 const PACKAGE_ROOT = __dirname;
@@ -25,13 +25,7 @@ export default defineConfig({
       '/@/': join(PACKAGE_ROOT, 'src') + '/',
     },
   },
-  plugins: [
-    svelte({
-      compilerOptions: {
-        dev: process.env.MODE === 'development',
-      },
-    }),
-  ],
+  plugins: [reactRefresh()],
   base: '',
   server: {
     fsServe: {

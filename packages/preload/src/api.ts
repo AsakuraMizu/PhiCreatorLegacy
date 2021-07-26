@@ -1,11 +1,13 @@
+import dialog from './dialog';
+import helpers from './helpers';
 import project from './project';
 import storage from './storage';
-import helpers from './helpers';
 
 export const api = {
+  dialog,
+  helpers,
   project,
   storage,
-  helpers,
   versions: process.versions,
 };
 

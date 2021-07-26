@@ -30,6 +30,9 @@ function bounceOut(x: number): number {
 }
 
 const easingsFunctions = {
+  linear(x: number) {
+    return x;
+  },
   easeInQuad(x: number) {
     return x ** 2;
   },
@@ -144,16 +147,10 @@ const easingsFunctions = {
       ? (1 - bounceOut(1 - 2 * x)) / 2
       : (1 + bounceOut(2 * x - 1)) / 2;
   },
-  linear(x: number) {
-    return x;
-  },
-  none() {
-    return 0;
-  },
 };
 
 export const easingNames: (keyof typeof easingsFunctions)[] = [
-  'none',
+  'linear',
   'easeInSine',
   'easeOutSine',
   'easeInOutSine',
@@ -184,17 +181,20 @@ export const easingNames: (keyof typeof easingsFunctions)[] = [
   'easeInBounce',
   'easeOutBounce',
   'easeInOutBounce',
-  'linear',
 ];
 
 export function easeCalc(
   l: number,
   r: number,
   t: number,
-  easing?: number
+  easing: number | null
 ): number {
-  const func = easingsFunctions[easingNames[easing ?? 0]];
-  return l + (r - l) * func(t);
+  if (easing) {
+    const func = easingsFunctions[easingNames[easing]];
+    return l + (r - l) * func(t);
+  } else {
+    return l;
+  }
 }
 
 export function easeSumCalc(
@@ -202,9 +202,9 @@ export function easeSumCalc(
   r: number,
   st: number,
   et: number,
-  easing?: number
+  easing: number | null
 ): number {
-  const eps = 1e-2;
+  const eps = 1e-1;
   let t = st;
   let sum = 0;
   while (t <= et) {

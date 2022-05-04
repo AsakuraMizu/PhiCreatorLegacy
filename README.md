@@ -1,3 +1,3 @@
 # PhiCreator
 
-注意：由于各种原因，本项目即将转为私有仓库。
+PhiCreator 是 PhiX 项目组开发的针对`Phigros`的谱面编辑器。

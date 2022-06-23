@@ -1,6 +1,8 @@
+## 注意：此仓库为 PhiCreator 早期版本的代码，已封存并不再进行维护，新版本的代码请到 [AsakuraMizu/PhiCreator](https://github.com/AsakuraMizu/PhiCreator) 获取
+
 # PhiCreator
 
-PhiCreator 是 PhiX 项目组开发的适用于 `Phigros` 的谱面编辑器。
+PhiCreator 是适用于 `Phigros` 的自制谱面编辑器。
 
 ## 关于近期 PhiCreator 再分发一事的简要澄清与说明
 
